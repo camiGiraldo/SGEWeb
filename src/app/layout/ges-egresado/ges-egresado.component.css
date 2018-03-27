@@ -1,0 +1,11 @@
+.flt-button{
+  width: 30px;
+  float: right;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: 2px 2px 10px #09afa4;
+  background-color: #0fb8ad;
+  color: #FFF;
+  text-align: center;
+  line-height: 2;
+}

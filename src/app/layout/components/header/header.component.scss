@@ -1,0 +1,41 @@
+$topnav-background-color: linear-gradient(141deg, #0fb8ad 13%, #26d4c8 82%, #0fb8ad 30%);;;
+:host {
+    .navbar {
+        background: $topnav-background-color;
+        .navbar-brand {
+            color: #fff;
+        }
+        .nav-item > a {
+            color: #FFF;
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+    .messages {
+        width: 300px;
+        .media {
+            border-bottom: 1px solid #ddd;
+            padding: 5px 10px;
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+        .media-body {
+            h5 {
+                font-size: 13px;
+                font-weight: 600;
+            }
+            .small {
+                margin: 0;
+            }
+            .last {
+                font-size: 12px;
+                margin: 0;
+            }
+        }
+    }
+    img{
+      width: 20px;
+    }
+}
