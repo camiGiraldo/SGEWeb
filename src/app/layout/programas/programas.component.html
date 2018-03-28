@@ -1,0 +1,49 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Gestion de Programas'" [icon]="'fa-building'"></app-page-header>
+  <div class="cont-actions">
+    <div class="fac-selec">Programa seleccionado: <strong>{{ message }}</strong></div>
+    <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
+      <i class="fa fa-edit"></i>
+    </div>
+    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="alertMessage('debe seleccionar un registro')">
+      <i class="fa fa-edit"></i>
+    </div>
+    <div class="flt-button-action" title="Crear Programas" (click)="open(content,'new')">
+      <i class="fa fa-plus"></i>
+    </div>
+  </div>
+
+  <br />
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="hover table-striped" cellspacing="0" width="100%"></table>
+</div>
+
+<!--FORMULARIO MODAL PARA CREAR Y EDITAR FACULTADES-->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title">Facultad</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+
+      <form class="" method="post">
+        <div class="form-group">
+          <input type="hidden" class="form-control" id="txtIdPrograma" [(ngModel)]="idEdit" name="idEdit" #ctrl="ngModel">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Nombre Programa:</label>
+          <input type="text" class="form-control" id="txtPrograma" [(ngModel)]="namePro" name="namePro" #ctrl="ngModel" placeholder="Programa ....">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Descripción:</label>
+          <input type="text" class="form-control" id="txtDescripcion" [(ngModel)]="descripPro" name="descripPro" #ctrl="ngModel" placeholder="en la facultad ofre....">
+        </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="saveFomr()">Guardar</button>
+
+  </div>
+</ng-template>
