@@ -12,7 +12,7 @@ export class FacultadesService{
   public url:string;
 
   constructor(private http : Http){
-    this.url ='http://192.168.1.66:8080/SGE-WEB/services/';
+    this.url ='http://localhost:8080/SGE-WEB/services/';
   }
 
   getFacultadById(id:string){

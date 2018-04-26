@@ -21,7 +21,7 @@ export class AuthenticationService {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
-        this.url ='http://192.168.1.66:8080/SGE-WEB/services/';
+        this.url ='http://localhost:8080/SGE-WEB/services/';
     }
 
     login(username: string, password: string): Observable<boolean> {

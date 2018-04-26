@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DataTablesModule } from 'angular-datatables';
 
-import { FacultadesRoutingModule } from './facultades.routing.module';
-import { FacultadesComponent} from './facultades.component';
+import { ProgramasRoutingModule } from './programas.routing.module';
+import { ProgramasComponent } from './programas.component';
 import { FacultadesService } from '../../_services/facultadesService';
 import {
     ReactiveFormsModule,
@@ -14,7 +14,7 @@ import {
 import { PageHeaderModule } from './../../shared';
 
 @NgModule({
-    imports: [CommonModule, FacultadesRoutingModule, PageHeaderModule, NgbModule.forRoot(), DataTablesModule, FormsModule, ReactiveFormsModule],
-    declarations: [FacultadesComponent]
+    imports: [CommonModule, ProgramasRoutingModule, PageHeaderModule, NgbModule.forRoot(), DataTablesModule, FormsModule, ReactiveFormsModule],
+    declarations: [ProgramasComponent]
 })
 export class FacultadesModule{}
