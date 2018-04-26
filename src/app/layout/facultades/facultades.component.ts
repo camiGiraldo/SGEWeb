@@ -78,8 +78,10 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
 
   ngOnInit():void{
+
+    
     this.dtOptions = {
-      ajax: 'http://192.168.1.66:8080/SGE-WEB/services/getFacultades',
+      ajax: 'http://localhost:8080/SGE-WEB/services/getFacultades',
       columns: [{
         title: 'ID',
         data: 'id',
