@@ -10,7 +10,7 @@ $topnav-background-color: #222;
     border: none;
     border-radius: 0;
     overflow-y: auto;
-    background: linear-gradient(141deg, #BFECE9 10%, #0cdccf 87%, #19d0c4 20%);
+    background: linear-gradient(141deg, #65a8fb 86%, #f8db0a 20%);
     bottom: 0;
     overflow-x: hidden;
     padding-bottom: 40px;
@@ -22,23 +22,23 @@ $topnav-background-color: #222;
     // border-top: 1px solid rgba(255,255,255,0.3);
     .list-group {
         a.list-group-item {
-          border: 0;
+          border: 0.5px solid #f8db0a;
           border-radius: 0;
           font-size: 15px;
           padding: 0.7rem 0rem !important;
-          color: #333940;
+          color: #000;
           text-decoration: none;
-          background: linear-gradient(141deg, #BFECE9 10%, #0cdccf 87%, #19d0c4 20%);
+          background: linear-gradient(141deg, #65a8fb 86%, #3287df 20%);
             .fa {
                 margin-right: 1px;
             }
         }
         a:hover {
-            background: darken(#0da299, 5%);
+            background: darken(#0168c5, 5%);
             color: #fff;
         }
         a.router-link-active {
-            background: darken(#0da299, 5%);
+            background: darken(#0168c5, 5%);
             color: #fff;
         }
         .header-fields {
