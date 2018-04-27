@@ -24,7 +24,7 @@ $topnav-background-color: #222;
         a.list-group-item {
           border: 0.5px solid #f8db0a;
           border-radius: 0;
-          font-size: 15px;
+          font-size: 14px;
           padding: 0.7rem 0rem !important;
           color: #000;
           text-decoration: none;
@@ -32,10 +32,13 @@ $topnav-background-color: #222;
             .fa {
                 margin-right: 1px;
             }
+          transition: 0.4s;
         }
         a:hover {
             background: darken(#0168c5, 5%);
             color: #fff;
+            font-size: 16px;
+
         }
         a.router-link-active {
             background: darken(#0168c5, 5%);
