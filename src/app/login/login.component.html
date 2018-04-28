@@ -1,17 +1,17 @@
 <div class="login-page" [@routerTransition]>
     <div class="row justify-content-md-center">
         <div class="col-md-4">
-            <img src="assets/images/logo-blanco.png" class="user-avatar" />
+            <img src="assets/images/logo.png" class="user-avatar" />
             <br>
-            <h1>Sistema Gestion Egresados</h1>
+            <h1 [ngStyle]="{'color': '#0168c5'}">Sistema Gestion Egresados</h1>
             <form novalidate [formGroup]="loginForm">
                 <div class="form-content">
                     <div class="form-group">
-                        <input type="text" formControlName="username"  class="form-control input-underline input-lg" id="" placeholder="Usuario">
+                        <input type="text" formControlName="username"  class="form-control input-underline input-lg" id="txtUser" placeholder="Usuario">
                     </div>
 
                     <div class="form-group">
-                        <input type="password" formControlName="password" class="form-control input-underline input-lg" id="" placeholder="Contraseña">
+                        <input type="password" formControlName="password" class="form-control input-underline input-lg" id="txtPass" placeholder="Contraseña">
                     </div>
                 </div>
                 <button type="submit" class="btn rounded-btn" (click)="onLoggedin()"> Iniciar </button>

@@ -1,4 +1,4 @@
-$topnav-background-color: linear-gradient(141deg, #0fb8ad 13%, #26d4c8 82%, #0fb8ad 30%);;;
+$topnav-background-color: linear-gradient(141deg, #0168c5 13%, #65a8fb 84%, #f8db0a 20%);
 :host {
     .navbar {
         background: $topnav-background-color;
@@ -6,9 +6,9 @@ $topnav-background-color: linear-gradient(141deg, #0fb8ad 13%, #26d4c8 82%, #0fb
             color: #fff;
         }
         .nav-item > a {
-            color: #FFF;
+            color: #0168c5;
             &:hover {
-                color: #fff;
+                color: #0168c5;
             }
         }
     }
@@ -36,6 +36,7 @@ $topnav-background-color: linear-gradient(141deg, #0fb8ad 13%, #26d4c8 82%, #0fb
         }
     }
     img{
-      width: 20px;
+      width: 19px;
+      margin-right: 15px;
     }
 }

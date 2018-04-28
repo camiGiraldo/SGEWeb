@@ -12,7 +12,7 @@ export class FacultadesService{
   public url:string;
 
   constructor(private http : Http){
-    this.url ='http://192.168.1.66:8080/SGE-WEB/services/';
+    this.url ='http://localhost:8080/SGE-WEB/services/';
   }
 
   getFacultadById(id:string){
@@ -47,6 +47,44 @@ export class FacultadesService{
     let options = new RequestOptions({ headers: headers, params: myParams});
 
     return this.http.post(this.url+'saveFacultad',
+                   myParams.toString(),
+                   {headers : headers});
+  }
+
+
+  //SERVICIOS PARA LOS PROGRAMAS
+
+  getProgramaById(id:string){
+
+    let headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    let myParams = new URLSearchParams();
+    myParams.set('id', id);
+
+    let options = new RequestOptions({ headers: headers, params: myParams});
+
+    return this.http.post(this.url+'getProgramaById',
+                   myParams.toString(),
+                   {headers : headers});
+
+  }
+
+  savePrograma(data:any){
+    let headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    let myParams = new URLSearchParams();
+    myParams.set('id', data.id);
+    myParams.set('nombre', data.nombre);
+    myParams.set('descripcion', data.descripcion);
+
+
+    let options = new RequestOptions({ headers: headers, params: myParams});
+
+    return this.http.post(this.url+'savePrograma',
                    myParams.toString(),
                    {headers : headers});
   }

@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import { routerTransition } from '../../router.animations';
+import { ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs/Subject';
 import {
@@ -11,35 +12,35 @@ import { FacultadesService } from '../../_services/facultadesService';
 import * as $ from 'jquery';
 
 @Component({
-  selector : 'app-facultades',
-  templateUrl: './facultades.component.html',
-  styleUrls:['./facultades.component.css'],
+  selector : 'app-programas',
+  templateUrl: './programas.component.html',
+  styleUrls:['./programas.component.css'],
   animations: [routerTransition()]
 })
 
-export class FacultadesComponent implements OnInit, AfterViewInit{
+export class ProgramasComponent implements OnInit, AfterViewInit{
 
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
 
   dtTrigger: Subject<any> = new Subject();
-  dtTriggerProg : Subject<any> = new Subject();
   modalRef:any;
-  modalRefProg:any;
 
   message = '';
   messageValidation = '';
   idEdit:string;
-  nameFac:string;
-  directorFac:string;
-  descripFac:string;
+  namePro:string;
+  descripPro:string;
 
+  facultadId:string;
+  facultadName:string;
   cellSelect:any;
   dtOptions: any = {};
-  dtOptionsProg : any ={};
   closeResult: string;
 
-  constructor(private zone: NgZone, private modalService: NgbModal, private facService: FacultadesService){
+  constructor(private zone: NgZone, private modalService: NgbModal, private facService: FacultadesService, private route: ActivatedRoute){
+    this.route.params.subscribe(res => console.log(res));
+    this.facultadId =
     this.idEdit = '';
     this.cellSelect = {
       id : ''
@@ -49,7 +50,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
    ngAfterViewInit(): void {
     this.dtTrigger.next();
-    this.dtTriggerProg.next();
+
   }
 
   someClickHandler(info: any): void {
@@ -78,23 +79,16 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
 
   ngOnInit():void{
-
-    
     this.dtOptions = {
-      ajax: 'http://localhost:8080/SGE-WEB/services/getFacultades',
+      ajax: 'http://192.168.1.66:8080/SGE-WEB/services/getProgramasByFacultad?idFacultad='+this.idEdit,
+
       columns: [{
         title: 'ID',
         data: 'id',
         visible: false
       }, {
         title: 'Nombre',
-        data: 'name'
-      }, {
-        title: 'Director',
-        data: 'director'
-      }, {
-        title: 'Descripción',
-        data: 'descripcion'
+        data: 'nombre'
       }],
       rowCallback:(row: Node, data: any[] | Object, index: number) => {
          const self = this;
@@ -113,78 +107,19 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
     };
   }
 
-  createTablePrograms(){
-    debugger
-    if(this.idEdit == '')
-    {
-
-      alert('Se debe seleccionar una facultad');
-
-    }
-    else{
-
-      this.dtOptionsProg = {
-        ajax: 'http://192.168.1.66:8080/SGE-WEB/services/getProgramasByFacultad?idFacultad='+this.idEdit,
-
-        columns: [{
-          title: 'ID',
-          data: 'id',
-          visible: false
-        }, {
-          title: 'Nombre',
-          data: 'nombre'
-        }],
-        rowCallback:(row: Node, data: any[] | Object, index: number) => {
-           const self = this;
-           $('td', row).unbind('click');
-           $('td', row).bind('click', () => {
-             self.someClickHandlerProg(data);
-           });
-           return row;
-        },
-        select:{
-              style: 'single'
-        },
-        "language": {
-             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-         }
-      };
-
-    }
-
-
-  }
-
-  openFacultades(contentProg, action:string){
-
-    this.createTablePrograms();
-
-    this.modalRefProg = this.modalService.open(contentProg);
-    this.modalRefProg.result.then((result) => {
-
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-
-  }
-
-
+//ARREGLAR PARA PROGRAMAS !!!!!!!!!!!!!!!!!!
   open(content, action:string) {
-
       if(action == 'edit'){
         if(this.idEdit != ''){
-          let callBack = this.facService.getFacultadById(this.idEdit);
+          let callBack = this.facService.getProgramaById(this.idEdit);
           callBack.subscribe(res => {
             let data = res.json();
 
             if(data.status && data.status === 'OK'){
-              var facultad = data.data;
-              this.idEdit = facultad.id;
-              this.nameFac = facultad.name;
-              this.directorFac = facultad.director
-              this.descripFac = facultad.descripcion;
+              var programa = data.data;
+              this.idEdit = programa.id;
+              this.namePro = programa.name;
+              this.descripPro = programa.descripcion;
             }
           });
         }
@@ -206,16 +141,15 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   saveFomr(){
 
-    if( this.nameFac == '' || this.directorFac == '' || this.descripFac == ''){
+    if( this.namePro == ''  || this.descripPro == ''){
       this.messageValidation = 'Todos los campos son obligatorios';
     }else{
       let data = {
         id : this.idEdit,
-        nombre: this.nameFac,
-        director: this.directorFac,
-        descripcion: this.descripFac
+        nombre: this.namePro ,
+        descripcion: this.descripPro
       };
-      let callBack = this.facService.saveFacultad(data);
+      let callBack = this.facService.savePrograma(data); //editar para programas !!!!!!!!
       callBack.subscribe(res => {
           let data = res.json();
 
@@ -256,9 +190,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   cleanForm(){
     //this.idEdit = "";
-    this.nameFac = "";
-    this.directorFac ="";
-    this.descripFac = "";
+    this.namePro = "";
+    this.descripPro = "";
   }
 
 
