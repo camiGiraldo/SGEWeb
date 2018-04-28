@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, ActivatedRoute  } from '@angular/router';
 import { LayoutComponent } from './layout.component';
 
 const routes: Routes = [
@@ -17,6 +17,7 @@ const routes: Routes = [
             { path: 'components', loadChildren: './bs-component/bs-component.module#BsComponentModule' },
             { path: 'blank-page', loadChildren: './blank-page/blank-page.module#BlankPageModule' },
             { path: 'ges-egresado', loadChildren: './ges-egresado/ges-egresado.module#GesEgresadoModule' },
+            { path: 'ges-encuesta/:id', loadChildren: './ges-encuesta/ges-encuesta.module#GesEncuestaeModule' },
             { path: 'facultades', loadChildren: './facultades/facultades.module#FacultadesModule' }
         ]
     }

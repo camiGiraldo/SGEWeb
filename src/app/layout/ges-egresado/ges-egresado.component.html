@@ -1,21 +1,145 @@
 <div [@routerTransition]>
   <app-page-header [heading]="'Gestion de Egresados'" [icon]="'fa-user'"></app-page-header>
-  <div class="col-12" style="text-align:center;">
-    <img src="assets/images/enConstruccion.jpg" class="img-fluid pull-xs-left">
+
+  <div class="">
+    <button type="button" name="button" (click)="openGesEncuesta()">abrir encuesta</button>
   </div>
+
+  <div class="cont-view-egresados">
+    <div class="flt-button-action-fixed" title="Crear Egresado" (click)="open(content,'new')">
+      <i class="fa fa-plus"></i>
+    </div>
+  </div>
+
+
 </div>
 
 
 
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Modal title</h4>
+      <h4 class="modal-title">Formulario Egresado</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
       </button>
   </div>
   <div class="modal-body">
-      <p>One fine body&hellip;</p>
+    <ngb-tabset>
+  <ngb-tab>
+    <ng-template ngbTabTitle>Datos basicos</ng-template>
+    <ng-template ngbTabContent>
+      <!--<ngb-alert [type]="info" [dismissible]="false">Datos Basicos</ngb-alert>-->
+      <form class="col-12">
+      <div class="row">
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Nombres</label>
+          <input type="text" class="form-control" id="txtNombre" placeholder="Nombres completos">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Apellidos</label>
+          <input type="text" class="form-control" id="txtApellido" placeholder="Apellidos completos">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Correo electronico</label>
+          <input type="email" class="form-control" id="txtCorreo" placeholder="emali@domain.com">
+        </div>
+
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Tipo de documento</label>
+          <select class="custom-select" id="cbxTipoDocumento">
+            <option selected>Seleccionar</option>
+            <option value="1">Cedula de ciudadania</option>
+            <option value="2">Tarjeta de identidad</option>
+            <option value="3">Pasaporte</option>
+          </select>
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Numero de identificacion</label>
+          <input type="text" class="form-control" id="txtNumeroIdentificacion" placeholder="99999....">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Ciudad expedicion</label>
+          <input type="text" class="form-control" id="txtCiudadExp" placeholder="Cali, Valle del cauca">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Ciudad de residencia</label>
+          <input type="text" class="form-control" id="txtCiudadNacimiento" placeholder="Cali, Valle del cauca">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Direccion de residencia</label>
+          <input type="text" class="form-control" id="txtDireccionRecidencia" placeholder="Example input">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Telefono fijo</label>
+          <input type="text" class="form-control" id="txtTelFijo" placeholder="numero fijo">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Telefono celular 1</label>
+          <input type="text" class="form-control" id="txtTelMovil1" placeholder="numero celular">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Telefono celular 2</label>
+          <input type="text" class="form-control" id="txtTelMovil2" placeholder="numero celular alternativo">
+        </div>
+
+      </div>
+      </form>
+    </ng-template>
+  </ngb-tab>
+  <ngb-tab>
+    <ng-template ngbTabTitle>Informacion academica</ng-template>
+    <ng-template ngbTabContent>
+    <form class="">
+      <div class="row">
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Libro</label>
+          <input type="text" class="form-control" id="txtLibro" placeholder="numero de libro">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Folio</label>
+          <input type="text" class="form-control" id="txtFolio" placeholder="numero de folio">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Acta</label>
+          <input type="text" class="form-control" id="txtActa" placeholder="numero de acta">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Diploma</label>
+          <input type="text" class="form-control" id="txtDiploma" placeholder="numero de diploma">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Semestre de grado</label>
+          <input type="text" class="form-control" id="txtSemestreGrado" placeholder="numero de semestre de grado">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Grado por</label>
+          <input type="text" class="form-control" id="txtGradoPor" placeholder="">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Ultimo programa cursador</label>
+          <input type="text" class="form-control" id="txtUltimoPrograma" placeholder="">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Opcion de grado</label>
+          <input type="text" class="form-control" id="txtOpcionGrado" placeholder="Diplomado, tesis, proyecto">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Nota de grado</label>
+          <input type="text" class="form-control" id="txtNotaOpcion" placeholder="3,4,5">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Semestre terminacion materias</label>
+          <input type="text" class="form-control" id="txtSemTerminacionMat" placeholder="numero de semestre terminacion materias">
+        </div>
+        <div class="form-group col-lg-4 col-sm-12 col-xs-12 col-md-6">
+          <label for="formGroupExampleInput">Otros proramas cursados</label>
+          <textarea class="form-control" id="exampleTextarea" rows="3" placeholder="Tecnologia sistemas, tecnico en sistemas"></textarea>
+        </div>
+      </div>
+    </form>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>

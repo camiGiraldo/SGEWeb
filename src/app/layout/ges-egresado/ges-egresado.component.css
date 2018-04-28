@@ -1,11 +1,33 @@
-.flt-button{
-  width: 30px;
+.cont-view-egresados .flt-button-action-fixed{
+  width: 50px;
   float: right;
-  height: 30px;
+  height: 50px;
   border-radius: 50%;
   box-shadow: 2px 2px 10px #09afa4;
   background-color: #0fb8ad;
   color: #FFF;
   text-align: center;
   line-height: 2;
+  font-size: 26px;
+  margin-right: 5px;
+  cursor: pointer;
+  background-position: center;
+  transition: background 0.8s;
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+}
+
+..flt-button-action-fixed:hover {
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+}
+
+..flt-button-action-fixed:active {
+  background-color: #6eb9f7;
+  background-size: 100%;
+  transition: background 0s;
+}
+
+.modal-m-size .modal-content{
+
 }
