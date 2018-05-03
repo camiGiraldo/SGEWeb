@@ -6,6 +6,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
+import * as CryptoJS from 'crypto-js';
+
 @Injectable()
 export class AuthenticationService {
     public token: string;
@@ -30,7 +32,7 @@ export class AuthenticationService {
       });
 
       let myParams = new URLSearchParams();
-      myParams.set('usr', username);
+      myParams.set('usr', CryptoJS.AES.encrypt(username, "Un14jc2018!!.").toString());
       myParams.set('pas',password);
       let options = new RequestOptions({ headers: headers, params: myParams});
 

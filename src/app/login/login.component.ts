@@ -11,6 +11,7 @@ import {
 
 import { routerTransition } from '../router.animations';
 
+
 @Component({
     selector: 'app-login',
     templateUrl: './login.component.html',
@@ -22,9 +23,15 @@ export class LoginComponent implements OnInit {
     public loginForm: FormGroup;
 
 
+
     constructor(
       private router: Router,
-      private authenticationService: AuthenticationService) {}
+      private authenticationService: AuthenticationService) {
+
+
+
+
+      }
 
 
 
@@ -34,6 +41,11 @@ export class LoginComponent implements OnInit {
         username: new FormControl('',Validators.required),
         password: new FormControl('',Validators.required)
       });
+
+
+
+      //console.log(CryptoJS.AES.encrypt("Message", "Secret Passphrase").toString());
+
     }
 
     onLoggedin() {
