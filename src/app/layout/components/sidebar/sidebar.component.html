@@ -19,17 +19,17 @@
             <li class="nested" [class.expand]="showMenu === 'eventos'">
                 <ul class="submenu">
                     <li>
-                      <a routerLink="/categoria-eventos"  class="list-group-item">
+                      <a routerLink="/categoria-eventos" [routerLinkActive]="['router-link-active']"  class="list-group-item">
                           <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Categorias' | translate }}
                       </a>
                     </li>
                     <li>
-                      <a routerLink="/tipo-eventos"  class="list-group-item">
+                      <a routerLink="/tipo-eventos" [routerLinkActive]="['router-link-active']"  class="list-group-item">
                           <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Tipos' | translate }}
                       </a>
                     </li>
                     <li>
-                      <a routerLink="/ges-eventos"  class="list-group-item">
+                      <a routerLink="/ges-eventos" [routerLinkActive]="['router-link-active']" class="list-group-item">
                           <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Todos Eventos' | translate }}
                       </a>
                     </li>
