@@ -72,6 +72,7 @@ export class AuthenticationService {
         this.token = null;
         this.loggedIn.next(false);
         localStorage.removeItem('currentUser');
+        localStorage.clear();
 
     }
 }
