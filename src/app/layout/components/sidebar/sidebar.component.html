@@ -9,6 +9,9 @@
         <a routerLink="/facultades" [routerLinkActive]="['router-link-active']"  class="list-group-item">
             <i class="fa fa-fw fa-building"></i>&nbsp;{{ 'Gestion de Facultades' | translate }}
         </a>
+        <a routerLink="/programas" [routerLinkActive]="['router-link-active']"  class="list-group-item">
+            <i class="fa fa-fw fa-building"></i>&nbsp;{{ 'Gestion de Programas' | translate }}
+        </a>
         <div class="nested-menu">
             <a class="list-group-item" (click)="addExpandClass('eventos')">
                 <span><i class="fa fa-plus"></i>&nbsp; {{ 'Eventos' | translate }}</span>
@@ -16,34 +19,89 @@
             <li class="nested" [class.expand]="showMenu === 'eventos'">
                 <ul class="submenu">
                     <li>
-                      <a routerLink="/ges-egresado"  class="list-group-item">
-                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Formacion Continuada' | translate }}
+                      <a routerLink="/categoria-eventos"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Categorias' | translate }}
                       </a>
                     </li>
                     <li>
-                      <a routerLink="/ges-egresado"  class="list-group-item">
-                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Academicos' | translate }}
+                      <a routerLink="/tipo-eventos"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Tipos' | translate }}
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/ges-eventos"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Todos Eventos' | translate }}
+                      </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="addExpandClass('participacion')">
+                <span><i class="fa fa-plus"></i>&nbsp; {{ 'Participacion democratica' | translate }}</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'participacion'">
+                <ul class="submenu">
+                    <li>
+                      <a routerLink="/formas-participacion"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Formas de Participacion' | translate }}
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/ges-participacion"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Gestionar Participaciones' | translate }}
                       </a>
                     </li>
 
                 </ul>
             </li>
         </div>
-        <a routerLink="/ges-egresado"  class="list-group-item">
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="addExpandClass('aportes')">
+                <span><i class="fa fa-plus"></i>&nbsp; {{ 'Aportes a la investigacion' | translate }}</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'aportes'">
+                <ul class="submenu">
+                    <li>
+                      <a routerLink="/tipo-aportes"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Tipos' | translate }}
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/ges-aportes"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Gestionar Aportes' | translate }}
+                      </a>
+                    </li>
+
+                </ul>
+            </li>
+        </div>
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="addExpandClass('reconocimientos')">
+                <span><i class="fa fa-plus"></i>&nbsp; {{ 'Reconocimientos a Egresados' | translate }}</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'reconocimientos'">
+                <ul class="submenu">
+                    <li>
+                      <a routerLink="/tipo-aportes"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Tipos' | translate }}
+                      </a>
+                    </li>
+                    <li>
+                      <a routerLink="/ges-aportes"  class="list-group-item">
+                          <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Gestionar reconocimientos' | translate }}
+                      </a>
+                    </li>
+
+                </ul>
+            </li>
+        </div>
+      <!--  <a routerLink="/ges-egresado"  class="list-group-item">
             <i class="fa fa-fw fa-calendar"></i>&nbsp;{{ 'Actividades y Servicios' | translate }}
         </a>
         <a routerLink="/ges-egresado" class="list-group-item">
             <i class="fa fa-fw fa-exchange"></i>&nbsp;{{ 'Actividades de Retribucion' | translate }}
-        </a>
-        <a routerLink="/ges-egresado" class="list-group-item">
-            <i class="fa fa-fw fa-bullhorn"></i>&nbsp;{{ 'Participacion democratica' | translate }}
-        </a>
-        <a routerLink="/ges-egresado"  class="list-group-item">
-            <i class="fa fa-fw fa-search-plus"></i>&nbsp;{{ 'Aportes a la investigacion' | translate }}
-        </a>
-        <a routerLink="/ges-egresado"  class="list-group-item">
-            <i class="fa fa-fw fa-trophy"></i>&nbsp;{{ 'Reconocimientos a Egresados' | translate }}
-        </a>
+        </a>     -->
         <a routerLink="/ges-egresado"  class="list-group-item">
             <i class="fa fa-fw fa-file"></i>&nbsp;{{ 'Reportes' | translate }}
         </a>

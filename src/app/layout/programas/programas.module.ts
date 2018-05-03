@@ -17,4 +17,4 @@ import { PageHeaderModule } from './../../shared';
     imports: [CommonModule, ProgramasRoutingModule, PageHeaderModule, NgbModule.forRoot(), DataTablesModule, FormsModule, ReactiveFormsModule],
     declarations: [ProgramasComponent]
 })
-export class FacultadesModule{}
+export class ProgranasModule{}

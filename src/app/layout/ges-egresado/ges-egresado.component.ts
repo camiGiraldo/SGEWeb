@@ -35,12 +35,8 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
 
 
-  constructor(private modalService: NgbModal/*, private router: Router*/){
-    /*this.idEdit = '';
-    this.cellSelect = {
-      id : ''
-    }
-    this.message = 'No se ha seleccionado una fila';*/
+  constructor(private modalService: NgbModal, private router: Router){
+
 
   }
 
@@ -48,24 +44,12 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   //  this.dtTrigger.next();
 
   }
-/*
-  someClickHandler(info: any): void {
-    if(this.cellSelect.id !== info.id){
-      this.cellSelect = {
-        id : info.id
-      }
-      this.message =  info.name;
-      this.idEdit = info.id;
-    }
-    else{
-      this.cellSelect = {
-        id : ''
-      }
-      this.message = 'no se ha seleccionado una fila';
-      this.idEdit = '';
-    }
+
+  onStep1Next(event){
+    debugger;
+
   }
-*/
+
 
   ngOnInit(){
   }

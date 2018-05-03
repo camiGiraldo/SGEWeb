@@ -1,6 +1,6 @@
-<div class="login-page" [@routerTransition]>
+<div class="login-page" [@routerTransition] style="background:url('assets/images/background.jpg');">
     <div class="row justify-content-md-center">
-        <div class="col-md-4">
+        <div class="col-md-4" [ngClass]="{'cont-login':true}">
             <img src="assets/images/logo.png" class="user-avatar" />
             <br>
             <h1 [ngStyle]="{'color': '#0168c5'}">Sistema Gestion Egresados</h1>

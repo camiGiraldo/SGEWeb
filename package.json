@@ -28,6 +28,7 @@
         "@ngx-translate/core": "^9.1.1",
         "@ngx-translate/http-loader": "^2.0.1",
         "angular-datatables": "^5.0.0",
+        "angular-wizard-form": "^0.4.1",
         "chart.js": "^2.7.2",
         "core-js": "^2.5.3",
         "datatables.net": "^1.10.16",

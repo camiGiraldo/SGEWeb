@@ -24,15 +24,15 @@ $topnav-background-color:#65a8fb;
         border-radius: 0;
     }
     .input-underline {
-        background: 0 0;
-        border: none;
-        box-shadow: none;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.5);
-        color: #fff;
+        //background: 0 0;
+        //border: none;
+        //box-shadow: none;
+        //border-bottom: 2px solid #65a8fb;;
+        color: #04529d;
         border-radius: 0;
     }
     .input-underline:focus {
-        border-bottom: 3px solid #fff;
+        border-bottom: 3px solid #04529d;
         box-shadow: none;
     }
     .rounded-btn {
@@ -68,21 +68,21 @@ $topnav-background-color:#65a8fb;
     .form-group {
         padding: 8px 0;
         input::-webkit-input-placeholder {
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: rgb(101, 168, 251) !important;
         }
 
         input:-moz-placeholder {
             /* Firefox 18- */
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: rgb(101, 168, 251) !important;
         }
 
         input::-moz-placeholder {
             /* Firefox 19+ */
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: rgb(101, 168, 251) !important;
         }
 
         input:-ms-input-placeholder {
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: rgb(101, 168, 251) !important;
         }
     }
     .form-content {
@@ -91,5 +91,11 @@ $topnav-background-color:#65a8fb;
     .user-avatar {
         width: 250px;
 
+    }
+
+    .cont-login{
+      background: rgba(255, 255, 0, 0.8784313725490196);
+      padding: 10px 5px;
+      border-radius: 15px;
     }
 }

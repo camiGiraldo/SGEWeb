@@ -23,9 +23,9 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   dtElement: DataTableDirective;
 
   dtTrigger: Subject<any> = new Subject();
-  dtTriggerProg : Subject<any> = new Subject();
+
   modalRef:any;
-  modalRefProg:any;
+
 
   message = '';
   messageValidation = '';
@@ -36,7 +36,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   cellSelect:any;
   dtOptions: any = {};
-  dtOptionsProg : any ={};
+
   closeResult: string;
 
   constructor(private zone: NgZone, private modalService: NgbModal, private facService: FacultadesService){
@@ -49,7 +49,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
    ngAfterViewInit(): void {
     this.dtTrigger.next();
-    this.dtTriggerProg.next();
+
   }
 
   someClickHandler(info: any): void {
@@ -79,7 +79,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   ngOnInit():void{
 
-    
+
     this.dtOptions = {
       ajax: 'http://localhost:8080/SGE-WEB/services/getFacultades',
       columns: [{
@@ -114,7 +114,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   }
 
   createTablePrograms(){
-    debugger
+
     if(this.idEdit == '')
     {
 
@@ -122,33 +122,6 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
     }
     else{
-
-      this.dtOptionsProg = {
-        ajax: 'http://192.168.1.66:8080/SGE-WEB/services/getProgramasByFacultad?idFacultad='+this.idEdit,
-
-        columns: [{
-          title: 'ID',
-          data: 'id',
-          visible: false
-        }, {
-          title: 'Nombre',
-          data: 'nombre'
-        }],
-        rowCallback:(row: Node, data: any[] | Object, index: number) => {
-           const self = this;
-           $('td', row).unbind('click');
-           $('td', row).bind('click', () => {
-             self.someClickHandlerProg(data);
-           });
-           return row;
-        },
-        select:{
-              style: 'single'
-        },
-        "language": {
-             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-         }
-      };
 
     }
 
@@ -159,14 +132,6 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
     this.createTablePrograms();
 
-    this.modalRefProg = this.modalService.open(contentProg);
-    this.modalRefProg.result.then((result) => {
-
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
 
   }
 
