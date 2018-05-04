@@ -46,7 +46,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   }
 
   onStep1Next(event){
-    debugger;
+    
 
   }
 

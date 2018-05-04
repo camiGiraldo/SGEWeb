@@ -21,15 +21,14 @@ import { routerTransition } from '../router.animations';
 export class LoginComponent implements OnInit {
 
     public loginForm: FormGroup;
-
+    public loading:boolean = false;
+    public btnStatus:boolean = false;
+    public messageAlert:boolean = false;
 
 
     constructor(
       private router: Router,
       private authenticationService: AuthenticationService) {
-
-
-
 
       }
 
@@ -49,7 +48,9 @@ export class LoginComponent implements OnInit {
     }
 
     onLoggedin() {
-
+      this.loading = true;
+      this.btnStatus = true;
+      this.messageAlert = false;
       const username = this.loginForm.value['username'];
       const password = this.loginForm.value['password'];
       this.authenticationService.login(username, password)
@@ -57,12 +58,23 @@ export class LoginComponent implements OnInit {
           .subscribe(result => {
               if (result === true) {
                   // login successful
+                  this.loading = false;
+                  this.btnStatus = false;
                   localStorage.setItem('isLoggedin', 'true');
                   this.router.navigate(['/dashboard']);
               } else {
-                  // login failed
+                  this.messageAlert = true;
+                  this.loading = false;
+                  this.btnStatus = false;
               }
-          });
+          },
+          error =>{
+            this.messageAlert = false;
+            this.loading = false;
+            this.btnStatus = false;
+            alert("Error interno con el servidor, por favor contactar con el administrador");
+
+          } );
 
 
     }

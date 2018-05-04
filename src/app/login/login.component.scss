@@ -86,7 +86,7 @@ $topnav-background-color:#65a8fb;
         }
     }
     .form-content {
-        padding: 40px 0;
+        padding: 20px 0;
     }
     .user-avatar {
         width: 250px;
@@ -95,7 +95,15 @@ $topnav-background-color:#65a8fb;
 
     .cont-login{
       background: rgba(255, 255, 0, 0.8784313725490196);
-      padding: 10px 5px;
+      padding: 20px 27px;
       border-radius: 15px;
+    }
+
+    #myVideo {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        min-width: 100%;
+        min-height: 100%;
     }
 }
