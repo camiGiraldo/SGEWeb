@@ -41,3 +41,48 @@
   background-size: 100%;
   transition: background 0s;
 }
+
+/*ESTILOS PARA LOS MENSAJES DE ALERTA*/
+.succes-msg .modal-content{
+  background-color: #e0ffe0;
+  color: #000;
+  font-weight: bold;
+}
+.succes-msg .modal-content .modal-header h4{
+  color: green;
+  font-weight: 700;
+}
+
+
+.info-msg .modal-content{
+  background-color: #fafad5;
+  color: #000;
+  font-weight: bold;
+}
+
+.info-msg .modal-content .modal-header h4{
+  color: #b0b01a;;
+  font-weight: 700;
+}
+
+
+
+.error-msg .modal-content{
+  background-color: #efd4d4;
+  color: #000;
+  font-weight: bold;
+}
+
+.error-msg .modal-content .modal-header h4{
+  color: red;
+  font-weight: 700;
+}
+
+
+.icon-message{
+  height: 50px;
+}
+
+.icon-message i{
+  font-size: 50px;
+}

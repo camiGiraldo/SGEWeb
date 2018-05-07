@@ -36,15 +36,15 @@
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Nombre Facultad:</label>
-          <input type="text" class="form-control" id="txtFacultad" [(ngModel)]="nameFac" name="nameFac" #ctrl="ngModel" placeholder="facultad de ...">
+          <input type="text" class="form-control" id="txtFacultad" [(ngModel)]="nameFac" name="nameFac" #ctrl="ngModel" placeholder="facultad de ..." required>
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Nombre Director:</label>
-          <input type="text" class="form-control" id="txtDirector" [(ngModel)]="directorFac" name="directorFac" #ctrl="ngModel" placeholder="nombre del director...">
+          <input type="text" class="form-control" id="txtDirector" [(ngModel)]="directorFac" name="directorFac" #ctrl="ngModel" placeholder="nombre del director..." required>
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Descripción:</label>
-          <input type="text" class="form-control" id="txtDescripcion" [(ngModel)]="descripFac" name="descripFac" #ctrl="ngModel" placeholder="en la facultad ofre....">
+          <input type="text" class="form-control" id="txtDescripcion" [(ngModel)]="descripFac" name="descripFac" #ctrl="ngModel" placeholder="en la facultad ofre...." required>
         </div>
       </form>
   </div>
@@ -55,21 +55,28 @@
   </div>
 </ng-template>
 
-<!--FORMULARIO MODAL PARA CREAR Y EDITAR FACULTADES-->
-<ng-template #contentProg let-c="close" let-d="dismiss">
+<!--MODAL DE NOTIFICACIONES-->
+<ng-template #mdlNotification let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Programas</h4>
+      <h4 class="modal-title">{{titleNotification}}</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
       </button>
   </div>
- <div class="modal-body">
+  <div class="modal-body">
+   <div class="row">
 
-  
+     <div class="col-2 icon-message">
+       <i [className] = 'iconNotification' [style.color] = "colorAlert"></i>
+     </div>
+     <div class="col-10">
+       {{messageNotification}}
+     </div>
+
+   </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="c('Close click')">Guardar</button>
 
+    <button type="button" class="btn btn-primary" (click)="c('Close click')">Aceptar</button>
   </div>
 </ng-template>

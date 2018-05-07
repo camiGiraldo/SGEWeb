@@ -1,11 +1,8 @@
-import { AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs/Subject';
-import {
-    ReactiveFormsModule,
-    FormsModule
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FacultadesService } from '../../_services/facultadesService';
 import * as $ from 'jquery';
@@ -13,16 +10,21 @@ import * as $ from 'jquery';
 @Component({
   selector : 'app-facultades',
   templateUrl: './facultades.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls:['./facultades.component.css'],
   animations: [routerTransition()]
 })
 
 export class FacultadesComponent implements OnInit, AfterViewInit{
 
-  @ViewChild(DataTableDirective)
-  dtElement: DataTableDirective;
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+  @ViewChild('mdlNotification') public modalNotification:NgbModal;
 
+  //vaariables para la tabla
+  dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  cellSelect:any;
+  //------------------------
 
   modalRef:any;
 
@@ -34,8 +36,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   directorFac:string;
   descripFac:string;
 
-  cellSelect:any;
-  dtOptions: any = {};
+
+
 
   closeResult: string;
 
@@ -53,6 +55,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   }
 
   someClickHandler(info: any): void {
+
+
     if(this.cellSelect.id !== info.id){
       this.cellSelect = {
         id : info.id
@@ -69,10 +73,6 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
     }
 
 
-  }
-
-  someClickHandlerProg(info: any): void {
-    console.log(info);
   }
 
 
@@ -113,27 +113,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
     };
   }
 
-  createTablePrograms(){
-
-    if(this.idEdit == '')
-    {
-
-      alert('Se debe seleccionar una facultad');
-
-    }
-    else{
-
-    }
 
 
-  }
-
-  openFacultades(contentProg, action:string){
-
-    this.createTablePrograms();
-
-
-  }
 
 
   open(content, action:string) {
@@ -172,8 +153,10 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   saveFomr(){
 
     if( this.nameFac == '' || this.directorFac == '' || this.descripFac == ''){
-      this.messageValidation = 'Todos los campos son obligatorios';
+
+      this.openNotification("Todos los campos son obligatorios","error");
     }else{
+
       let data = {
         id : this.idEdit,
         nombre: this.nameFac,
@@ -187,23 +170,20 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
           let status = data.status;
 
           if(status == 'OK'){
-            this.messageValidation = 'Registro exitoso';
-            this.alertMessage(this.messageValidation);
+
             this.modalRef.close();
+            this.openNotification("","succes");
           }
           else{
             this.messageValidation = 'Ocurrio un error al guardar el registro';
-            this.alertMessage(this.messageValidation);
+
           }
       })
       this.rerenderTable();
 
     }
   }
-//muestra mensajes de alertas
-  alertMessage(mensaje:string){
-    alert(mensaje);
-  }
+
 
   private getDismissReason(reason: any): string {
       if (reason === ModalDismissReasons.ESC) {
@@ -217,8 +197,6 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
           return  `with: ${reason}`;
       }
   }
-
-
   cleanForm(){
     //this.idEdit = "";
     this.nameFac = "";
@@ -236,6 +214,57 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
       // Call the dtTrigger to rerender again
       this.dtTrigger.next();
     });
+  }
+
+
+  //SECCION DE  NOTIFICACIONES
+  //AUTOR: CAMILO GIRALDO 2018
+  //variables para los mensajes de notificacion
+  titleNotification:string;
+  messageNotification:string;
+  iconNotification:string;
+  colorAlert:string;
+  //-------------------------------------------
+  //METODO PARA ABRIR EL MODAL DE LA NOTIFICACION
+  openNotification(messageComplement:string, type:string){
+
+
+    let titleNot:string;
+    let firstMessage:string;
+    let classBox:string;
+    let classIcon;
+    let colorIcon;
+
+    switch (type){
+      case 'succes':
+        titleNot = "Confirmación";
+        firstMessage ="Registro exitoso.";
+        classIcon = "fa fa-check-square-o";
+        colorIcon = "green";
+        classBox = "succes-msg";
+      break;
+      case 'info':
+        titleNot = "Información";
+        firstMessage ="";
+        classIcon ="fa fa-exclamation-triangle";
+        colorIcon = "#b0b01a";
+        classBox = "info-msg";
+      break;
+      case 'error':
+        titleNot = "Error";
+        firstMessage ="Opps! ";
+        classIcon ="fa fa-times";
+        colorIcon="red";
+        classBox = "error-msg";
+      break;
+    }
+
+    this.titleNotification =titleNot;
+    this.messageNotification = firstMessage + messageComplement;
+    this.iconNotification = classIcon;
+    this.colorAlert = colorIcon;
+    this.modalService.open(this.modalNotification, { windowClass: classBox});
+
   }
 
 }
