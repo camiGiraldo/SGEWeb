@@ -2,7 +2,12 @@ import { AfterViewInit, Component, NgZone, OnInit, ViewChild, ViewEncapsulation}
 import { routerTransition } from '../../router.animations';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs/Subject';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+    Validators,
+    FormBuilder
+} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FacultadesService } from '../../_services/facultadesService';
 import * as $ from 'jquery';
@@ -20,8 +25,9 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
 
+
   //vaariables para la tabla
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any;
   dtTrigger: Subject<any> = new Subject();
   cellSelect:any;
   //------------------------
@@ -31,15 +37,12 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   message = '';
   messageValidation = '';
-  idEdit:string;
-  nameFac:string;
-  directorFac:string;
-  descripFac:string;
-
-
-
-
   closeResult: string;
+
+  //MAPEO DE LOS ATRIBUTOS DEL FORMULARIO A CREAR
+  idEdit:string ='';
+  nameFac:string = '';
+  abreviatura:string = '';
 
   constructor(private zone: NgZone, private modalService: NgbModal, private facService: FacultadesService){
     this.idEdit = '';
@@ -47,6 +50,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
       id : ''
     }
     this.message = 'No se ha seleccionado una fila';
+
+
    }
 
    ngAfterViewInit(): void {
@@ -59,10 +64,10 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
     if(this.cellSelect.id !== info.id){
       this.cellSelect = {
-        id : info.id
+        id : info.idFacultad
       }
       this.message =  info.name;
-      this.idEdit = info.id;
+      this.idEdit = info.idFacultad;
     }
     else{
       this.cellSelect = {
@@ -81,20 +86,17 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
 
     this.dtOptions = {
-      ajax: 'http://localhost:8080/SGE-WEB/services/getFacultades',
+      ajax: 'http://192.168.1.70:8080/SIGEG-WEB/services/getFacultades',
       columns: [{
         title: 'ID',
-        data: 'id',
+        data: 'idFacultad',
         visible: false
       }, {
         title: 'Nombre',
-        data: 'name'
+        data: 'nombre'
       }, {
-        title: 'Director',
-        data: 'director'
-      }, {
-        title: 'Descripción',
-        data: 'descripcion'
+        title: 'Abreviatura',
+        data: 'abreviatura'
       }],
       rowCallback:(row: Node, data: any[] | Object, index: number) => {
          const self = this;
@@ -113,13 +115,10 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
     };
   }
 
-
-
-
-
   open(content, action:string) {
-
+      this.modalRef = this.modalService.open(content);
       if(action == 'edit'){
+
         if(this.idEdit != ''){
           let callBack = this.facService.getFacultadById(this.idEdit);
           callBack.subscribe(res => {
@@ -127,19 +126,21 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
             if(data.status && data.status === 'OK'){
               var facultad = data.data;
-              this.idEdit = facultad.id;
-              this.nameFac = facultad.name;
-              this.directorFac = facultad.director
-              this.descripFac = facultad.descripcion;
+              this.idEdit = facultad.idFacultad;
+              this.nameFac = facultad.nombre;
+              this.abreviatura = facultad.abreviatura
+
             }
           });
         }
         else{
-          this.message ="POR FAVOR SELECCIONAR UNA FILA PARA EDITAR";
+          this.message ="Por favor seleccionar una fila para editar";
+          this.modalRef.close();
+          this.openNotification(this.message, 'error');
         }
       }
 
-      this.modalRef = this.modalService.open(content);
+
       this.modalRef.result.then((result) => {
         this.cleanForm();
         this.closeResult = `Closed with: ${result}`;
@@ -150,9 +151,9 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   }
 
-  saveFomr(){
+  saveForm(){
 
-    if( this.nameFac == '' || this.directorFac == '' || this.descripFac == ''){
+    if( this.nameFac == '' || this.abreviatura == ''){
 
       this.openNotification("Todos los campos son obligatorios","error");
     }else{
@@ -160,8 +161,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
       let data = {
         id : this.idEdit,
         nombre: this.nameFac,
-        director: this.directorFac,
-        descripcion: this.descripFac
+        abreviatura: this.abreviatura,
+
       };
       let callBack = this.facService.saveFacultad(data);
       callBack.subscribe(res => {
@@ -200,8 +201,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   cleanForm(){
     //this.idEdit = "";
     this.nameFac = "";
-    this.directorFac ="";
-    this.descripFac = "";
+    this.abreviatura ="";
+
   }
 
 
@@ -263,7 +264,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
     this.messageNotification = firstMessage + messageComplement;
     this.iconNotification = classIcon;
     this.colorAlert = colorIcon;
-    this.modalService.open(this.modalNotification, { windowClass: classBox});
+    this.modalService.open(this.modalNotification, { windowClass: classBox });
 
   }
 

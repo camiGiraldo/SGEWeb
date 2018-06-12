@@ -12,7 +12,7 @@ export class EgresadosService{
   public url:string;
 
   constructor(private http : Http){
-    this.url ='http://192.168.1.66:8080/SGE-WEB/services/';
+    this.url ='http://192.168.1.70:8080/SIGEG-WEB/services/';
   }
 
 
@@ -23,7 +23,7 @@ export class EgresadosService{
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('id', id);
+    myParams.set('idEgresado', id);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 

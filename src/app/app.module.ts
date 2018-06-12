@@ -8,6 +8,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AuthenticationService } from './_services/authentication.service';
 import { FacultadesService } from './_services/facultadesService';
+import { EgresadosService } from './_services/egresadosService';
 
 import { DataTablesModule } from 'angular-datatables';
 
@@ -49,7 +50,10 @@ export function createTranslateLoader(http: HttpClient) {
 
     ],
     declarations: [AppComponent],
-    providers: [AuthGuard, AuthenticationService, FacultadesService],
+    providers: [AuthGuard,
+      AuthenticationService,
+      FacultadesService,
+      EgresadosService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

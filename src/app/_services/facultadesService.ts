@@ -12,21 +12,21 @@ export class FacultadesService{
   public url:string;
 
   constructor(private http : Http){
-    this.url ='http://localhost:8080/SGE-WEB/services/';
+    this.url ='http://192.168.1.70:8080/SIGEG-WEB/services/';
   }
 
   getFacultadById(id:string){
-
+debugger
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('id', id);
+    myParams.set('idFacultad', id);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 
-    return this.http.post(this.url+'getFacultadesById',
+    return this.http.post(this.url+'getFacultadById',
                    myParams.toString(),
                    {headers : headers});
 
@@ -38,10 +38,10 @@ export class FacultadesService{
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('id', data.id);
+    myParams.set('idFacultad', data.idFacultad);
     myParams.set('nombre', data.nombre);
-    myParams.set('director', data.director);
-    myParams.set('descripcion', data.descripcion);
+    myParams.set('abreviatura', data.abreviatura);
+
 
 
     let options = new RequestOptions({ headers: headers, params: myParams});
@@ -61,7 +61,7 @@ export class FacultadesService{
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('id', id);
+    myParams.set('idFacultad', id);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 

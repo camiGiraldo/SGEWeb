@@ -8,7 +8,7 @@
     <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
       <i class="fa fa-edit"></i>
     </div>
-    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="alertMessage('debe seleccionar un registro')">
+    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
       <i class="fa fa-edit"></i>
     </div>
     <div class="flt-button-action" title="Crear Programas" (click)="open(content,'new')">
@@ -30,27 +30,24 @@
   </div>
   <div class="modal-body">
 
-      <form class="" method="post">
-        <div class="form-group">
-          <input type="hidden" class="form-control" id="txtIdFacultad" [(ngModel)]="idEdit" name="idEdit" #ctrl="ngModel">
-        </div>
+      <form>
+
         <div class="form-group">
           <label for="exampleInputEmail1">Nombre Facultad:</label>
-          <input type="text" class="form-control" id="txtFacultad" [(ngModel)]="nameFac" name="nameFac" #ctrl="ngModel" placeholder="facultad de ..." required>
+          <input type="text"  class="form-control"  id="txtFacultad" [(ngModel)]="nameFac" name="nameFac"  placeholder="facultad de ..." >
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Nombre Director:</label>
-          <input type="text" class="form-control" id="txtDirector" [(ngModel)]="directorFac" name="directorFac" #ctrl="ngModel" placeholder="nombre del director..." required>
+          <label for="exampleInputEmail1">Abreviatura::</label>
+          <input type="text" class="form-control" id="txtDescripcion"  [(ngModel)]="abreviatura" name="abreviatura" placeholder="abreviatura ...." required>
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">Descripción:</label>
-          <input type="text" class="form-control" id="txtDescripcion" [(ngModel)]="descripFac" name="descripFac" #ctrl="ngModel" placeholder="en la facultad ofre...." required>
+          <input type="hidden" id="txtIdFacultad" [(ngModel)]="idEdit" name="idEdit">
         </div>
       </form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="saveFomr()">Guardar</button>
+    <button type="button" class="btn btn-primary" (click)="saveForm()">Guardar</button>
 
   </div>
 </ng-template>
