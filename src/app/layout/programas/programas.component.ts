@@ -80,7 +80,7 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
   ngOnInit():void{
     this.dtOptions = {
-      ajax: 'http://192.168.1.66:8080/SGE-WEB/services/getProgramasByFacultad?idFacultad='+this.idEdit,
+      ajax: 'http://localhost:8080/SGE-WEB/services/getProgramasByFacultad?idFacultad='+this.idEdit,
 
       columns: [{
         title: 'ID',

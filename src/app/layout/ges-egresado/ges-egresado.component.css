@@ -42,6 +42,13 @@
   transition: background 0s;
 }
 
+.card-header{
+    font-size: smaller !important;
+}
+.card-header .nav{
+    height: 50px !important;
+}
+
 .cont-view-egresados .flt-button-action-fixed{
   width: 50px;
   float: right;

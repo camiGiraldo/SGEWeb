@@ -23,7 +23,7 @@ export class AuthenticationService {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
-        this.url ='http://192.168.1.70:8080/SIGEG-WEB/services/';
+        this.url ='http://localhost:8080/SIGEG-WEB/services/';
     }
 
     login(username: string, password: string): Observable<boolean> {
@@ -44,7 +44,7 @@ export class AuthenticationService {
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
 
-                
+
                 let status = response.json().status;
 
 

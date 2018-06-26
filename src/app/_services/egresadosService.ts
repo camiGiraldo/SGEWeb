@@ -12,7 +12,7 @@ export class EgresadosService{
   public url:string;
 
   constructor(private http : Http){
-    this.url ='http://192.168.1.70:8080/SIGEG-WEB/services/';
+    this.url ='http://localhost:8080/SIGEG-WEB/services/';
   }
 
 

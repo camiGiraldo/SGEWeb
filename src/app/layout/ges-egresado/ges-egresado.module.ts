@@ -6,6 +6,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { GesEgresadoRoutingModule } from './ges-egresado.routing.module';
 import { GesEgresadoComponent} from './ges-egresado.component';
 import { PageHeaderModule } from './../../shared';
+import { FormWizardModule } from 'angular-wizard-form';
 import {
     ReactiveFormsModule,
     FormsModule
@@ -18,7 +19,8 @@ import {
       PageHeaderModule,
       NgbModule.forRoot(),
       DataTablesModule,
-      FormsModule, 
+      FormsModule,
+      FormWizardModule,
       ReactiveFormsModule],
     declarations: [GesEgresadoComponent]
 })

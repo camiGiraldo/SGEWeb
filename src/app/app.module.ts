@@ -12,7 +12,9 @@ import { EgresadosService } from './_services/egresadosService';
 
 import { DataTablesModule } from 'angular-datatables';
 
-//LIBRERIAS MATERILA Angular
+//Libreria para formulario tipo wizard
+import { FormWizardModule } from 'angular-wizard-form';
+
 import {
     ReactiveFormsModule,
     FormsModule
@@ -38,6 +40,7 @@ export function createTranslateLoader(http: HttpClient) {
         HttpModule,
         BrowserModule,
         BrowserAnimationsModule,
+        FormWizardModule,
         HttpClientModule,
         TranslateModule.forRoot({
             loader: {

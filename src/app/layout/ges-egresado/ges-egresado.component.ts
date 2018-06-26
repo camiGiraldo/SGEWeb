@@ -85,17 +85,23 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
     //SETEAMOS LOS CAMPOS EN LA TABLA QUE VAMOS A MOSTRAR AL INICIO
     this.dtOptions = {
-      ajax: 'http://192.168.1.70:8080/SIGEG-WEB/services/getFacultades',
+      ajax: 'http://localhost:8080/SIGEG-WEB/services/getEgresados',
       columns: [{
         title: 'ID',
-        data: 'idFacultad',
+        data: 'idEgresado',
         visible: false
       }, {
-        title: 'Nombre',
-        data: 'nombre'
+        title: 'No. Identificacion',
+        data: 'identificacion'
       }, {
-        title: 'Abreviatura',
-        data: 'abreviatura'
+        title: 'Nombres',
+        data: 'nombres'
+      }, {
+        title: 'Apellidos',
+        data: 'apellidos'
+      }, {
+        title: 'Correo Electronico',
+        data: 'correoElectronico'
       }],
       rowCallback:(row: Node, data: any[] | Object, index: number) => {
          const self = this;
@@ -115,9 +121,9 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   }
 
 
-  open(content) {
+  open(content, action:string) {
     //REFERENCIA DEL Modal
-    this.modalRef = this.modalService.open(content);
+    this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static' });
 
     //VALIDAMOS QUE ACCION VA A EJECUTAR EL MODAL
     /*if(action == 'edit'){ //SI ES EDITAR TRAIGA LA INFO
@@ -170,6 +176,10 @@ private getDismissReason(reason: any): string {
       }
   }
 
+  //METODOS PARA EL FORMULARIO PASO A PASO
+  onComplete($event){
+    this.modalRef.close();
+  }
 
 
 //METODO PARA LIMPIAR LA INFORMACION DE LOS FORMULARIOS CREADOS
@@ -239,4 +249,8 @@ openNotification(messageComplement:string, type:string){
 
   }
 
+}
+
+export class data {
+  public email:string;
 }

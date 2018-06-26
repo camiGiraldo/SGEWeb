@@ -61,12 +61,11 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   someClickHandler(info: any): void {
 
-
-    if(this.cellSelect.id !== info.id){
+    if(this.cellSelect.idFacultad !== info.idFacultad){
       this.cellSelect = {
         id : info.idFacultad
       }
-      this.message =  info.name;
+      this.message =  info.nombre;
       this.idEdit = info.idFacultad;
     }
     else{
@@ -86,7 +85,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
 
     this.dtOptions = {
-      ajax: 'http://192.168.1.70:8080/SIGEG-WEB/services/getFacultades',
+      ajax: 'http://localhost:8080/SIGEG-WEB/services/getFacultades',
       columns: [{
         title: 'ID',
         data: 'idFacultad',

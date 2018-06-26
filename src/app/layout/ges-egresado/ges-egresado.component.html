@@ -34,13 +34,96 @@
 
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Formulario Egresado</h4>
+      Formulario Egresado
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
       </button>
   </div>
   <div class="modal-body">
+    <form-wizard>
+     <wizard-step [title]="'Información basica'" [isValid]="formBasico.form.valid" (onNext)="onStep1Next($event)">
+         <form #formBasico='ngForm'>
+           <div class="row" [ngStyle]="{'margin':'0'}">
+             <div class="form-group col-md-6">
+              <label for="usr">Nombres:</label>
+              <input type="text" class="form-control" name="nombre" [(ngModel)]="formBasico.nombre" required >
+              <span *ngIf="formBasico.touched && !formBasico.form.valid" [ngStyle]="{'color': 'red'}">Campo requerido</span>
+             </div>
+             <div class="form-group col-md-6">
+                <label for="pwd">Apellidos:</label>
+                <input type="text" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="sel1">Tipo de identificacion:</label>
+                <select class="form-control" id="cbxTipoId">
+                  <option value="1">Cedula de ciudadania</option>
+                  <option value="2">Tarjeta de identidad</option>
+                  <option value="3">Pasaportes</option>
+                  <option value="4">Cedula extrangera</option>
+                </select>
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Numero de Identificacion:</label>
+                <input type="number" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Ciudad de expedici&oacute;n:</label>
+                <input type="text" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Pais de residencia:</label>
+                <input type="text" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Ciudad de residencia:</label>
+                <input type="text" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Direcci&oacute;n de residencia:</label>
+                <input type="text" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Telefono Fijo:</label>
+                <input type="number" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Telefono Movil:</label>
+                <input type="number" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-4">
+                <label for="pwd">Telefono Alterno:</label>
+                <input type="number" class="form-control" id="pwd">
+             </div>
+             <div class="form-group col-md-6">
+                <label for="pwd">Correo Electronico:</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" name="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"
+                [(ngModel)]="formBasico.email" required>
+                <span *ngIf="formBasico.touched && !formBasico.form.valid" [ngStyle]="{'color': 'red'}">error en el email</span>
+             </div>
+             <div class="form-group col-md-6">
+                <label for="pwd">Correo Electronico Alterno:</label>
+                <input type="email" class="form-control" id="pwd">
+             </div>
+           </div>
 
+         </form>
+
+     </wizard-step>
+     <wizard-step [title]="'Información Academica'" (onNext)="onStep2Next($event)">
+       <form #formAcademico = 'ngForm'>
+         <div class="form-group col-md-4">
+            <label for="pwd">Ciudad de residencia:</label>
+            <input type="text" class="form-control" id="pwd">
+         </div>
+       </form>
+     </wizard-step>
+     <wizard-step [title]="'Información de control'" (onComplete)="onComplete($event)">
+       <div class="form-group col-md-4">
+          <label for="pwd">Ciudad de residencia:</label>
+          <input type="text" class="form-control" id="pwd">
+       </div>
+     </wizard-step>
+   </form-wizard>
   </div>
   <div class="modal-footer">
     <!--  <button type="button" class="btn btn-secondary" (click)="c('Close click')">Close</button>-->
