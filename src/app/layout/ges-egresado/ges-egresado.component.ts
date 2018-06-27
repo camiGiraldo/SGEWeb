@@ -10,6 +10,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { EgresadosService } from '../../_services/egresadosService';
+import { Egresados } from './egresados'
 import * as $ from 'jquery';
 
 @Component({
@@ -40,11 +41,14 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   closeResult: string;
 
   //MAPEO DE LOS ATRIBUTOS DEL FORMULARIO A CREAR
+  egresado:Egresados
   idEdit:string ='';
 
 
 
   constructor(private modalService: NgbModal, private egreService: EgresadosService){
+
+    this.egresado = new Egresados();
     this.idEdit = '';
     this.cellSelect = {
       id : ''
@@ -78,6 +82,15 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
     }
 
 
+  }
+  onStep1Next($event){
+    debugger;
+    console.log(this.egresado);
+  }
+
+  onStep2Next($event){
+    debugger;
+    console.log(this.egresado);
   }
 
 

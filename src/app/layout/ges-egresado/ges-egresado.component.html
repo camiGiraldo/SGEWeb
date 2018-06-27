@@ -43,15 +43,17 @@
     <form-wizard>
      <wizard-step [title]="'Información basica'" [isValid]="formBasico.form.valid" (onNext)="onStep1Next($event)">
          <form #formBasico='ngForm'>
+           <input type="hidden" id="idEgresado" name="idEgresado" [(ngModel)]="egresado.idEgresado" />
            <div class="row" [ngStyle]="{'margin':'0'}">
              <div class="form-group col-md-6">
               <label for="usr">Nombres:</label>
-              <input type="text" class="form-control" name="nombre" [(ngModel)]="formBasico.nombre" required >
-              <span *ngIf="formBasico.touched && !formBasico.form.valid" [ngStyle]="{'color': 'red'}">Campo requerido</span>
+              <input type="text" class="form-control" id="nombre" minlength="1" #nombre="ngModel" name="nombre" required [(ngModel)]="egresado.nombres">
+              <span *ngIf="nombre.errors && (nombre.dirty || nombre.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-6">
                 <label for="pwd">Apellidos:</label>
-                <input type="text" class="form-control" id="pwd">
+                <input type="text" class="form-control" id="apellidos" minlength="1" #apellidos="ngModel" name="apellidos" required [(ngModel)]="egresado.apellidos">
+                <span *ngIf="apellidos.errors && (apellidos.dirty || apellidos.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
                 <label for="sel1">Tipo de identificacion:</label>
@@ -96,9 +98,9 @@
              </div>
              <div class="form-group col-md-6">
                 <label for="pwd">Correo Electronico:</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" name="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"
+                <input type="email" class="form-control" id="emailOne" #emailOne="ngModel" name="emailOne" placeholder="ejemplo@ejemplo.com"
                 [(ngModel)]="formBasico.email" required>
-                <span *ngIf="formBasico.touched && !formBasico.form.valid" [ngStyle]="{'color': 'red'}">error en el email</span>
+                <span *ngIf="emailOne.errors && (emailOne.dirty || emailOne.touched)"  [ngStyle]="{'color': 'red'}">Campo Requerido</span>
              </div>
              <div class="form-group col-md-6">
                 <label for="pwd">Correo Electronico Alterno:</label>
