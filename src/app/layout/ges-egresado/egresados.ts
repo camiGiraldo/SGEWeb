@@ -16,6 +16,19 @@ export  class Egresados {
   correoElectronico:string;
   correoElectronicoAlterno:string;
 
+  //Informacion Academica
+  idInformacionAcademica:number;
+  idPrograma:number;
+  libro:string;
+  folio:string;
+  acta:string;
+  numeroDiploma:number;
+  semestreGrado:string;
+  formaGrado:string;
+  tipoOpcionGrado:string;
+  notaOpcionGrado:string;
+  semestreFinalizoMaterias:string;
+
   constructor(){
     /*this.idEgresado = idEgresado;
     this.nombres = nombre;
