@@ -33,6 +33,22 @@
   transition: background 0.8s;
 }
 
+/*Tabla de facultades*/
+#tbl-facultades{
+  border: 1px solid #bbd1ec;
+    thead th {
+      color: #5f5f73;
+      border-bottom:1px solid #7cb3e4;
+      background: #bbd1ec;
+      padding: 0;
+      text-align: center;
+      font-size: 15px;
+    }
+    tbody{
+      font-size: 13px;
+    }
+}
+
 .flt-button-action:hover {
   background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
 }

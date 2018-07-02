@@ -13,13 +13,20 @@ import { EgresadosService } from '../../_services/egresadosService';
 import { Egresados } from './egresados'
 import * as $ from 'jquery';
 
+
+interface Programa {
+  idPrograma:number;
+  nombre:string;
+}
+
 @Component({
   selector : 'app-ges-egresado',
   templateUrl: './ges-egresado.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls:['./ges-egresado.component.css'],
+  styleUrls:['./ges-egresado.component.scss'],
   animations: [routerTransition()]
 })
+
 
 export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
@@ -36,24 +43,32 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   modalRef:any;
 
 
+
   message = '';
   messageValidation = '';
   closeResult: string;
 
   //MAPEO DE LOS ATRIBUTOS DEL FORMULARIO A CREAR
-  egresado:Egresados
+  egresado:Egresados;
+  programa:Programa;
   idEdit:string ='';
+  listProgramas:Programa[];
 
 
 
   constructor(private modalService: NgbModal, private egreService: EgresadosService){
 
     this.egresado = new Egresados();
+
     this.idEdit = '';
     this.cellSelect = {
       id : ''
     }
     this.message = 'No se ha seleccionado una fila';
+
+    let jsonProgramas ='[{"idPrograma":"1","nombre":"Programa1"},{"idPrograma":"2","nombre":"Programa2"}]';
+
+    this.listProgramas = JSON.parse(jsonProgramas) as Programa[];
 
   }
 

@@ -16,7 +16,7 @@ import * as $ from 'jquery';
   selector : 'app-facultades',
   templateUrl: './facultades.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls:['./facultades.component.css'],
+  styleUrls:['./facultades.component.scss'],
   animations: [routerTransition()]
 })
 

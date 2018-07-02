@@ -26,7 +26,7 @@
   </div></div>-->
 
 
-    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="hover table-striped" cellspacing="0" width="100%"></table>
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table hover table-striped table-bordered" id="tbl-egresados" width="100%"></table>
 
 </div>
 
@@ -43,80 +43,135 @@
     <form-wizard>
      <wizard-step [title]="'Información basica'" [isValid]="formBasico.form.valid" (onNext)="onStep1Next($event)">
          <form #formBasico='ngForm'>
-           <input type="hidden" id="idEgresado" name="idEgresado" [(ngModel)]="egresado.idEgresado" />
+           <input type="hidden" id="idEgresado" name="idEgresado" #idEgresado="ngModel" [(ngModel)]="egresado.idEgresado" />
            <div class="row" [ngStyle]="{'margin':'0'}">
              <div class="form-group col-md-6">
-              <label for="usr">Nombres:</label>
+              <label for="usr">*Nombres:</label>
               <input type="text" class="form-control" id="nombre" minlength="1" #nombre="ngModel" name="nombre" required [(ngModel)]="egresado.nombres">
               <span *ngIf="nombre.errors && (nombre.dirty || nombre.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-6">
-                <label for="pwd">Apellidos:</label>
+                <label for="pwd">*Apellidos:</label>
                 <input type="text" class="form-control" id="apellidos" minlength="1" #apellidos="ngModel" name="apellidos" required [(ngModel)]="egresado.apellidos">
                 <span *ngIf="apellidos.errors && (apellidos.dirty || apellidos.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
                 <label for="sel1">Tipo de identificacion:</label>
-                <select class="form-control" id="cbxTipoId">
-                  <option value="1">Cedula de ciudadania</option>
+                <select class="form-control" id="tipoId" #tipoId="ngModel" name="tipoId" [(ngModel)]="egresado.tipoIdentificacion">
+                  <option value="1" selected >Cedula de ciudadania</option>
                   <option value="2">Tarjeta de identidad</option>
                   <option value="3">Pasaportes</option>
                   <option value="4">Cedula extrangera</option>
                 </select>
              </div>
              <div class="form-group col-md-4">
-                <label for="pwd">Numero de Identificacion:</label>
-                <input type="number" class="form-control" id="pwd">
+                <label for="pwd">*Numero de Identificacion:</label>
+                <input type="number" class="form-control" id="identificacion" minlength="1" #identificacion="ngModel" name="identificacion" required [(ngModel)]="egresado.identificacion">
+                <span *ngIf="identificacion.errors && (identificacion.dirty || identificacion.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
-                <label for="pwd">Ciudad de expedici&oacute;n:</label>
-                <input type="text" class="form-control" id="pwd">
+                <label for="pwd">*Ciudad de expedici&oacute;n:</label>
+                <input type="text" class="form-control" id="ciudadExpedicion" name="ciudadExpedicion" #ciudadExpedicion="ngModel" required [(ngModel)]="egresado.ciudadExpedicion">
+                <span *ngIf="ciudadExpedicion.errors && (ciudadExpedicion.dirty || ciudadExpedicion.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
-                <label for="pwd">Pais de residencia:</label>
-                <input type="text" class="form-control" id="pwd">
+                <label for="pwd">*Pais de residencia:</label>
+                <input type="text" class="form-control" id="paisResidencia" #paisResidencia="ngModel" name="paisResidencia" required [(ngModel)]="egresado.paisResidencia">
+                <span *ngIf="paisResidencia.errors && (paisResidencia.dirty || paisResidencia.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
-                <label for="pwd">Ciudad de residencia:</label>
-                <input type="text" class="form-control" id="pwd">
+                <label for="pwd">*Ciudad de residencia:</label>
+                <input type="text" class="form-control" id="ciudadResidencia" name="ciudadResidencia" #ciudadResidencia="ngModel" required [(ngModel)]="egresado.ciudadResidencia">
+                <span *ngIf="ciudadResidencia.errors && (ciudadResidencia.dirty || ciudadResidencia.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
-                <label for="pwd">Direcci&oacute;n de residencia:</label>
-                <input type="text" class="form-control" id="pwd">
+                <label for="pwd">*Direcci&oacute;n de residencia:</label>
+                <input type="text" class="form-control" id="direccionResidencia" name="direccionResidencia" #direccionResidencia="ngModel" required [(ngModel)]="egresado.direccionResidencia">
+                <span *ngIf="direccionResidencia.errors && (direccionResidencia.dirty || direccionResidencia.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
-                <label for="pwd">Telefono Fijo:</label>
-                <input type="number" class="form-control" id="pwd">
+                <label for="pwd">*Telefono Fijo:</label>
+                <input type="number" class="form-control" id="telefonoFijo" name="telefonoFijo" #telefonoFijo="ngModel" required [(ngModel)]="egresado.telefonoFijo">
+                <span *ngIf="telefonoFijo.errors && (telefonoFijo.dirty || telefonoFijo.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
-                <label for="pwd">Telefono Movil:</label>
-                <input type="number" class="form-control" id="pwd">
+                <label for="pwd">*Telefono Movil:</label>
+                <input type="number" class="form-control" id="telefonoMovil" name="telefonoMovil" #telefonoMovil="ngModel" required [(ngModel)]="egresado.telefonoMovil">
+                <span *ngIf="telefonoMovil.errors && (telefonoMovil.dirty || telefonoMovil.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-4">
                 <label for="pwd">Telefono Alterno:</label>
-                <input type="number" class="form-control" id="pwd">
+                <input type="number" class="form-control" id="telefonoMovilAlterno" name="telefonoMovilAlterno" #telefonoMovilAlterno="ngModel" required [(ngModel)]="egresado.telefonoMovilAlterno">
+                <span *ngIf="telefonoMovilAlterno.errors && (telefonoMovilAlterno.dirty || telefonoMovilAlterno.touched)" [ngStyle]="{'color': 'red'}">Campo requerido</span>
              </div>
              <div class="form-group col-md-6">
                 <label for="pwd">Correo Electronico:</label>
-                <input type="email" class="form-control" id="emailOne" #emailOne="ngModel" name="emailOne" placeholder="ejemplo@ejemplo.com"
-                [(ngModel)]="formBasico.email" required>
-                <span *ngIf="emailOne.errors && (emailOne.dirty || emailOne.touched)"  [ngStyle]="{'color': 'red'}">Campo Requerido</span>
+                <input type="email" class="form-control" id="correoElectronico" #correoElectronico="ngModel" name="correoElectronico" [(ngModel)]="egresado.correoElectronico" placeholder="ejemplo@ejemplo.com"
+                 required>
+                <span *ngIf="correoElectronico.errors && (correoElectronico.dirty || correoElectronico.touched)"  [ngStyle]="{'color': 'red'}">Campo Requerido</span>
              </div>
              <div class="form-group col-md-6">
                 <label for="pwd">Correo Electronico Alterno:</label>
-                <input type="email" class="form-control" id="pwd">
+                <input type="email" class="form-control" id="correoElectronicoAlterno" name="correoElectronicoAlterno" #correoElectronicoAlterno="ngModel" [(ngModel)]="egresado.correoElectronicoAlterno">
              </div>
            </div>
+
 
          </form>
 
      </wizard-step>
      <wizard-step [title]="'Información Academica'" (onNext)="onStep2Next($event)">
        <form #formAcademico = 'ngForm'>
-         <div class="form-group col-md-4">
-            <label for="pwd">Ciudad de residencia:</label>
-            <input type="text" class="form-control" id="pwd">
-         </div>
+         <div class="row" [ngStyle]="{'margin':'0'}">
+           <input type="hidden" id="idInformacionAcademica" name="idInformacionAcademica" #idInformacionAcademica="ngModel"
+                [(ngModel)]="egresado.idInformacionAcademica">
+          <div class="form-group col-md-4">
+           <label for="sel1">Tipo de identificacion:</label>
+           <select class="form-control" id="idPrograma" #idPrograma="ngModel" name="idPrograma" [(ngModel)]="egresado.idPrograma">
+             <option *ngFor="let prog of listProgramas"
+                [value]="prog.idPrograma">
+              {{prog.nombre}}
+            </option>
+           </select>
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Libro:</label>
+           <input type="text" class="form-control" id="libro" name="libro" #libro="ngModel" [(ngModel)]="egresado.libro">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Folio:</label>
+           <input type="text" class="form-control" id="folio" name="folio" #folio="ngModel" [(ngModel)]="egresado.folio">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Acta:</label>
+           <input type="text" class="form-control" id="acta" name="acta" #acta="ngModel" [(ngModel)]="egresado.acta">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Numero de diploma:</label>
+           <input type="number" class="form-control" id="numeroDiploma" name="numeroDiploma" #numeroDiploma="ngModel" [(ngModel)]="egresado.numeroDiploma">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Semestre Grado:</label>
+           <input type="text" class="form-control" id="semestreGrado" name="semestreGrado" #semestreGrado="ngModel" [(ngModel)]="egresado.semestreGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Forma de Grado:</label>
+           <input type="text" class="form-control" id="formaGrado" name="formaGrado" #formaGrado="ngModel" [(ngModel)]="egresado.formaGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Opcion de Grado:</label>
+           <input type="text" class="form-control" id="tipoOpcionGrado" name="tipoOpcionGrado" #tipoOpcionGrado="ngModel" [(ngModel)]="egresado.tipoOpcionGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Nota de Opcion de Grado:</label>
+           <input type="text" class="form-control" id="notaOpcionGrado" name="notaOpcionGrado" #notaOpcionGrado="ngModel" [(ngModel)]="egresado.notaOpcionGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Semestre Finalizacion Materias:</label>
+           <input type="number" class="form-control" id="semestreFinalizoMaterias" name="semestreFinalizoMaterias"
+               #semestreFinalizoMaterias="ngModel" [(ngModel)]="egresado.semestreFinalizoMaterias">
+        </div>
+      </div>
        </form>
      </wizard-step>
      <wizard-step [title]="'Información de control'" (onComplete)="onComplete($event)">

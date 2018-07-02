@@ -5,7 +5,7 @@ export  class Egresados {
   nombres:string;
   apellidos:string;
   tipoIdentificacion:number;
-  identificacion:string;
+  identificacion:number;
   ciudadExpedicion:string;
   paisResidencia:string;
   ciudadResidencia:string;
@@ -27,7 +27,7 @@ export  class Egresados {
   formaGrado:string;
   tipoOpcionGrado:string;
   notaOpcionGrado:string;
-  semestreFinalizoMaterias:string;
+  semestreFinalizoMaterias:number;
 
   constructor(){
     /*this.idEgresado = idEgresado;
