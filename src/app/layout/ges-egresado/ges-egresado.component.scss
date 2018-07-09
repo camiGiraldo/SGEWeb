@@ -7,6 +7,19 @@
   padding-top: 7px;
 }
 
+form{
+  label {
+    font-size: 14px;
+  }
+}
+
+.text-validator{
+  color: red;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
 #tbl-egresados{
   border: 1px solid #bbd1ec;
     thead th {
@@ -19,6 +32,9 @@
     }
     tbody{
       font-size: 13px;
+    }
+    thead tr{
+      background: #bbd1ec;
     }
 }
 

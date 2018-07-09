@@ -1,41 +1,48 @@
 export  class Egresados {
 
   //Informacion Basica
-  idEgresado:number;
-  nombres:string;
-  apellidos:string;
-  tipoIdentificacion:number;
-  identificacion:number;
-  ciudadExpedicion:string;
+  idEgresado:string = "";
+  nombres:string = "";
+  apellidos:string = "";
+  tipoIdentificacion:string = "";
+  identificacion:string = "";
+  ciudadExpedicion:string = "";
   paisResidencia:string;
   ciudadResidencia:string;
   direccionResidencia:string;
-  telefonoFijo:number;
-  telefonoMovil:number;
-  telefonoMovilAlterno:number;
-  correoElectronico:string;
-  correoElectronicoAlterno:string;
+  telefonoFijo:string = "";
+  telefonoMovil:string = "";
+  telefonoMovilAlterno:string = "";
+  correoElectronico:string= "";
+  correoElectronicoAlterno:string = "";
 
   //Informacion Academica
-  idInformacionAcademica:number;
-  idPrograma:number;
-  libro:string;
-  folio:string;
-  acta:string;
-  numeroDiploma:number;
-  semestreGrado:string;
-  formaGrado:string;
-  tipoOpcionGrado:string;
-  notaOpcionGrado:string;
-  semestreFinalizoMaterias:number;
+  idInformacionAcademica:string = "";
+  idPrograma:string = "";
+  libro:string = "";
+  folio:string = "";
+  acta:string = "";
+  numeroDiploma:string = "";
+  semestreGrado:string = "";
+  formaGrado:string = "";
+  tipoOpcionGrado:string = "";
+  notaOpcionGrado:string = "";
+  semestreFinalizoMaterias:string = "";
+
+  //Informacion de control
+  idInformacionControl:string ="";
+  fechaEntregaCarnet:string ="";
+  encuestaM0En:string ="";
+  encuestaM1En:string ="";
+  encuestaM5En:string ="";
+  gradoAcademusoft:string ="";
+  recibeInformacion:string ="";
+  tipoInformacion:string ="";
+  observacionCorreo:string ="";
+  observacionesGenerales:string ="";
 
   constructor(){
-    /*this.idEgresado = idEgresado;
-    this.nombres = nombre;
-    this.apellidos = apellidos;
-    this.tipoDoc = tipoDoc;
-    this.numeroDoc = numeroDoc;
-    this.telefono = telefono;*/
+
   }
 
 }

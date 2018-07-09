@@ -39,13 +39,15 @@
     thead th {
       color: #5f5f73;
       border-bottom:1px solid #7cb3e4;
-      background: #bbd1ec;
       padding: 0;
       text-align: center;
       font-size: 15px;
     }
     tbody{
       font-size: 13px;
+    }
+    thead tr{
+      background: #bbd1ec;
     }
 }
 

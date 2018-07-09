@@ -15,8 +15,11 @@ import * as $ from 'jquery';
 
 
 interface Programa {
-  idPrograma:number;
-  nombre:string;
+  IdPrograma:string;
+  IdFacultad:string;
+  Nombre:string;
+  Abreviatura:string;
+
 }
 
 @Component({
@@ -32,6 +35,8 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
+  @ViewChild('content') public modalForm:NgbModal;
+
 
 
   //vaariables para la tabla
@@ -66,9 +71,28 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
     }
     this.message = 'No se ha seleccionado una fila';
 
-    let jsonProgramas ='[{"idPrograma":"1","nombre":"Programa1"},{"idPrograma":"2","nombre":"Programa2"}]';
+    this.getProgramas();
+  }
 
-    this.listProgramas = JSON.parse(jsonProgramas) as Programa[];
+  getProgramas(){
+    let callBack = this.egreService.getProgramas();
+    callBack.subscribe(res => {
+
+        let data = res.json();
+        let status = data.status;
+
+        if(status == 'OK'){
+          this.listProgramas = data.data as Programa[];
+        }
+        else{
+          this.openNotification('Error al obtener los programas:'+data.message, 'error');
+
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
 
   }
 
@@ -80,13 +104,15 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   someClickHandler(info: any): void {
 
 
-    if(this.cellSelect.id !== info.id){
+    if(this.cellSelect.id !== info.idEgresado){
       this.cellSelect = {
-        id : info.idFacultad //cambiar por el id del egresado
+        id : info.idEgresado //cambiar por el id del egresado
       }
+
       //SETEAMOS EN EN MODEL PARA QUE PASE MAS ADELANTE AL FORMULARIO DE EDITAR
-      /*this.message =  info.name;
-      this.idEdit = info.idFacultad;*/
+      this.message =  info.identificacion+"-"+info.nombres+" "+info.apellidos;
+
+      this.idEdit = info.idEgresado;
     }
     else{
       this.cellSelect = {
@@ -98,14 +124,170 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
 
   }
-  onStep1Next($event){
-    debugger;
+
+  //Metodos del  wizard
+  onStep1Next(){
+
     console.log(this.egresado);
   }
 
-  onStep2Next($event){
-    debugger;
+  onStep2Next(){
+
     console.log(this.egresado);
+  }
+
+  //METODOS PARA EL FORMULARIO PASO A PASO
+  onComplete(){
+    console.log(this.egresado);
+    this.saveForm();
+
+  }
+
+
+
+  //METO DE INGNICION PARA EMPREZAR A GUARDAR LA INFO DEL EGRESADO
+  saveForm(){
+      let callBack = this.egreService.saveInfoBasic(this.egresado);
+      callBack.subscribe(res => {
+
+          let data = res.json();
+          let status = data.status;
+
+          if(status == 'OK'){
+            this.saveFormAcademic(data.data);
+          }
+          else{
+            this.openNotification('Error del servidor al guardar la informacion basica:'+data.message, 'error');
+
+          }
+      },
+      error=>{
+
+        this.openNotification('Error del servidor: '+error, 'error');
+      });
+
+  }
+  saveFormAcademic(idEgresado:any){
+    this.egresado.idEgresado = idEgresado;
+    let callBack = this.egreService.saveInfoAcademic(this.egresado);
+    callBack.subscribe(res => {
+
+        let data = res.json();
+        let status = data.status;
+
+        if(status == 'OK'){
+          this.saveFormControl(this.egresado);
+        }
+        else{
+          this.openNotification('Error del servidor al guardar la informacion academica:'+data.message, 'error');
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+
+  }
+
+  saveFormControl(data:any){
+    let callBack = this.egreService.saveInfoControl(this.egresado);
+    callBack.subscribe(res => {
+
+        let data = res.json();
+        let status = data.status;
+        if(status == 'OK'){
+          this.modalRef.close();
+          this.openNotification("","succes");
+        }
+        else{
+          this.openNotification('Error del servidor al guardar la informacion de control: '+data.message, 'error');
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+  }
+
+/*Metodo para editar un egresado en el cual priimero traemos la info y despues abrimos el modal bindeando la info*/
+  editEgresado(){
+
+
+      if(this.idEdit != ''){
+        this.getInfoEgresadoById(this.idEdit);
+      }
+      else{
+        this.message ="Por favor seleccionar una fila para editar";
+        this.modalRef.close();
+        this.openNotification(this.message, 'error');
+      }
+
+  }
+
+  getInfoEgresadoById(idEgresado:string){
+
+    let data = {
+      idEgresado : idEgresado
+    };
+    let callBack = this.egreService.getEgresadoById(data);
+    callBack.subscribe(res => {
+
+        let data = res.json();
+        let status = data.status;
+debugger
+console.log(data);
+        if(status == 'OK'){
+          this.egresado = new Egresados();
+          let infoBasica    =  data.data.Egresado;
+          let infoAcademica =  data.data.InformacionAcademica[0];
+          let infoControl   = data.data.InformacionControl[0];
+          /*Seteamos la informacion basica, academica y de control*/
+          this.egresado.idEgresado = infoBasica.idEgresado;
+          this.egresado.nombres = infoBasica.nombres;
+          this.egresado.apellidos = infoBasica.apellidos;
+          this.egresado.tipoIdentificacion = infoBasica.tipoIdentificacion;
+          this.egresado.identificacion = infoBasica.identificacion;
+          this.egresado.ciudadExpedicion = infoBasica.ciudadExpedicion;
+          this.egresado.paisResidencia = infoBasica.paisResidencia;
+          this.egresado.ciudadResidencia = infoBasica.ciudadResidencia;
+          this.egresado.direccionResidencia = infoBasica.direccionResidencia;
+          this.egresado.telefonoFijo = infoBasica.telefonoFijo;
+          this.egresado.telefonoMovil = infoBasica.telefonoMovil;
+          this.egresado.telefonoMovilAlterno = infoBasica.telefonoMovilAlterno;
+          this.egresado.correoElectronico = infoBasica.correoElectronico;
+          this.egresado.correoElectronicoAlterno = infoBasica.correoElectronicoAlterno;
+
+          this.egresado.idInformacionAcademica = infoAcademica.idInformacionAcademica;
+          this.egresado.idPrograma = infoAcademica.idPrograma;
+          this.egresado.libro = infoAcademica.libro;
+          this.egresado.folio = infoAcademica.folio;
+          this.egresado.acta = infoAcademica.acta;
+          this.egresado.numeroDiploma = infoAcademica.numeroDiploma;
+          this.egresado.semestreGrado = infoAcademica.semestreGrado;
+          this.egresado.formaGrado = infoAcademica.formaGrado;
+          this.egresado.tipoOpcionGrado = infoAcademica.tipoOpcionGrado;
+          this.egresado.notaOpcionGrado = infoAcademica.notaOpcionGrado;
+          this.egresado.semestreFinalizoMaterias = infoAcademica.semestreFinalizoMaterias;
+
+
+          this.modalRef = this.modalService.open(this.modalForm, { size: 'lg', backdrop: 'static' });
+
+        }
+        else{
+          this.openNotification('Error del servidor al guardar la informacion basica: '+data.message, 'error');
+
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+  }
+
+  //METODO PARA LIMPIAR LA INFORMACION DE LOS FORMULARIOS CREADOS
+  cleanForm(){
+    this.egresado = new Egresados();
+
   }
 
 
@@ -149,35 +331,11 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   }
 
 
+
+
   open(content, action:string) {
     //REFERENCIA DEL Modal
     this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static' });
-
-    //VALIDAMOS QUE ACCION VA A EJECUTAR EL MODAL
-    /*if(action == 'edit'){ //SI ES EDITAR TRAIGA LA INFO
-
-      if(this.idEdit != ''){
-        let callBack = this.facService.getFacultadById(this.idEdit);
-        callBack.subscribe(res => {
-          let data = res.json();
-
-          if(data.status && data.status === 'OK'){
-            var facultad = data.data;
-            this.idEdit = facultad.idFacultad;
-            this.nameFac = facultad.nombre;
-            this.abreviatura = facultad.abreviatura
-
-          }
-        });
-      }
-      else{
-        this.message ="Por favor seleccionar una fila para editar";
-        this.modalRef.close();
-        this.openNotification(this.message, 'error');
-      }
-    }*/
-
-
     this.modalRef.result.then((result) => {
       this.cleanForm();
       this.closeResult = `Closed with: ${result}`;
@@ -187,11 +345,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
     });
   }
 
-//METO DE INGNICION PARA EMPREZAR A GUARDAR LA INFO DEL EGRESADO
-saveForm(){
 
-
-}
 
 
 private getDismissReason(reason: any): string {
@@ -204,17 +358,7 @@ private getDismissReason(reason: any): string {
       }
   }
 
-  //METODOS PARA EL FORMULARIO PASO A PASO
-  onComplete($event){
-    this.modalRef.close();
-  }
 
-
-//METODO PARA LIMPIAR LA INFORMACION DE LOS FORMULARIOS CREADOS
-cleanForm(){
-
-
-}
 
 //METODO QUE RECARGA LA TABLA
 rerenderTable(): void {
