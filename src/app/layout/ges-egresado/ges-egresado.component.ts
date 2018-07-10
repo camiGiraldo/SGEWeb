@@ -235,7 +235,6 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
         let data = res.json();
         let status = data.status;
 debugger
-console.log(data);
         if(status == 'OK'){
           this.egresado = new Egresados();
           let infoBasica    =  data.data.Egresado;
