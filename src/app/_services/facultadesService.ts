@@ -42,8 +42,6 @@ export class FacultadesService{
     myParams.set('nombre', data.nombre);
     myParams.set('abreviatura', data.abreviatura);
 
-
-
     let options = new RequestOptions({ headers: headers, params: myParams});
 
     return this.http.post(this.url+'saveFacultad',

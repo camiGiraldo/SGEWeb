@@ -166,7 +166,6 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
         idFacultad : this.idEdit,
         nombre: this.nameFac,
         abreviatura: this.abreviatura,
-
       };
       let callBack = this.facService.saveFacultad(data);
       callBack.subscribe(res => {
