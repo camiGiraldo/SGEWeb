@@ -17,7 +17,7 @@ export class FacultadesService{
   }
 
   getFacultadById(id:string){
-debugger
+
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });

@@ -47,6 +47,8 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   abreviatura:string = '';
 
   constructor(private zone: NgZone, private modalService: NgbModal, private facService: FacultadesService){
+
+    this.url = environment.urlServices;
     this.idEdit = '';
     this.url = environment.urlServices;
     this.cellSelect = {
@@ -88,7 +90,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
 
     this.dtOptions = {
-      ajax: 'http://localhost:8080/SIGEG-WEB/services/getFacultades',
+      ajax: this.url+'getFacultades',
       columns: [{
         title: 'ID',
         data: 'idFacultad',
@@ -161,7 +163,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
     }else{
 
       let data = {
-        id : this.idEdit,
+        idFacultad : this.idEdit,
         nombre: this.nameFac,
         abreviatura: this.abreviatura,
 
@@ -176,6 +178,9 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
             this.modalRef.close();
             this.openNotification("","succes");
+
+
+            this.message = 'No se ha seleccionado una fila';
           }
           else{
             this.messageValidation = 'Ocurrio un error al guardar el registro';
