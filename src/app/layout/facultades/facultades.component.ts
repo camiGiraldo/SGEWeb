@@ -11,6 +11,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FacultadesService } from '../../_services/facultadesService';
 import * as $ from 'jquery';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector : 'app-facultades',
@@ -33,6 +34,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
   //------------------------
 
   modalRef:any;
+  public url:string;
 
 
   message = '';
@@ -46,6 +48,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   constructor(private zone: NgZone, private modalService: NgbModal, private facService: FacultadesService){
     this.idEdit = '';
+    this.url = environment.urlServices;
     this.cellSelect = {
       id : ''
     }

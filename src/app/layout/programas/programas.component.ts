@@ -10,6 +10,7 @@ import {
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FacultadesService } from '../../_services/facultadesService';
 import * as $ from 'jquery';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector : 'app-programas',
@@ -25,6 +26,7 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
   dtTrigger: Subject<any> = new Subject();
   modalRef:any;
+  public url:string;
 
   message = '';
   messageValidation = '';
@@ -80,7 +82,7 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
   ngOnInit():void{
     this.dtOptions = {
-      ajax: 'http://localhost:8080/SGE-WEB/services/getProgramasByFacultad?idFacultad='+this.idEdit,
+      ajax: this.url+'getProgramasByFacultad?idFacultad='+this.idEdit,
 
       columns: [{
         title: 'ID',

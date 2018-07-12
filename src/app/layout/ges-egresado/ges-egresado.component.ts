@@ -11,6 +11,7 @@ import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { EgresadosService } from '../../_services/egresadosService';
 import { Egresados } from './egresados'
+import { environment } from '../../../environments/environment';
 import * as $ from 'jquery';
 
 
@@ -46,6 +47,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   //------------------------
 
   modalRef:any;
+  public url:string;
 
 
 
@@ -64,7 +66,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   constructor(private modalService: NgbModal, private egreService: EgresadosService){
 
     this.egresado = new Egresados();
-
+    this.url = environment.urlServices;
     this.idEdit = '';
     this.cellSelect = {
       id : ''
@@ -72,6 +74,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
     this.message = 'No se ha seleccionado una fila';
 
     this.getProgramas();
+
   }
 
   getProgramas(){
@@ -294,7 +297,7 @@ debugger
 
     //SETEAMOS LOS CAMPOS EN LA TABLA QUE VAMOS A MOSTRAR AL INICIO
     this.dtOptions = {
-      ajax: 'http://localhost:8080/SIGEG-WEB/services/getEgresados',
+      ajax: this.url+'getEgresados',
       columns: [{
         title: 'ID',
         data: 'idEgresado',
