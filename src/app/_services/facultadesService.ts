@@ -30,7 +30,6 @@ export class FacultadesService{
     return this.http.post(this.url+'getFacultadById',
                    myParams.toString(),
                    {headers : headers});
-
   }
  //metodo que se comunica para con el back el cual guarda o edita una facultad
   saveFacultad(data:any){

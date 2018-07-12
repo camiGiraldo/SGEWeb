@@ -178,8 +178,6 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
             this.modalRef.close();
             this.openNotification("","succes");
-
-
             this.message = 'No se ha seleccionado una fila';
           }
           else{

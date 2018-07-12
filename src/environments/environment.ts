@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
+  
   production: false,
   urlServices: 'http://192.168.1.73:8080/SIGEG-WEB/services/'
 };
