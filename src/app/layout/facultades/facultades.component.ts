@@ -185,7 +185,6 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
           }
       })
       this.rerenderTable();
-
     }
   }
 

@@ -49,7 +49,6 @@ export class FacultadesService{
                    {headers : headers});
   }
 
-
   //SERVICIOS PARA LOS PROGRAMAS
 
   getProgramaById(id:string){
