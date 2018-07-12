@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { environment } from '../../environments/environment';
 
 
 import { Observable } from 'rxjs';
@@ -23,7 +24,7 @@ export class AuthenticationService {
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
-        this.url ='http://localhost:8080/SIGEG-WEB/services/';
+        this.url = environment.urlServices;
     }
 
     login(username: string, password: string): Observable<boolean> {
