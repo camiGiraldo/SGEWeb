@@ -39,6 +39,19 @@
           <label for="exampleInputEmail1">Descripción:</label>
           <input type="text" class="form-control" id="txtDescripcion" [(ngModel)]="descripPro" name="descripPro" #ctrl="ngModel" placeholder="en la facultad ofre....">
         </div>
+
+        <div class="form-group">
+          <label for="idFacultad">Facultad:</label>
+          <select  class="form-control" id="txtFacultad" [(ngModel)]="txtFacultad" name="txtFacultad" #ctrl="ngModel">
+            <option value="">Seleccionar
+            </option>
+            <option *ngFor="let fac of listFacultad"
+               [value]="fac.idFacultad">
+               {{fac.nombre}}
+           </option>
+          </select>
+
+        </div>
       </form>
   </div>
   <div class="modal-footer">
