@@ -6,6 +6,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { ProgramasRoutingModule } from './programas.routing.module';
 import { ProgramasComponent } from './programas.component';
 import { FacultadesService } from '../../_services/facultadesService';
+import { ProgramasService } from '../../_services/programasService';
 import {
     ReactiveFormsModule,
     FormsModule

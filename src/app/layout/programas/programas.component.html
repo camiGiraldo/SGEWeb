@@ -5,9 +5,10 @@
     <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
       <i class="fa fa-edit"></i>
     </div>
-    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="alertMessage('debe seleccionar un registro')">
+    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
       <i class="fa fa-edit"></i>
     </div>
+  
     <div class="flt-button-action" title="Crear Programas" (click)="open(content,'new')">
       <i class="fa fa-plus"></i>
     </div>
@@ -58,5 +59,30 @@
     <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
     <button type="button" class="btn btn-primary" (click)="saveFomr()">Guardar</button>
 
+  </div>
+</ng-template>
+
+<ng-template #mdlNotification let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title">{{titleNotification}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+   <div class="row">
+
+     <div class="col-2 icon-message">
+       <i [className] = 'iconNotification' [style.color] = "colorAlert"></i>
+     </div>
+     <div class="col-10">
+       {{messageNotification}}
+     </div>
+
+   </div>
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-primary" (click)="c('Close click')">Aceptar</button>
   </div>
 </ng-template>

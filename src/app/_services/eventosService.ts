@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
 @Injectable()
-export class ProgramasService{
+export class EventosService{
 
   public url:string;
 
@@ -32,6 +32,21 @@ export class ProgramasService{
                      {headers : headers});
 
     }
+   saveFile(form:any){
+      let headers = new Headers({
+          'Content-Type': 'multipart/form-data'
+      });
+
+
+
+
+    
+
+      return this.http.post(this.url+'uploadFile',
+                     form,
+                     {headers : headers});
+    }
+
 
     savePrograma(data:any){
       let headers = new Headers({
@@ -61,5 +76,7 @@ export class ProgramasService{
       return this.http.get(this.url+'getFacultades');
 
     }
+
+
 
 }

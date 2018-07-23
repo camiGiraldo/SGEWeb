@@ -25,7 +25,7 @@ interface Facultad {
 @Component({
   selector : 'app-programas',
   templateUrl: './programas.component.html',
-  styleUrls:['./programas.component.css'],
+  styleUrls:['./programas.component.scss'],
   animations: [routerTransition()]
 })
 
@@ -36,13 +36,16 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
 
+  @ViewChild('mdlNotification')
+  public modalNotification:NgbModal;
+
   dtTrigger: Subject<any> = new Subject();
   modalRef:any;
   public url:string;
 
   message = '';
   messageValidation = '';
-  idEdit:string;
+  idEdit:string='';
   namePro:string;
   descripPro:string;
 
@@ -71,12 +74,21 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
   }
 
   someClickHandler(info: any): void {
-    if(this.cellSelect.id !== info.id){
+    console.log(info);
+    console.log(this.cellSelect);
+
+    this.cellSelect = {
+      id : info.id
+    }
+    this.message =  info.name;
+    this.idEdit = info.idPrograma;
+    /*if(this.cellSelect.id !== info.id){
       this.cellSelect = {
         id : info.id
       }
       this.message =  info.name;
-      this.idEdit = info.id;
+      this.idEdit = info.idPrograma;
+
     }
     else{
       this.cellSelect = {
@@ -84,7 +96,7 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
       }
       this.message = 'no se ha seleccionado una fila';
       this.idEdit = '';
-    }
+    }*/
 
 
   }
@@ -130,21 +142,25 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
 //ARREGLAR PARA PROGRAMAS !!!!!!!!!!!!!!!!!!
   open(content, action:string) {
+  console.log("sfsfds");
       if(action == 'edit'){
-        if(this.idEdit != ''){
+        console.log("valor edit"+this.idEdit);
+
+        if(this.idEdit != '' && this.idEdit != null){
+          console.log("ingreso")
           let callBack = this.facService.getProgramaById(this.idEdit);
           callBack.subscribe(res => {
             let data = res.json();
-
+            console.log(data);
             if(data.status && data.status === 'OK'){
               var programa = data.data;
-              this.idEdit = programa.id;
-              this.namePro = programa.name;
-              this.descripPro = programa.descripcion;
+              this.idEdit = programa.idPrograma;
+              this.namePro = programa.nombre;
+              this.descripPro = programa.abreviatura;
+              this.txtFacultad=programa.idFacultad;
             }
           });
-        }
-        else{
+        } else{
           this.message ="POR FAVOR SELECCIONAR UNA FILA PARA EDITAR";
         }
       }
@@ -161,11 +177,11 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
   }
 
   saveFomr(){
-
-    if( this.namePro == ''  || this.descripPro == ''){
-      this.messageValidation = 'Todos los campos son obligatorios';
+    debugger;
+    if( (this.namePro == '' || this.namePro == undefined ) || (this.descripPro == '' || this.descripPro== undefined) || (this.txtFacultad =='' || this.txtFacultad == undefined)){
+        this.openNotification("Todos los campos son obligatorios","error");
     }else{
-      console.log(this.idEdit);
+
       let data = {
         id : (this.idEdit==null|| this.idEdit=='' ?'':this.idEdit) ,
         nombre: this.namePro ,
@@ -194,7 +210,7 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
   }
 //muestra mensajes de alertas
   alertMessage(mensaje:string){
-    alert(mensaje);
+    this.openNotification(mensaje,"info");
   }
 
   private getDismissReason(reason: any): string {
@@ -246,6 +262,51 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
 
     });
+  }
+  titleNotification:string;
+  messageNotification:string;
+  iconNotification:string;
+  colorAlert:string;
+
+  openNotification(messageComplement:string, type:string){
+
+
+    let titleNot:string;
+    let firstMessage:string;
+    let classBox:string;
+    let classIcon;
+    let colorIcon;
+
+    switch (type){
+      case 'succes':
+        titleNot = "Confirmación";
+        firstMessage ="Registro exitoso.";
+        classIcon = "fa fa-check-square-o";
+        colorIcon = "green";
+        classBox = "succes-msg";
+      break;
+      case 'info':
+        titleNot = "Información";
+        firstMessage ="";
+        classIcon ="fa fa-exclamation-triangle";
+        colorIcon = "#b0b01a";
+        classBox = "info-msg";
+      break;
+      case 'error':
+        titleNot = "Error";
+        firstMessage ="Opps! ";
+        classIcon ="fa fa-times";
+        colorIcon="red";
+        classBox = "error-msg";
+      break;
+    }
+
+    this.titleNotification =titleNot;
+    this.messageNotification = firstMessage + messageComplement;
+    this.iconNotification = classIcon;
+    this.colorAlert = colorIcon;
+    this.modalService.open(this.modalNotification, { windowClass: classBox });
+
   }
 
 }
