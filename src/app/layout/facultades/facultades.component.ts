@@ -48,7 +48,7 @@ export class FacultadesComponent implements OnInit, AfterViewInit{
 
   constructor(private zone: NgZone, private modalService: NgbModal, private facService: FacultadesService){
 
-    this.url = environment.urlServices;
+    
     this.idEdit = '';
     this.url = environment.urlServices;
     this.cellSelect = {

@@ -20,6 +20,7 @@ const routes: Routes = [
             { path: 'ges-encuesta/:id', loadChildren: './ges-encuesta/ges-encuesta.module#GesEncuestaeModule' },
             { path: 'facultades', loadChildren: './facultades/facultades.module#FacultadesModule' },
             { path: 'programas', loadChildren: './programas/programas.module#ProgranasModule' },
+            { path: 'reportes', loadChildren: './reportes/reportes.module#ReportesModule' },
            /* { path: 'categoria-eventos', loadChildren: './categoria-eventos/categoria-eventos.module#CategoriaEventosModule' },
             { path: 'tipo-eventos', loadChildren: './tipo-eventos/tipo-eventos.module#TipoEventoModule' },
             { path: 'ges-eventos', loadChildren: './ges-eventos/ges-eventos.module#GesEventosModule' },*/
