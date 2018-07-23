@@ -1,0 +1,99 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Reportes'" [icon]="'fa-user'"></app-page-header>
+  <!--CARTAS DONDE SE UBICARAN LOS REPORTES DEL SISTEMA-->
+
+  <div class="row no-margin">
+
+      <div class="col-xs-12 col-sm-12 col-md-4 cont-card-report">
+        <div class="card-report" (click)="openReportOne()">
+          <div class="card-header">
+            <label for="">Reporte de egresados por programa</label>
+          </div>
+          <div class="body-card">
+            <img src="assets/images/Excel.png" class="logo-excel" alt="">
+          </div>
+
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 cont-card-report">
+        <div class="card-report" (click)="openReportEgresados()">
+          <div class="card-header">
+            <label for="">Cantidad de egresados</label>
+          </div>
+          <div class="body-card">
+            <img src="assets/images/Excel.png" class="logo-excel" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 cont-card-report">
+        <div class="card-report">
+          <div class="card-header">
+            <label for="">Participacion de encuestas</label>
+          </div>
+          <div class="body-card">
+            <img src="assets/images/Excel.png" class="logo-excel" alt="">
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+  <!--MODAL DE REPORTES PARA EGRESADOS POR PROGRAMA-->
+  <ng-template #reportOne let-c="close" let-d="dismiss" class="personalModal">
+    <div class="modal-header">
+        <h4 class="modal-title">Reporte 1</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="form-group col-6">
+          <label for=""></label>
+          <select class="cbxProgramas">
+
+          </select>
+        </div>
+
+        <div class="cont-table col-12">
+          <table datatable [dtOptions]="dtOptions"  class="table table-striped table-responsive-sm table-bordered tbl-reporte" cellspacing="0" width="100%"></table>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cerrar</button>
+    </div>
+  </ng-template>
+
+  <!--MODAL PARA REPORTE DE TODOS LOS EGRESADOS-->
+  <ng-template #reportTwo let-c="close" let-d="dismiss" class="personalModal">
+    <div class="modal-header">
+        <h4 class="modal-title">Reporte 1</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="form-group col-6">
+          <label for=""></label>
+          <select class="cbxProgramas">
+
+          </select>
+        </div>
+
+        <div class="cont-table col-12">
+          <table datatable [dtOptions]="dtOptRepEgresados"  class="table table-striped table-responsive-sm table-bordered tbl-reporte" cellspacing="0" width="100%"></table>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cerrar</button>
+    </div>
+  </ng-template>
+
+</div>
