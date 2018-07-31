@@ -98,5 +98,53 @@ headers.append('Accept', 'application/json');
     }
 
 
+    getEgresados(){
+
+      let headers = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+      });
+      return this.http.get(this.url+'getEgresados');
+
+    }
+    getEgresadosbyEvent(id:string){
+
+      let headers = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+      });
+
+      let myParams = new URLSearchParams();
+      myParams.set('idEvento', id);
+
+      let options = new RequestOptions({ headers: headers, params: myParams});
+
+      return this.http.post(this.url+'getAsistenciasByIdEvento',
+                     myParams.toString(),
+                     {headers : headers});
+
+    }
+
+    saveAsistioEvento(data:any){
+    
+      let headers = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+      });
+
+      let myParams = new URLSearchParams();
+      myParams.set('idAsistenciaEvento',data.idAsistenciaEvento);
+      myParams.set('idEgresado',data.idEgresado);
+      myParams.set('idEvento',data.idEvento);
+      myParams.set('inscrito',data.inscrito);
+      myParams.set('asistio',data.asistio);
+      myParams.set('aprobo',data.aprobo);
+
+      let options = new RequestOptions({ headers: headers, params: myParams});
+  console.log('save asistio');
+      return this.http.post(this.url+'saveAsistenciaEvento',
+                     myParams.toString(),
+                     {headers : headers});
+
+
+    }
+
 
 }

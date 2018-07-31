@@ -52,7 +52,17 @@ interface EventoObj{
   adjunto:string;
   soporte:string;
 }
+interface Egresados{
+  idAsistenciaEvento:string;
+  nombres:string;
+  apellidos:string;
+  idEgresado:string;
+  inscrito:string;
+  asistio:string;
+  aprobo:string;
+  idEvento:string;
 
+}
 @Component({
     selector: 'app-blank-page',
     templateUrl: './ges-eventos.component.html',
@@ -81,6 +91,8 @@ export class GesEventosComponent implements OnInit {
   closeResult: string;
   listFacultad:Facultad[];
   listTipoEventos:TipoEvento[];
+  listEgresados:Egresados[];
+  egresadosSave:Egresados;
   eventos:EventoObj;
   txtFacultad:string;
   evento:EventoObj;
@@ -122,8 +134,18 @@ export class GesEventosComponent implements OnInit {
     urlInscripcion:'',
     adjunto:'',
     soporte:''} as EventoObj;
-   }
 
+this.egresadosSave={
+  idAsistenciaEvento:'';
+  nombres:'';
+  apellidos:'';
+  idEgresado:'';
+  inscrito:'0';
+  asistio:'0';
+  aprobo:'0';
+  idEvento:'';
+} as Egresados;
+}
    ngAfterViewInit(): void {
     this.dtTrigger.next();
 
@@ -203,7 +225,24 @@ export class GesEventosComponent implements OnInit {
     this.getTiposEvento();
   }
 
+addEgresados(content){
 
+  if(this.idEdit == ''){
+      this.openNotification('Debe seleccionar un evento','error');
+  }else{
+
+    console.log("valor edit"+this.idEdit);
+    this.getEgresados();
+    this.modalRef = this.modalService.open(content);
+    this.modalRef.result.then((result) => {
+      this.cleanForm();
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.cleanForm();
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    }
+}
   open(content, action:string) {
   console.log("sfsfds");
       if(action == 'edit'){
@@ -222,6 +261,27 @@ export class GesEventosComponent implements OnInit {
               h=programa.horaInicio.replace('PM','');
               this.evento.horaInicio=h;
               this.duracionEstimada=this.evento.duracionEstimada;
+
+              if(this.evento.duracionEstimada.indexOf('dias') > -1){
+                  console.log(this.evento.duracionEstimada.replace('dias',''));
+                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('dias',''));
+                this.cbotipoduracion='dias';
+              }
+              if(this.evento.duracionEstimada.indexOf('horas')  > -1){
+                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('horas',''));
+                this.cbotipoduracion='horas';
+              }
+
+              if(this.evento.duracionEstimada.indexOf('años')  > -1){
+                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('años',''));
+                this.cbotipoduracion='años';
+              }
+
+              if(this.evento.duracionEstimada.indexOf('minutos')  > -1){
+                console.log(this.evento.duracionEstimada.replace('minutos',''));
+                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('minutos',''));
+                this.cbotipoduracion='minutos';
+              }
             }
           });
         } else{
@@ -243,7 +303,7 @@ export class GesEventosComponent implements OnInit {
   validateForm(){
     //idEvento==''){}
     var message='';
-    debugger;
+
     if(this.evento.idTipoEvento==''){message+='Es obligatorio el ingreso del tipo de evento \n';}
     if(this.evento.nombre==''){message+='Es obligatorio el ingreso del nombre de evento \n';}
     if(this.evento.fechaInicio==''){message+='Es obligatorio el ingreso de la fecha de inicio \n';}
@@ -346,7 +406,72 @@ export class GesEventosComponent implements OnInit {
       this.dtTrigger.next();
     });
   }
+  getEgresados(){
+    let callBack = this.facService.getEgresados(); //editar para programas !!!!!!!!
+    callBack.subscribe(res => {
+        let data = res.json();
 
+        let status = data.status;
+
+        if(status == 'OK'){
+          this.getEgresadosbyEvent(data.data);
+
+          //this.listEgresados = data.data as  Egresados[];
+        }
+        else{
+        //  this.openNotification('Error al obtener los programas:'+data.message, 'error');
+
+        }
+
+
+    });
+  }
+
+getEgresadosEnEvento(obj,lst){
+
+  for(var i=0;i<lst.length;i++){
+      if(lst[i].idEgresado==obj.idEgresado){
+        lst[i].nombres=obj.nombres;
+        lst[i].apellidos=obj.apellidos;
+          return lst[i] as Egresado;
+        break;
+
+      }
+  }
+  obj.inscrito='0';
+  obj.asistio='0';
+  obj.aprobo='0';
+  obj.idAsistenciaEvento='';
+  return obj as Egresado;
+
+}
+  getEgresadosbyEvent(lst){
+
+    let callBack = this.facService.getEgresadosbyEvent(this.idEdit); //editar para programas !!!!!!!!
+    callBack.subscribe(res => {
+        let data = res.json();
+
+        let status = data.status;
+
+        if(status == 'OK'){
+          var listado=data.data;
+          var lstnew=[];
+          for(var i=0;i<lst.length;i++){
+
+            lstnew.push(  this.getEgresadosEnEvento(lst[i],listado));
+          }
+
+          this.listEgresados = lstnew as  Egresados[];
+          console.log(this.listEgresados);
+        }
+        else{
+        //  this.openNotification('Error al obtener los programas:'+data.message, 'error');
+
+        }
+
+
+    });
+  }
   getTiposEvento(){
     let callBack = this.facService.getTipoEventos(); //editar para programas !!!!!!!!
     callBack.subscribe(res => {
@@ -417,6 +542,49 @@ export class GesEventosComponent implements OnInit {
       let callBack = this.facService.saveFile(fd); //editar para programas !!!!!!!!
       callBack.subscribe(res => {
       });
+
+  }
+
+  agregarEgresados(id:string,estado:string,idassi:string){
+    this.egresadosSave.idEvento=this.idEdit;
+    this.egresadosSave.idEgresado=id;
+    this.egresadosSave.idAsistenciaEvento=idassi;
+        if(estado=='inscrito'){
+
+        this.egresadosSave.inscrito='1';
+    }
+
+    if(estado=='asistio'){
+
+    this.egresadosSave.asistio='1';
+}
+
+if(estado=='aprobo'){
+
+this.egresadosSave.aprobo='1';
+}
+      let callBack = this.facService.saveAsistioEvento(this.egresadosSave);
+
+      callBack.subscribe(res => {
+          let data = res.json();
+
+          let status = data.status;
+
+          if(status == 'OK'){
+          /*  this.messageValidation = 'Registro exitoso';
+            this.alertMessage(this.messageValidation);
+            this.modalRef.close();*/
+
+            this.getEgresados();
+
+          }
+          else{
+            this.messageValidation = 'Ocurrio un error al guardar el registro';
+            this.alertMessage(this.messageValidation);
+          }
+      })
+
+
 
   }
 

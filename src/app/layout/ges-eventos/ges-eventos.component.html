@@ -12,6 +12,10 @@
     <div class="flt-button-action" title="Crear Eventos" (click)="open(content,'new')">
       <i class="fa fa-plus"></i>
     </div>
+
+    <div class="flt-button-action" title="Añadir Egresados" (click)="addEgresados(addEgre)">
+      <i class="fa fa-user-plus"></i>
+    </div>
   </div>
 
   <br />
@@ -19,6 +23,47 @@
 </div>
 
 <!--FORMULARIO MODAL PARA CREAR Y EDITAR FACULTADES-->
+
+<ng-template #addEgre let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title">Egresados</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+    <div class="modal-body">
+      <ul>
+        <li *ngFor="let eg of listEgresados">
+
+           <div *ngIf ="eg.inscrito=='0' && eg.asistio=='0' && eg.aprobo=='0' ">
+             {{eg.nombres + ' '+eg.apellidos}}
+           <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'inscrito',eg.idAsistenciaEvento)">  <i class="fa fa-plus"></i></button>
+         </div>
+
+         <div *ngIf ="eg.inscrito=='1' && eg.asistio=='0' && eg.aprobo=='0'">
+           {{eg.nombres + ' '+eg.apellidos}}
+         <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'asistio',eg.idAsistenciaEvento)">  <i class="fa fa-check"></i></button>
+       </div>
+
+       <div *ngIf ="eg.asistio=='1' && eg.aprobo=='0'">
+         {{eg.nombres + ' '+eg.apellidos}}
+       <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'aprobo',eg.idAsistenciaEvento)">  <i class="fa fa-thumbs-up"></i></button>
+     </div>
+
+
+     <div *ngIf ="eg.aprobo=='1'">
+       {{eg.nombres + ' '+eg.apellidos}}
+     <button type="button" class="fltbtnplus"  disabled>  <i class="fa fa-user"></i></button>
+   </div>
+         </li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
+
+
+    </div>
+    </ng-template>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
       <h4 class="modal-title">Eventos</h4>
@@ -79,11 +124,11 @@
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Costo Egresado:</label>
-          <input type="number" class="form-control" id="costoEgresado" [(ngModel)]="evento.costoEgresado" name="costoEgresado" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="number" class="form-control" id="costoEgresado" [(ngModel)]="evento.costoEgresado" name="costoEgresado" #ctrl="ngModel" placeholder="Costo Egresado ....">
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Costo Uniajc:</label>
-          <input type="number" class="form-control" id="costoUniajc" [(ngModel)]="evento.costoUniajc" name="costoUniajc" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="number" class="form-control" id="costoUniajc" [(ngModel)]="evento.costoUniajc" name="costoUniajc" #ctrl="ngModel" placeholder="Costo Uniajc ....">
         </div>
 
         <div class="form-group">
@@ -97,36 +142,36 @@
 
         <div class="form-group">
           <label for="exampleInputEmail1">Dependencia Organiza:</label>
-          <input type="text" class="form-control" id="dependenciaOrganiza" [(ngModel)]="evento.dependenciaOrganiza" name="dependenciaOrganiza" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="text" class="form-control" id="dependenciaOrganiza" [(ngModel)]="evento.dependenciaOrganiza" name="dependenciaOrganiza" #ctrl="ngModel" placeholder="Dependencia Organiza ....">
         </div>
         <div class="form-group">
           <label for="exampleInputEmail1">Dependencia Beneficiaria:</label>
-          <input type="text" class="form-control" id="dependenciaBeneficiaria" [(ngModel)]="evento.dependenciaBeneficiaria" name="dependenciaBeneficiaria" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="text" class="form-control" id="dependenciaBeneficiaria" [(ngModel)]="evento.dependenciaBeneficiaria" name="dependenciaBeneficiaria" #ctrl="ngModel" placeholder="Dependencia Beneficiaria ....">
         </div>
 
         <div class="form-group">
           <label for="exampleInputEmail1">Comunidad Beneficiaria:</label>
-          <input type="text" class="form-control" id="comunidadBeneficiaria" [(ngModel)]="evento.comunidadBeneficiaria" name="comunidadBeneficiaria" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="text" class="form-control" id="comunidadBeneficiaria" [(ngModel)]="evento.comunidadBeneficiaria" name="comunidadBeneficiaria" #ctrl="ngModel" placeholder="Comunidad Beneficiada  ....">
         </div>
 
         <div class="form-group">
           <label for="exampleInputEmail1">Personas a Cargo:</label>
-          <input type="number" class="form-control" id="personasCargo" [(ngModel)]="evento.personaACargo" name="personasCargo" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="number" class="form-control" id="personasCargo" [(ngModel)]="evento.personaACargo" name="personasCargo" #ctrl="ngModel" placeholder="Personas a Cargo ....">
         </div>
 
         <div class="form-group">
           <label for="exampleInputEmail1">Correo Electronico:</label>
-          <input type="email" class="form-control" id="email" [(ngModel)]="evento.correoElectronico" name="email" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="email" class="form-control" id="email" [(ngModel)]="evento.correoElectronico" name="email" #ctrl="ngModel" placeholder="Correo Electronico ....">
         </div>
 
         <div class="form-group">
           <label for="exampleInputEmail1">Telefono:</label>
-          <input type="number" class="form-control" id="telefono" [(ngModel)]="evento.telefono" name="telefono" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="number" class="form-control" id="telefono" [(ngModel)]="evento.telefono" name="telefono" #ctrl="ngModel" placeholder="Telefono ....">
         </div>
 
         <div class="form-group">
           <label for="exampleInputEmail1">Cupos Egresados:</label>
-          <input type="number" class="form-control" id="cupos" [(ngModel)]="evento.cuposEgresados" name="cupos" #ctrl="ngModel" placeholder="Hora Inicio ....">
+          <input type="number" class="form-control" id="cupos" [(ngModel)]="evento.cuposEgresados" name="cupos" #ctrl="ngModel" placeholder="Cupos Egresado ....">
         </div>
 
 
