@@ -16,64 +16,84 @@ export class EventosService{
     this.url = environment.urlServices;
   }
 
-  getProgramaById(id:string){
-
+  getEventobyId(id:string){
+    console.log('sfsdfsd')
       let headers = new Headers({
           'Content-Type': 'application/x-www-form-urlencoded'
       });
 
       let myParams = new URLSearchParams();
-      myParams.set('idPrograma', id);
+      myParams.set('idEvento', id);
 
       let options = new RequestOptions({ headers: headers, params: myParams});
 
-      return this.http.post(this.url+'getProgramaById',
+      return this.http.post(this.url+'getEventoById',
                      myParams.toString(),
                      {headers : headers});
 
     }
    saveFile(form:any){
+     console.log(form);
+
       let headers = new Headers({
           'Content-Type': 'multipart/form-data'
       });
 
 
+headers.append('Accept', 'application/json');
 
 
-    
-
+      let options = new RequestOptions({ headers: headers});
       return this.http.post(this.url+'uploadFile',
                      form,
-                     {headers : headers});
+                     options);
     }
 
 
-    savePrograma(data:any){
+    saveEvento(data:any){
       let headers = new Headers({
           'Content-Type': 'application/x-www-form-urlencoded'
       });
 
       let myParams = new URLSearchParams();
-      myParams.set('idPrograma', data.id);
-      myParams.set('nombre', data.nombre);
-      myParams.set('abreviatura', data.descripcion);
-      myParams.set('idFacultad', data.idFacultad);
+      myParams.set('idEvento',data.idEvento);
+      myParams.set('idTipoEvento',data.idTipoEvento);
+      myParams.set('nombre',data.nombre);
+      myParams.set('fechaInicio',data.fechaInicio);
+      myParams.set('fechaFin',data.fechaFin);
+      myParams.set('lugar',data.lugar);
+      myParams.set('horaInicio',data.horaInicio);
+      myParams.set('duracionEstimada',data.duracionEstimada);
+      myParams.set('costoEgresado',data.costoEgresado);
+      myParams.set('costoUniajc',data.costoUniajc);
+      myParams.set('certificable',data.certificable);
+      myParams.set('dependenciaOrganiza',data.dependenciaOrganiza);
+      myParams.set('dependenciaBeneficiaria',data.dependenciaBeneficiaria);
+      myParams.set('comunidadBeneficiaria',data.comunidadBeneficiaria);
+      myParams.set('personaACargo',data.personaACargo);
+      myParams.set('correoElectronico',data.correoElectronico);
+      myParams.set('telefono',data.telefono);
+      myParams.set('cuposEgresados',data.cuposEgresados);
+      myParams.set('bannerEvento',data.bannerEvento);
+      myParams.set('urlInscripcion',data.urlInscripcion);
+      myParams.set('adjunto',data.adjunto);
+      myParams.set('soporte',data.soporte);
 
 
       let options = new RequestOptions({ headers: headers, params: myParams});
 
-      return this.http.post(this.url+'savePrograma',
+      return this.http.post(this.url+'saveEvento',
                      myParams.toString(),
                      {headers : headers});
     }
 
 
-    getFacultades(){
+    getTipoEventos(){
 
       let headers = new Headers({
           'Content-Type': 'application/x-www-form-urlencoded'
       });
-      return this.http.get(this.url+'getFacultades');
+      return this.http.get(this.url+'getTiposEvento');
 
     }
 

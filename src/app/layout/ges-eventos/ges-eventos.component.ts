@@ -20,6 +20,39 @@ interface Facultad {
 
 
 };
+
+interface TipoEvento{
+  idTipoEvento:string;
+  idCategoriaEvento:string;
+  nombre:string;
+  activo:string;
+}
+
+interface EventoObj{
+  idEvento:string,
+  idTipoEvento:string,
+  nombre:string;
+  fechaInicio:string,
+  fechaFin:string;
+  lugar:string;
+  horaInicio:string,
+  duracionEstimada:string;
+  costoEgresado:string,
+  costoUniajc:string;
+  certificable:string,
+  dependenciaOrganiza:string;
+  dependenciaBeneficiaria:string,
+  comunidadBeneficiaria:string,
+  personaACargo:string,
+  correoElectronico:string;
+  telefono:string,
+  cuposEgresados:string;
+  bannerEvento:string,
+  urlInscripcion:string;
+  adjunto:string;
+  soporte:string;
+}
+
 @Component({
     selector: 'app-blank-page',
     templateUrl: './ges-eventos.component.html',
@@ -47,17 +80,48 @@ export class GesEventosComponent implements OnInit {
   dtOptions: any = {};
   closeResult: string;
   listFacultad:Facultad[];
+  listTipoEventos:TipoEvento[];
+  eventos:EventoObj;
   txtFacultad:string;
+  evento:EventoObj;
+  duracionEstimada:string;
+  cbotipoduracion:string;
+  urlExterna:string;
 
   constructor(private zone: NgZone, private modalService: NgbModal, private facService: EventosService, private route: ActivatedRoute){
     this.route.params.subscribe(res => console.log(res));
     this.facultadId =
     this.idEdit = '';
     this.url = environment.urlServices;
+    this.duracionEstimada='';
+    this.cbotipoduracion='';
+    this.urlExterna='';
     this.cellSelect = {
       id : ''
     }
     this.message = 'No se ha seleccionado una fila';
+    this.evento={idEvento:'',
+    idTipoEvento:'',
+    nombre:'',
+    fechaInicio:'',
+    fechaFin:'',
+    lugar:'',
+    horaInicio:'',
+    duracionEstimada:'',
+    costoEgresado:'',
+    costoUniajc:'',
+    certificable:'',
+    dependenciaOrganiza:'',
+    dependenciaBeneficiaria:'',
+    comunidadBeneficiaria:'',
+    personaACargo:'',
+    correoElectronico:'',
+    telefono:'',
+    cuposEgresados:'',
+    bannerEvento:'',
+    urlInscripcion:'',
+    adjunto:'',
+    soporte:''} as EventoObj;
    }
 
    ngAfterViewInit(): void {
@@ -73,7 +137,7 @@ export class GesEventosComponent implements OnInit {
       id : info.id
     }
     this.message =  info.name;
-    this.idEdit = info.idPrograma;
+    this.idEdit = info.idEvento;
     /*if(this.cellSelect.id !== info.id){
       this.cellSelect = {
         id : info.id
@@ -136,7 +200,7 @@ export class GesEventosComponent implements OnInit {
        }
     };
 
-  //  this.getFacultades();
+    this.getTiposEvento();
   }
 
 
@@ -147,16 +211,17 @@ export class GesEventosComponent implements OnInit {
 
         if(this.idEdit != '' && this.idEdit != null){
           console.log("ingreso")
-          let callBack = this.facService.getProgramaById(this.idEdit);
+          let callBack = this.facService.getEventobyId(this.idEdit);
           callBack.subscribe(res => {
             let data = res.json();
             console.log(data);
             if(data.status && data.status === 'OK'){
               var programa = data.data;
-              this.idEdit = programa.idPrograma;
-              this.namePro = programa.nombre;
-              this.descripPro = programa.abreviatura;
-              this.txtFacultad=programa.idFacultad;
+              this.evento = programa;
+              var h=programa.horaInicio.replace('AM','');
+              h=programa.horaInicio.replace('PM','');
+              this.evento.horaInicio=h;
+              this.duracionEstimada=this.evento.duracionEstimada;
             }
           });
         } else{
@@ -175,19 +240,57 @@ export class GesEventosComponent implements OnInit {
 
   }
 
+  validateForm(){
+    //idEvento==''){}
+    var message='';
+    debugger;
+    if(this.evento.idTipoEvento==''){message+='Es obligatorio el ingreso del tipo de evento \n';}
+    if(this.evento.nombre==''){message+='Es obligatorio el ingreso del nombre de evento \n';}
+    if(this.evento.fechaInicio==''){message+='Es obligatorio el ingreso de la fecha de inicio \n';}
+    if(this.evento.fechaFin==''){message+='Es obligatorio el ingreso de la fecha fin \n';}
+    if(this.evento.lugar==''){message+='Es obligatorio el ingreso del lugar \n';}
+    if(this.evento.horaInicio==''){message+='ES obligatorio el ingreso de la hora de inicio \n';}
+    if(this.duracionEstimada==''){message+='ES obligatorio el ingreso de la duracion estimada \n';}
+    if(this.evento.costoEgresado==''){message+='Es obligatorio el ingreso del costo de egresado \n';}
+    if(this.evento.costoUniajc==''){message+='Es obligatorio el ingreso del costo Uniajc \n';}
+    if(this.evento.certificable==''){message+='Es obligatorio indicar si es certificable \n';}
+    if(this.evento.dependenciaOrganiza==''){message+='Es obligatorio ingresa que dependencia organiza \n';}
+    if(this.evento.dependenciaBeneficiaria==''){message+='Es obligatorio el ingreso de dependencia Beneficiaria \n';}
+    if(this.evento.comunidadBeneficiaria==''){message+='Es obligatorio el ingreso de la comunidad beneficiada \n';}
+    if(this.evento.personaACargo==''){message+='ES obligatorio el ingreso de las personas a cargo \n';}
+    if(this.evento.correoElectronico==''){message+='Es obligatorio el ingreso de el correo electronico \n';}
+    if(this.evento.telefono==''){message+='Es obligatorio el ingreso del telefono \n';}
+    if(this.evento.cuposEgresados==''){message+='ES obligatorio el ingreso de los cupos de egresado \n';}
+    //if(this.evento.bannerEvento==''){}
+    if(this.evento.urlInscripcion==''){message+='Es obligatorio el ingreso de la url de inscripcion \n';}
+    if(message==''){
+      var f=new Date(this.evento.fechaInicio);
+      var ff=new Date(this.evento.fechaFin);
+      if(f > ff){
+        this.openNotification("La fecha de inicio no puede ser mayor a la fecha fin","error");
+        return true;
+      }
+      this.evento.fechaInicio=f.getTime()+"";
+      this.evento.fechaFin=ff.getTime()+"";
+      return false;
+    }else{
+        //this.openNotification(message,"error");
+        this.openNotification("Todos los campos son obligatorios","error");
+      return true;
+    }
+  }
+
   saveFomr(){
 
-    if( (this.namePro == '' || this.namePro == undefined ) || (this.descripPro == '' || this.descripPro== undefined) || (this.txtFacultad =='' || this.txtFacultad == undefined)){
-        this.openNotification("Todos los campos son obligatorios","error");
-    }else{
+    if( this.validateForm()){
 
-      let data = {
-        id : (this.idEdit==null|| this.idEdit=='' ?'':this.idEdit) ,
-        nombre: this.namePro ,
-        descripcion: this.descripPro,
-        idFacultad:this.txtFacultad,
-      };
-      let callBack = this.facService.savePrograma(data); //editar para programas !!!!!!!!
+    }else{
+      this.evento.adjunto='1';
+      this.evento.soporte='1';
+      this.evento.bannerEvento='1';
+      this.evento.duracionEstimada=this.duracionEstimada+' '+this.cbotipoduracion;
+      let data = this.evento;
+      let callBack = this.facService.saveEvento(data); //editar para Eventos !!!!!!!!
       callBack.subscribe(res => {
           let data = res.json();
 
@@ -244,15 +347,15 @@ export class GesEventosComponent implements OnInit {
     });
   }
 
-  getFacultades(){
-    let callBack = this.facService.getFacultades(); //editar para programas !!!!!!!!
+  getTiposEvento(){
+    let callBack = this.facService.getTipoEventos(); //editar para programas !!!!!!!!
     callBack.subscribe(res => {
         let data = res.json();
 
         let status = data.status;
 
         if(status == 'OK'){
-          this.listFacultad = data.data as  Facultad[];
+          this.listTipoEventos = data.data as  TipoEvento[];
         }
         else{
         //  this.openNotification('Error al obtener los programas:'+data.message, 'error');
@@ -309,11 +412,11 @@ export class GesEventosComponent implements OnInit {
 
   handleFileInput(files: FileList) {
 
-    /*  var fd = new FormData();
-      fd.append("file",files.item(0));
+     var fd = new FormData();
+      fd.append("file",files.item(0),files.item(0).name);
       let callBack = this.facService.saveFile(fd); //editar para programas !!!!!!!!
       callBack.subscribe(res => {
-      });*/
+      });
 
   }
 
