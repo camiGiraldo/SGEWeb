@@ -264,22 +264,22 @@ addEgresados(content){
 
               if(this.evento.duracionEstimada.indexOf('dias') > -1){
                   console.log(this.evento.duracionEstimada.replace('dias',''));
-                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('dias',''));
+                this.duracionEstimada=this.evento.duracionEstimada.replace('dias','');
                 this.cbotipoduracion='dias';
               }
               if(this.evento.duracionEstimada.indexOf('horas')  > -1){
-                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('horas',''));
+                this.duracionEstimada=this.evento.duracionEstimada.replace('horas','');
                 this.cbotipoduracion='horas';
               }
 
               if(this.evento.duracionEstimada.indexOf('años')  > -1){
-                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('años',''));
+                this.duracionEstimada=this.evento.duracionEstimada.replace('años','');
                 this.cbotipoduracion='años';
               }
 
               if(this.evento.duracionEstimada.indexOf('minutos')  > -1){
                 console.log(this.evento.duracionEstimada.replace('minutos',''));
-                this.duracionEstimada=parseInt(this.evento.duracionEstimada.replace('minutos',''));
+                this.duracionEstimada=this.evento.duracionEstimada.replace('minutos','');
                 this.cbotipoduracion='minutos';
               }
             }
@@ -433,8 +433,8 @@ getEgresadosEnEvento(obj,lst){
       if(lst[i].idEgresado==obj.idEgresado){
         lst[i].nombres=obj.nombres;
         lst[i].apellidos=obj.apellidos;
-          return lst[i] as Egresado;
-        break;
+          return lst[i] as Egresados;
+      
 
       }
   }
@@ -442,7 +442,7 @@ getEgresadosEnEvento(obj,lst){
   obj.asistio='0';
   obj.aprobo='0';
   obj.idAsistenciaEvento='';
-  return obj as Egresado;
+  return obj as Egresados;
 
 }
   getEgresadosbyEvent(lst){
