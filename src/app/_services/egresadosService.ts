@@ -24,7 +24,6 @@ export class EgresadosService{
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
-    debugger
 
     let myParams = new URLSearchParams();
     myParams.set('idEgresado', data.idEgresado);
@@ -39,7 +38,6 @@ export class EgresadosService{
  //metodo que se comunica para con el back el cual guarda o edita una facultad
   saveInfoBasic(data:any){
 
-  debugger;
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
@@ -73,7 +71,6 @@ export class EgresadosService{
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
-    debugger
 
     let myParams = new URLSearchParams();
     myParams.set('idInformacionAcademica', data.idInformacionAcademica);

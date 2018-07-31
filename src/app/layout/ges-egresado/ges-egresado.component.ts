@@ -28,13 +28,13 @@ interface Programa {
   templateUrl: './ges-egresado.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls:['./ges-egresado.component.scss'],
-  animations: [routerTransition()]
+  animations: [routerTransition()] 
 })
 
 
 export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
-  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective; //create una directiva verifica donde llama eso 
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
   @ViewChild('content') public modalForm:NgbModal;
 
@@ -42,7 +42,9 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
   //vaariables para la tabla
   dtOptions: any;
+  dtOptionsPrograms: any;
   dtTrigger: Subject<any> = new Subject();
+  dtTriggerPrograms: Subject<any> = new Subject();
   cellSelect:any;
   //------------------------
 
@@ -60,6 +62,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   programa:Programa;
   idEdit:string ='';
   listProgramas:Programa[];
+  listProgramasEgresado= [];
 
 
 
@@ -86,6 +89,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
         if(status == 'OK'){
           this.listProgramas = data.data as Programa[];
+          console.log('listado', this.listProgramas);
         }
         else{
           this.openNotification('Error al obtener los programas:'+data.message, 'error');
@@ -101,6 +105,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    this.dtTriggerPrograms.next();
 
   }
 
@@ -116,6 +121,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
       this.message =  info.identificacion+"-"+info.nombres+" "+info.apellidos;
 
       this.idEdit = info.idEgresado;
+      this.getInfoEgresadoById(this.idEdit);
     }
     else{
       this.cellSelect = {
@@ -126,6 +132,33 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
     }
 
 
+  }
+
+  onClickProgram(idPrograma){
+    this.egresado.idInformacionAcademica = this.egresado.InformacionAcademica[idPrograma].idInformacionAcademica;
+    this.egresado.idPrograma = this.egresado.InformacionAcademica[idPrograma].idPrograma;
+    this.egresado.libro = this.egresado.InformacionAcademica[idPrograma].libro;
+    this.egresado.folio = this.egresado.InformacionAcademica[idPrograma].folio;
+    this.egresado.acta = this.egresado.InformacionAcademica[idPrograma].acta;
+    this.egresado.numeroDiploma = this.egresado.InformacionAcademica[idPrograma].numeroDiploma;
+    this.egresado.semestreGrado = this.egresado.InformacionAcademica[idPrograma].semestreGrado;
+    this.egresado.formaGrado = this.egresado.InformacionAcademica[idPrograma].formaGrado;
+    this.egresado.tipoOpcionGrado = this.egresado.InformacionAcademica[idPrograma].tipoOpcionGrado;
+    this.egresado.notaOpcionGrado = this.egresado.InformacionAcademica[idPrograma].notaOpcionGrado;
+    this.egresado.semestreFinalizoMaterias = this.egresado.InformacionAcademica[idPrograma].semestreFinalizoMaterias;
+  }
+
+  cleanInfoProgram(){
+    this.egresado.idInformacionAcademica = '';
+    this.egresado.libro = '';
+    this.egresado.folio = '';
+    this.egresado.acta = '';
+    this.egresado.numeroDiploma = '';
+    this.egresado.semestreGrado = '';
+    this.egresado.formaGrado = '';
+    this.egresado.tipoOpcionGrado = '';
+    this.egresado.notaOpcionGrado = '';
+    this.egresado.semestreFinalizoMaterias = '';
   }
 
   //Metodos del  wizard
@@ -157,7 +190,8 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
           let status = data.status;
 
           if(status == 'OK'){
-            this.saveFormAcademic(data.data);
+            this.egresado.idEgresado = data.data;
+            this.saveFormControl(this.egresado);
           }
           else{
             this.openNotification('Error del servidor al guardar la informacion basica:'+data.message, 'error');
@@ -170,8 +204,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
       });
 
   }
-  saveFormAcademic(idEgresado:any){
-    this.egresado.idEgresado = idEgresado;
+  saveFormAcademic(){
     let callBack = this.egreService.saveInfoAcademic(this.egresado);
     callBack.subscribe(res => {
 
@@ -179,7 +212,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
         let status = data.status;
 
         if(status == 'OK'){
-          this.saveFormControl(this.egresado);
+          this.openNotification("","succes");
         }
         else{
           this.openNotification('Error del servidor al guardar la informacion academica:'+data.message, 'error');
@@ -217,7 +250,8 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
 
       if(this.idEdit != ''){
-        this.getInfoEgresadoById(this.idEdit);
+        this.modalRef = this.modalService.open(this.modalForm, { size: 'lg', backdrop: 'static' });
+
       }
       else{
         this.message ="Por favor seleccionar una fila para editar";
@@ -225,6 +259,20 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
         this.openNotification(this.message, 'error');
       }
 
+  }
+
+  onChangeIdPrograma(){
+    var existe = false;
+    for(var info in this.egresado.InformacionAcademica){
+      if(parseInt(this.egresado.idPrograma) === parseInt(info)){
+        existe = true;
+      }
+    }
+    if(!existe){
+      this.cleanInfoProgram();
+    }else{
+      this.onClickProgram(this.egresado.idPrograma);
+    }
   }
 
   getInfoEgresadoById(idEgresado:string){
@@ -237,11 +285,10 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
         let data = res.json();
         let status = data.status;
-debugger
         if(status == 'OK'){
           this.egresado = new Egresados();
           let infoBasica    =  data.data.Egresado;
-          let infoAcademica =  data.data.InformacionAcademica[0];
+          let arrayInfoAcademica =  data.data.InformacionAcademica;
           let infoControl   = data.data.InformacionControl[0];
           /*Seteamos la informacion basica, academica y de control*/
           this.egresado.idEgresado = infoBasica.idEgresado;
@@ -258,8 +305,26 @@ debugger
           this.egresado.telefonoMovilAlterno = infoBasica.telefonoMovilAlterno;
           this.egresado.correoElectronico = infoBasica.correoElectronico;
           this.egresado.correoElectronicoAlterno = infoBasica.correoElectronicoAlterno;
+          this.egresado.InformacionAcademica = {};
 
-          this.egresado.idInformacionAcademica = infoAcademica.idInformacionAcademica;
+          this.listProgramasEgresado = [];
+
+          for(var i = 0, len = arrayInfoAcademica.length; i < len; i++){
+            var infoAcademica = arrayInfoAcademica[i];
+            this.egresado.InformacionAcademica[infoAcademica.idPrograma] = infoAcademica;
+            var newProgram = {};
+            newProgram.idPrograma = infoAcademica.idPrograma;
+            for(var j = 0, leng = this.listProgramas.length; j < leng; j++){
+              if(parseInt(infoAcademica.idPrograma) === parseInt(this.listProgramas[j].idPrograma)){
+                newProgram.nombre = this.listProgramas[j].nombre;
+                newProgram.abreviatura = this.listProgramas[j].abreviatura;
+                newProgram.idFacultad = this.listProgramas[j].idFacultad;
+              }
+            }
+            this.listProgramasEgresado.push(newProgram);
+          }
+
+          /*this.egresado.idInformacionAcademica = infoAcademica.idInformacionAcademica;
           this.egresado.idPrograma = infoAcademica.idPrograma;
           this.egresado.libro = infoAcademica.libro;
           this.egresado.folio = infoAcademica.folio;
@@ -269,10 +334,10 @@ debugger
           this.egresado.formaGrado = infoAcademica.formaGrado;
           this.egresado.tipoOpcionGrado = infoAcademica.tipoOpcionGrado;
           this.egresado.notaOpcionGrado = infoAcademica.notaOpcionGrado;
-          this.egresado.semestreFinalizoMaterias = infoAcademica.semestreFinalizoMaterias;
+          this.egresado.semestreFinalizoMaterias = infoAcademica.semestreFinalizoMaterias;*/
 
-
-          this.modalRef = this.modalService.open(this.modalForm, { size: 'lg', backdrop: 'static' });
+          console.log('Prueba------', this.egresado);
+          console.log('Prueba------2', this.listProgramasEgresado);
 
         }
         else{
@@ -294,7 +359,6 @@ debugger
 
 
   ngOnInit(){
-
     //SETEAMOS LOS CAMPOS EN LA TABLA QUE VAMOS A MOSTRAR AL INICIO
     this.dtOptions = {
       ajax: this.url+'getEgresados',
@@ -330,14 +394,55 @@ debugger
            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
        }
     };
+    /*this.dtOptionsPrograms = {
+      ajax: this.url+'getEgresados',
+      columns: [{
+        title: 'ID',
+        data: 'idEgresado',
+        visible: false
+      }, {
+        title: 'No. Identificacion',
+        data: 'identificacion'
+      }, {
+        title: 'Nombres',
+        data: 'nombres'
+      }, {
+        title: 'Apellidos',
+        data: 'apellidos'
+      }, {
+        title: 'Correo Electronico',
+        data: 'correoElectronico'
+      }],
+      rowCallback:(row: Node, data: any[] | Object, index: number) => {
+         const self = this;
+         $('td', row).unbind('click');
+         $('td', row).bind('click', () => {
+           self.someClickHandler(data);
+         });
+         return row;
+      },
+      select:{
+            style: 'single'
+      },
+      "language": {
+           "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+       }
+    };*/
+  }
+
+  setProgramData(){
+    this.dtTriggerPrograms.next();
   }
 
 
 
 
-  open(content, action:string) {
+  open(content, action:string, size:string) {
+
+          this.setProgramData();
     //REFERENCIA DEL Modal
-    this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static' });
+    var sizeModal = (size != undefined) ? size : 'lg';
+    this.modalRef = this.modalService.open(content, { size: sizeModal, backdrop: 'static' });
     this.modalRef.result.then((result) => {
       this.cleanForm();
       this.closeResult = `Closed with: ${result}`;
@@ -370,6 +475,7 @@ rerenderTable(): void {
     this.idEdit = "";
     // Call the dtTrigger to rerender again
     this.dtTrigger.next();
+    this.dtTriggerPrograms.next();
   });
 }
 

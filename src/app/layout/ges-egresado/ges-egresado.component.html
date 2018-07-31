@@ -2,10 +2,10 @@
   <app-page-header [heading]="'Gestion de Egresados'" [icon]="'fa-user'"></app-page-header>
   <div class="cont-actions">
     <div class="fac-selec">Egresado seleccionado: <strong>{{ message }}</strong></div>
-    <div class="flt-button-action" title="Ver Egresado">
+    <div *ngIf = "idEdit" class="flt-button-action" title="Ver programas" (click)="open(contentprograms,'new', 'xl')">
       <i class="fa fa-book"></i>
     </div>
-    <div *ngIf = "idEdit" class="flt-button-action" title="Edita" (click)="editEgresado()">
+    <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="editEgresado()">
       <i class="fa fa-edit"></i>
     </div>
     <div *ngIf = "!idEdit" class="flt-button-action" title="Editar">
@@ -30,6 +30,84 @@
 
 </div>
 
+<ng-template #contentprograms let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      Asignar programas
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+       <form #formAcademico = 'ngForm' class="col-md-6">
+         <div class="row" [ngStyle]="{'margin':'0'}">
+           <input type="hidden" id="idInformacionAcademica" name="idInformacionAcademica" #idInformacionAcademica="ngModel"
+                [(ngModel)]="egresado.idInformacionAcademica">
+          <div class="form-group col-md-4">
+           <label for="sel1">Tipo de Programa:</label>
+           <select class="form-control" id="idPrograma" #idPrograma="ngModel" name="idPrograma" [(ngModel)]="egresado.idPrograma" (ngModelChange)="onChangeIdPrograma()">
+             <option value="">Seleccionar</option>
+             <option *ngFor="let prog of listProgramas"
+                [value]="prog.idPrograma">
+                {{prog.nombre}}
+            </option>
+           </select>
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Libro:</label>
+           <input type="text" class="form-control" id="libro" name="libro" #libro="ngModel" [(ngModel)]="egresado.libro">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Folio:</label>
+           <input type="text" class="form-control" id="folio" name="folio" #folio="ngModel" [(ngModel)]="egresado.folio">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Acta:</label>
+           <input type="text" class="form-control" id="acta" name="acta" #acta="ngModel" [(ngModel)]="egresado.acta">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Numero de diploma:</label>
+           <input type="number" class="form-control" id="numeroDiploma" name="numeroDiploma" #numeroDiploma="ngModel" [(ngModel)]="egresado.numeroDiploma">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Semestre Grado:</label>
+           <input type="text" class="form-control" id="semestreGrado" name="semestreGrado" #semestreGrado="ngModel" [(ngModel)]="egresado.semestreGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Forma de Grado:</label>
+           <input type="text" class="form-control" id="formaGrado" name="formaGrado" #formaGrado="ngModel" [(ngModel)]="egresado.formaGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Opcion de Grado:</label>
+           <input type="text" class="form-control" id="tipoOpcionGrado" name="tipoOpcionGrado" #tipoOpcionGrado="ngModel" [(ngModel)]="egresado.tipoOpcionGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Nota de Opcion de Grado:</label>
+           <input type="text" class="form-control" id="notaOpcionGrado" name="notaOpcionGrado" #notaOpcionGrado="ngModel" [(ngModel)]="egresado.notaOpcionGrado">
+        </div>
+        <div class="form-group col-md-4">
+           <label for="pwd">Semestre Finalizacion Materias:</label>
+           <input type="number" class="form-control" id="semestreFinalizoMaterias" name="semestreFinalizoMaterias"
+               #semestreFinalizoMaterias="ngModel" [(ngModel)]="egresado.semestreFinalizoMaterias">
+        </div>
+      </div>
+      <div class="row" [ngStyle]="{'margin':'0'}">
+        <div class="form-group col-md-4">
+          <button class="btn btn-primary" type="button" (click)="saveFormAcademic()">Guardar</button>
+        </div>
+      </div>
+       </form>
+       <div class="col-md-6">
+         <h6>Listado de programas asignados:</h6>
+         <ul class="list-group">
+            <li *ngFor="let prog of listProgramasEgresado" class="list-group-item list-group-item-action list-group-item-secondary" (click)="onClickProgram(prog.idPrograma)">
+                  {{prog.nombre}}
+            </li>
+         </ul>
+       </div>
+    </div>
+  </div>
+</ng-template>
 
 
 <ng-template #content let-c="close" let-d="dismiss">
@@ -122,61 +200,7 @@
          </form>
 
      </wizard-step>
-     <wizard-step [title]="'Información Academica'" (onNext)="onStep2Next($event)">
-       <form #formAcademico = 'ngForm'>
-         <div class="row" [ngStyle]="{'margin':'0'}">
-           <input type="hidden" id="idInformacionAcademica" name="idInformacionAcademica" #idInformacionAcademica="ngModel"
-                [(ngModel)]="egresado.idInformacionAcademica">
-          <div class="form-group col-md-4">
-           <label for="sel1">Tipo de Programa:</label>
-           <select class="form-control" id="idPrograma" #idPrograma="ngModel" name="idPrograma" [(ngModel)]="egresado.idPrograma">
-             <option value="">Seleccionar</option>
-             <option *ngFor="let prog of listProgramas"
-                [value]="prog.idPrograma">
-                {{prog.nombre}}
-            </option>
-           </select>
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Libro:</label>
-           <input type="text" class="form-control" id="libro" name="libro" #libro="ngModel" [(ngModel)]="egresado.libro">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Folio:</label>
-           <input type="text" class="form-control" id="folio" name="folio" #folio="ngModel" [(ngModel)]="egresado.folio">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Acta:</label>
-           <input type="text" class="form-control" id="acta" name="acta" #acta="ngModel" [(ngModel)]="egresado.acta">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Numero de diploma:</label>
-           <input type="number" class="form-control" id="numeroDiploma" name="numeroDiploma" #numeroDiploma="ngModel" [(ngModel)]="egresado.numeroDiploma">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Semestre Grado:</label>
-           <input type="text" class="form-control" id="semestreGrado" name="semestreGrado" #semestreGrado="ngModel" [(ngModel)]="egresado.semestreGrado">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Forma de Grado:</label>
-           <input type="text" class="form-control" id="formaGrado" name="formaGrado" #formaGrado="ngModel" [(ngModel)]="egresado.formaGrado">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Opcion de Grado:</label>
-           <input type="text" class="form-control" id="tipoOpcionGrado" name="tipoOpcionGrado" #tipoOpcionGrado="ngModel" [(ngModel)]="egresado.tipoOpcionGrado">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Nota de Opcion de Grado:</label>
-           <input type="text" class="form-control" id="notaOpcionGrado" name="notaOpcionGrado" #notaOpcionGrado="ngModel" [(ngModel)]="egresado.notaOpcionGrado">
-        </div>
-        <div class="form-group col-md-4">
-           <label for="pwd">Semestre Finalizacion Materias:</label>
-           <input type="number" class="form-control" id="semestreFinalizoMaterias" name="semestreFinalizoMaterias"
-               #semestreFinalizoMaterias="ngModel" [(ngModel)]="egresado.semestreFinalizoMaterias">
-        </div>
-      </div>
-       </form>
-     </wizard-step>
+     
      <wizard-step [title]="'Información de control'" (onComplete)="onComplete($event)">
       <form #formControl="ngForm">
         <div class="row" [ngStyle]="{'margin':'0'}">
