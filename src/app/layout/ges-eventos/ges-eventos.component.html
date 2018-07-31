@@ -1,0 +1,225 @@
+<div [@routerTransition]>
+  <app-page-header [heading]="'Gestion de Eventos'" [icon]="'fa-building'"></app-page-header>
+  <div class="cont-actions">
+    <div class="fac-selec">Evento seleccionado: <strong>{{ message }}</strong></div>
+    <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
+      <i class="fa fa-edit"></i>
+    </div>
+    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
+      <i class="fa fa-edit"></i>
+    </div>
+
+    <div class="flt-button-action" title="Crear Eventos" (click)="open(content,'new')">
+      <i class="fa fa-plus"></i>
+    </div>
+
+    <div class="flt-button-action" title="Añadir Egresados" (click)="addEgresados(addEgre)">
+      <i class="fa fa-user-plus"></i>
+    </div>
+  </div>
+
+  <br />
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="hover table-striped" cellspacing="0" width="100%"></table>
+</div>
+
+<!--FORMULARIO MODAL PARA CREAR Y EDITAR FACULTADES-->
+
+<ng-template #addEgre let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title">Egresados</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+    <div class="modal-body">
+      <ul>
+        <li *ngFor="let eg of listEgresados">
+
+           <div *ngIf ="eg.inscrito=='0' && eg.asistio=='0' && eg.aprobo=='0' ">
+             {{eg.nombres + ' '+eg.apellidos}}
+           <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'inscrito',eg.idAsistenciaEvento)">  <i class="fa fa-plus"></i></button>
+         </div>
+
+         <div *ngIf ="eg.inscrito=='1' && eg.asistio=='0' && eg.aprobo=='0'">
+           {{eg.nombres + ' '+eg.apellidos}}
+         <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'asistio',eg.idAsistenciaEvento)">  <i class="fa fa-check"></i></button>
+       </div>
+
+       <div *ngIf ="eg.asistio=='1' && eg.aprobo=='0'">
+         {{eg.nombres + ' '+eg.apellidos}}
+       <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'aprobo',eg.idAsistenciaEvento)">  <i class="fa fa-thumbs-up"></i></button>
+     </div>
+
+
+     <div *ngIf ="eg.aprobo=='1'">
+       {{eg.nombres + ' '+eg.apellidos}}
+     <button type="button" class="fltbtnplus"  disabled>  <i class="fa fa-user"></i></button>
+   </div>
+         </li>
+      </ul>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
+
+
+    </div>
+    </ng-template>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title">Eventos</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+
+      <form class="" method="post">
+        <div class="form-group">
+          <input type="hidden" class="form-control" id="txtIdEvento" [(ngModel)]="idEdit" name="idEdit" #ctrl="ngModel">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Nombre Evento:</label>
+          <input type="text" class="form-control" id="txtPrograma" [(ngModel)]="evento.nombre" name="namePro" #ctrl="ngModel" placeholder="Evento ....">
+        </div>
+
+        <div class="form-group">
+          <label for="idFacultad">Tipo Evento:</label>
+          <select  class="form-control" id="txtTipoEvento" [(ngModel)]="evento.idTipoEvento" name="txtFacultad" #ctrl="ngModel">
+            <option value="">Seleccionar
+            </option>
+            <option *ngFor="let tev of listTipoEventos"
+               [value]="tev.idTipoEvento">
+               {{tev.nombre}}
+           </option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Fecha de Inicio:</label>
+          <input type="date" class="form-control" id="txtDescripcion" [(ngModel)]="evento.fechaInicio" name="fechaInicio" #ctrl="ngModel" placeholder="Fecha de Inicio">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Fecha Fin:</label>
+          <input type="date" class="form-control" id="txtDescripcion" [(ngModel)]="evento.fechaFin" name="fechaFin" #ctrl="ngModel" placeholder="Fecha de Inicio">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Lugar:</label>
+          <input type="text" class="form-control" id="txtPrograma" [(ngModel)]="evento.lugar" name="lugar" #ctrl="ngModel" placeholder="Lugar ....">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Hora Inicio:</label>
+          <input type="time" class="form-control" id="txtPrograma" [(ngModel)]="evento.horaInicio" name="hora" #ctrl="ngModel" placeholder="Hora Inicio ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Duración Estimada:</label>
+          <input type="number" class="form-control" id="txtPrograma" [(ngModel)]="duracionEstimada" name="duracion" #ctrl="ngModel" placeholder="Duración ....">
+          <select class="form-control" id="cbotipoduracion" [(ngModel)]="cbotipoduracion" name="cbotipoduracion" #ctrl="ngModel">
+            <option value="dias">Dias</option>
+            <option value="horas">Horas</option>
+            <option value="años">Años</option>
+            <option value="minutos">Minutos</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Costo Egresado:</label>
+          <input type="number" class="form-control" id="costoEgresado" [(ngModel)]="evento.costoEgresado" name="costoEgresado" #ctrl="ngModel" placeholder="Costo Egresado ....">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Costo Uniajc:</label>
+          <input type="number" class="form-control" id="costoUniajc" [(ngModel)]="evento.costoUniajc" name="costoUniajc" #ctrl="ngModel" placeholder="Costo Uniajc ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Certificable:</label>
+          <select class="form-control" id="cbocertificable" [(ngModel)]="evento.certificable" name="cbocertificable" #ctrl="ngModel">
+            <option value="1">Si</option>
+            <option value="0">No</option>
+
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Dependencia Organiza:</label>
+          <input type="text" class="form-control" id="dependenciaOrganiza" [(ngModel)]="evento.dependenciaOrganiza" name="dependenciaOrganiza" #ctrl="ngModel" placeholder="Dependencia Organiza ....">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Dependencia Beneficiaria:</label>
+          <input type="text" class="form-control" id="dependenciaBeneficiaria" [(ngModel)]="evento.dependenciaBeneficiaria" name="dependenciaBeneficiaria" #ctrl="ngModel" placeholder="Dependencia Beneficiaria ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Comunidad Beneficiaria:</label>
+          <input type="text" class="form-control" id="comunidadBeneficiaria" [(ngModel)]="evento.comunidadBeneficiaria" name="comunidadBeneficiaria" #ctrl="ngModel" placeholder="Comunidad Beneficiada  ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Personas a Cargo:</label>
+          <input type="number" class="form-control" id="personasCargo" [(ngModel)]="evento.personaACargo" name="personasCargo" #ctrl="ngModel" placeholder="Personas a Cargo ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Correo Electronico:</label>
+          <input type="email" class="form-control" id="email" [(ngModel)]="evento.correoElectronico" name="email" #ctrl="ngModel" placeholder="Correo Electronico ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Telefono:</label>
+          <input type="number" class="form-control" id="telefono" [(ngModel)]="evento.telefono" name="telefono" #ctrl="ngModel" placeholder="Telefono ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Cupos Egresados:</label>
+          <input type="number" class="form-control" id="cupos" [(ngModel)]="evento.cuposEgresados" name="cupos" #ctrl="ngModel" placeholder="Cupos Egresado ....">
+        </div>
+
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Url Incripcion:</label>
+          <input type="text" class="form-control" id="urlInsc" [(ngModel)]="evento.urlInscripcion" name="urlInsc" #ctrl="ngModel" placeholder="http:// ....">
+        </div>
+
+        <div class="form-group">
+          <label for="exampleInputEmail1">Url Externa:</label>
+          <input type="text" class="form-control" id="urlExterna" [(ngModel)]="urlExterna" name="urlExterna" #ctrl="ngModel" placeholder="http:// ....">
+        </div>
+
+        <!--<div class="form-group">
+          <label for="exampleInputEmail1">Archivo:</label>
+          <input type="file" class="form-control" id="archivo"  [(ngModel)]="archivo" (change)="handleFileInput($event.target.files)" #ctrl="ngModel" >
+        </div>-->
+
+      </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="saveFomr()">Guardar</button>
+
+  </div>
+</ng-template>
+
+<ng-template #mdlNotification let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title">{{titleNotification}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+   <div class="row">
+
+     <div class="col-2 icon-message">
+       <i [className] = 'iconNotification' [style.color] = "colorAlert"></i>
+     </div>
+     <div class="col-10">
+       {{messageNotification}}
+     </div>
+
+   </div>
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-primary" (click)="c('Close click')">Aceptar</button>
+  </div>
+</ng-template>
