@@ -136,14 +136,14 @@ export class GesEventosComponent implements OnInit {
     soporte:''} as EventoObj;
 
 this.egresadosSave={
-  idAsistenciaEvento:'';
-  nombres:'';
-  apellidos:'';
-  idEgresado:'';
-  inscrito:'0';
-  asistio:'0';
-  aprobo:'0';
-  idEvento:'';
+  idAsistenciaEvento:'',
+  nombres:'',
+  apellidos:'',
+  idEgresado:'',
+  inscrito:'0',
+  asistio:'0',
+  aprobo:'0',
+  idEvento:''
 } as Egresados;
 }
    ngAfterViewInit(): void {
