@@ -213,6 +213,16 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
         if(status == 'OK'){
           this.openNotification("","succes");
+          var newProgram = {idPrograma:this.egresado.idPrograma, nombre: '', abreviatura: '', idFacultad: ''};
+            for(var j = 0, leng = this.listProgramas.length; j < leng; j++){
+              if(parseInt(this.egresado.idPrograma) === parseInt(this.listProgramas[j].idPrograma)){
+                newProgram.nombre = this.listProgramas[j].nombre;
+                newProgram.abreviatura = this.listProgramas[j].abreviatura;
+                newProgram.idFacultad = this.listProgramas[j].idFacultad;
+              }
+            }
+            this.listProgramasEgresado.push(newProgram);
+            this.cleanInfoProgram();
         }
         else{
           this.openNotification('Error del servidor al guardar la informacion academica:'+data.message, 'error');
@@ -243,6 +253,15 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
       this.openNotification('Error del servidor: '+error, 'error');
     });
+  }
+
+  onClickDeleteProgram(event){
+    var target = event.target;
+    var parent = target.parentNode;
+    if(confirm('Est\u00E1 seguro que desea eliminar el programa del egresado?')){
+      parent.parentNode.removeChild(parent);
+      this.cleanInfoProgram();
+    }
   }
 
 /*Metodo para editar un egresado en el cual priimero traemos la info y despues abrimos el modal bindeando la info*/

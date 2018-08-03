@@ -117,3 +117,18 @@ form{
 .modal-xl .modal-dialog.modal-lg {
   max-width: 98%;
 }
+
+.text-name-program {
+  float: left;
+}
+
+.icon-name-program {
+  font-size: 18px;
+  float: right;
+  cursor: pointer;
+}
+
+.ul-list-programs {
+  max-height: 400px;
+  overflow: auto;
+}
