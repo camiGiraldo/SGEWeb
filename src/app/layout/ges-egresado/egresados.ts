@@ -41,6 +41,8 @@ export  class Egresados {
   observacionCorreo:string ="";
   observacionesGenerales:string ="";
 
+  InformacionAcademica:object={};
+
   constructor(){
 
   }

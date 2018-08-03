@@ -2,7 +2,7 @@
   <app-page-header [heading]="'Gestion de Egresados'" [icon]="'fa-user'"></app-page-header>
   <div class="cont-actions">
     <div class="fac-selec">Egresado seleccionado: <strong>{{ message }}</strong></div>
-    <div *ngIf = "idEdit" class="flt-button-action" title="Ver programas" (click)="open(contentprograms,'new', 'xl')">
+    <div *ngIf = "idEdit" class="flt-button-action" title="Ver programas" (click)="open(contentprograms,'new', 'modal-xl')">
       <i class="fa fa-book"></i>
     </div>
     <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="editEgresado()">

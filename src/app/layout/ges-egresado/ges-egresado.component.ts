@@ -16,10 +16,10 @@ import * as $ from 'jquery';
 
 
 interface Programa {
-  IdPrograma:string;
-  IdFacultad:string;
-  Nombre:string;
-  Abreviatura:string;
+  idPrograma:string;
+  idFacultad:string;
+  nombre:string;
+  abreviatura:string;
 
 }
 
@@ -312,8 +312,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
           for(var i = 0, len = arrayInfoAcademica.length; i < len; i++){
             var infoAcademica = arrayInfoAcademica[i];
             this.egresado.InformacionAcademica[infoAcademica.idPrograma] = infoAcademica;
-            var newProgram = {};
-            newProgram.idPrograma = infoAcademica.idPrograma;
+            var newProgram = {idPrograma:infoAcademica.idPrograma, nombre: '', abreviatura: '', idFacultad: ''};
             for(var j = 0, leng = this.listProgramas.length; j < leng; j++){
               if(parseInt(infoAcademica.idPrograma) === parseInt(this.listProgramas[j].idPrograma)){
                 newProgram.nombre = this.listProgramas[j].nombre;
@@ -437,12 +436,12 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
 
 
-  open(content, action:string, size:string) {
+  open(content, action:string, windowClass:string) {
 
           this.setProgramData();
     //REFERENCIA DEL Modal
-    var sizeModal = (size != undefined) ? size : 'lg';
-    this.modalRef = this.modalService.open(content, { size: sizeModal, backdrop: 'static' });
+    var windowClassModal = (windowClass != undefined) ? windowClass : 'lg';
+    this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', windowClass: windowClassModal });
     this.modalRef.result.then((result) => {
       this.cleanForm();
       this.closeResult = `Closed with: ${result}`;
