@@ -23,7 +23,7 @@ const routes: Routes = [
 
             { path: 'ges-eventos', loadChildren: './ges-eventos/ges-eventos.module#GesEventosModule' },
 
-            { path: 'reportes', loadChildren: './reportes/reportes.module#ReportesModule' },
+            { path: 'rep-egre-programa', loadChildren: './rep-egre-programa/rep-egre-programa.module#ReporteEgreProgModule' },
 
            /* { path: 'categoria-eventos', loadChildren: './categoria-eventos/categoria-eventos.module#CategoriaEventosModule' },
             { path: 'tipo-eventos', loadChildren: './tipo-eventos/tipo-eventos.module#TipoEventoModule' },

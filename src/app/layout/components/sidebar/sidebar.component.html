@@ -102,9 +102,21 @@
         <a routerLink="/ges-egresado" class="list-group-item">
             <i class="fa fa-fw fa-exchange"></i>&nbsp;{{ 'Actividades de Retribucion' | translate }}
         </a>     -->
-        <a routerLink="/reportes" [routerLinkActive]="['router-link-active']"   class="list-group-item">
-            <i class="fa fa-fw fa-file"></i>&nbsp;{{ 'Reportes' | translate }}
-        </a>
+        <div class="nested-menu">
+            <a class="list-group-item" (click)="addExpandClass('reportes')">
+                <span><i class="fa fa-plus"></i>&nbsp; {{ 'Reportes' | translate }}</span>
+            </a>
+            <li class="nested" [class.expand]="showMenu === 'reportes'">
+                <ul class="submenu">
+                    <li>
+                      <a routerLink="/rep-egre-programa" [routerLinkActive]="['router-link-active']"   class="list-group-item">
+                          <i class="fa fa-fw fa-file"></i>&nbsp;{{ 'Reporte Programas' | translate }}
+                      </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
+
 
 
       <!--  <a [routerLink]="['/charts']" [routerLinkActive]="['router-link-active']" class="list-group-item">

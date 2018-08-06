@@ -20,7 +20,6 @@ interface Programa {
   idFacultad:string;
   nombre:string;
   abreviatura:string;
-
 }
 
 @Component({
@@ -28,13 +27,13 @@ interface Programa {
   templateUrl: './ges-egresado.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls:['./ges-egresado.component.scss'],
-  animations: [routerTransition()] 
+  animations: [routerTransition()]
 })
 
 
 export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
-  @ViewChild(DataTableDirective) dtElement: DataTableDirective; //create una directiva verifica donde llama eso 
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective; //create una directiva verifica donde llama eso
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
   @ViewChild('content') public modalForm:NgbModal;
 
