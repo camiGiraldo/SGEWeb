@@ -34,7 +34,7 @@ export class ReporteEgreProgComponent implements AfterViewInit, OnDestroy, OnIni
   dtElement: DataTableDirective;
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
   // Must be declared as "any", not as "DataTables.Settings"
-  dtOptions: DataTables.Settings = {};
+  dtOptions: any;
   dtTrigger: Subject<any> = new Subject();
   modalRef:any;
   modalRefRepoEgresados:any;
