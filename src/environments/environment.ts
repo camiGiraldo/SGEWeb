@@ -6,5 +6,5 @@
 
 export const environment = {
   production: false,
-  urlServices: 'http://192.168.1.66:8080/SIGEG-WEB/services/'
+  urlServices: 'http://192.168.145.1:8080/SIGEG-WEB/services/'
 };
