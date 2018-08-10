@@ -1,11 +1,11 @@
 <div [@routerTransition]>
 
-  <div class="col-12" style="text-align:center;">
+  <!--<div class="col-12" style="text-align:center;">
     <img src="assets/images/enConstruccion.jpg" class="img-fluid pull-xs-left">
-  </div>
+  </div>-->
 
-    <!-- <h2 class="text-muted">Dashboard <small>Statistics Overview</small></h2>
-    <div class="row">
+    <h2 class="text-muted">Resumen del Sistema</h2>
+    <!--<div class="row">
         <div class="col-md-12">
             <ngb-carousel>
                 <ng-template ngbSlide *ngFor="let slider of sliders">
@@ -17,24 +17,20 @@
                 </ng-template>
             </ngb-carousel>
         </div>
-    </div>
-    <hr>
+    </div>-->
     <div class="row">
-        <div class="col-xl-3 col-lg-6">
-            <app-stat [bgClass]="'primary'" [icon]="'fa-comments'" [count]="26" [label]="'New Comments!'" ></app-stat>
+        <div class="col-xl-4 col-lg-6">
+            <app-stat [bgClass]="'primary'" [link]="'/ges-egresado'" [icon]="'fa-graduation-cap'" [count]="1230" [label]="'Egresados!'" ></app-stat>
         </div>
-        <div class="col-xl-3 col-lg-6">
-            <app-stat [bgClass]="'warning'" [icon]="'fa-tasks'" [count]="12" [label]="'New task!'" ></app-stat>
+        <div class="col-xl-4 col-lg-6">
+            <app-stat [bgClass]="'warning'" [link]="'/programas'" [icon]="'fa-book'" [count]="97" [label]="'Programas!'" ></app-stat>
         </div>
-        <div class="col-xl-3 col-lg-6">
-            <app-stat [bgClass]="'success'" [icon]="'fa-shopping-cart'" [count]="124" [label]="'New Orders!'" ></app-stat>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-            <app-stat [bgClass]="'danger'" [icon]="'fa-support'" [count]="13" [label]="'New Tickets!'"></app-stat>
+        <div class="col-xl-4 col-lg-6">
+            <app-stat [bgClass]="'success'" [link]="'/ges-eventos'" [icon]="'fa-calendar-check-o'" [count]="124" [label]="'Eventos!'" ></app-stat>
         </div>
     </div>
-    <hr />
-    <ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}</ngb-alert>
+
+    <!--<ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}</ngb-alert>
     <hr />
     <div class="row">
         <div class="col-lg-8">
@@ -55,7 +51,7 @@
                     <i class="fa fa-bell fa-fw"></i> Notifications card
                 </div>
                 <!-- /.card-header
-                <app-notification></app-notification>
+                <app-notification></app-notification> -->
                 <!-- /.card-body
             </div>
             <!-- /.card
@@ -64,5 +60,5 @@
             <!-- /.card .chat-card
         </div>
         <!-- /.col-lg-4
-    </div> -->
+    </div>-->
 </div>
