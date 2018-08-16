@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, NgZone, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
@@ -66,6 +66,7 @@ interface Egresados{
 @Component({
     selector: 'app-blank-page',
     templateUrl: './ges-eventos.component.html',
+    encapsulation: ViewEncapsulation.None,
     styleUrls: ['./ges-eventos.component.scss'],
     animations: [routerTransition()]
 })
@@ -434,7 +435,7 @@ getEgresadosEnEvento(obj,lst){
         lst[i].nombres=obj.nombres;
         lst[i].apellidos=obj.apellidos;
           return lst[i] as Egresados;
-      
+
 
       }
   }

@@ -101,3 +101,21 @@
 .icon-message i{
   font-size: 50px;
 }
+
+
+#tbl-eventos{
+  border: 1px solid #bbd1ec;
+    thead th {
+      color: #5f5f73;
+      border-bottom:1px solid #7cb3e4;
+      padding: 0;
+      text-align: center;
+      font-size: 15px;
+    }
+    tbody{
+      font-size: 13px;
+    }
+    thead tr{
+      background: #bbd1ec;
+    }
+}
