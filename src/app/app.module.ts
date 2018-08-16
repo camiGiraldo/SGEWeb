@@ -12,6 +12,9 @@ import { FacultadesService } from './_services/facultadesService';
 import { EgresadosService } from './_services/egresadosService';
 import { ProgramasService } from './_services/programasService';
 import { EventosService } from './_services/eventosService';
+import { CategoriasEventosService } from './_services/categoriasEventosService';
+import { TipoEventosService } from './_services/tipoEventosService';
+import { TiposReconocimientosService } from './_services/tiposReconocimientosService';
 
 import { DataTablesModule } from 'angular-datatables';
 
@@ -59,7 +62,12 @@ export function createTranslateLoader(http: HttpClient) {
     providers: [AuthGuard,
       AuthenticationService,
       FacultadesService,
-      EgresadosService,ProgramasService,EventosService],
+      EgresadosService,
+      ProgramasService,
+      EventosService,
+      CategoriasEventosService,
+      TipoEventosService,
+      TiposReconocimientosService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}
