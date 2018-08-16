@@ -1,3 +1,4 @@
+
 import {AfterViewInit, Component, NgZone, OnInit,ViewChild, ChangeDetectorRef, ViewEncapsulation, OnDestroy} from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { DataTableDirective } from 'angular-datatables';
@@ -11,6 +12,8 @@ import {
 import { environment } from '../../../environments/environment';
 import { EgresadosService } from '../../_services/egresadosService';
 import * as $ from 'jquery';
+import 'datatables.net';
+import 'datatables.net-bs4';
 
 interface Programa {
   idPrograma:string;

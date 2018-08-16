@@ -24,7 +24,10 @@ const routes: Routes = [
             { path: 'rep-egre-programa', loadChildren: './rep-egre-programa/rep-egre-programa.module#ReporteEgreProgModule' },
             { path: 'categoria-eventos', loadChildren: './categoria-eventos/categoria-eventos.module#CategoriaEventosModule' },
             { path: 'tipo-eventos', loadChildren: './tipo-eventos/tipo-eventos.module#TipoEventoModule' },
+<<<<<<< HEAD
             { path: 'tipos-reconocimientos', loadChildren: './tipos-reconocimientos/tipos-reconocimientos.module#TiposReconocimientosModule' },
+=======
+>>>>>>> branch 'master' of https://github.com/camiGiraldo/sgeWeb.git
         ]
     }
 ];

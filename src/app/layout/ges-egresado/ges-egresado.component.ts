@@ -20,7 +20,6 @@ interface Programa {
   idFacultad:string;
   nombre:string;
   abreviatura:string;
-
 }
 
 @Component({
@@ -28,13 +27,13 @@ interface Programa {
   templateUrl: './ges-egresado.component.html',
   encapsulation: ViewEncapsulation.None,
   styleUrls:['./ges-egresado.component.scss'],
-  animations: [routerTransition()] 
+  animations: [routerTransition()]
 })
 
 
 export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
-  @ViewChild(DataTableDirective) dtElement: DataTableDirective; //create una directiva verifica donde llama eso 
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective; //create una directiva verifica donde llama eso
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
   @ViewChild('content') public modalForm:NgbModal;
 
@@ -89,7 +88,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
         if(status == 'OK'){
           this.listProgramas = data.data as Programa[];
-          console.log('listado', this.listProgramas);
+
         }
         else{
           this.openNotification('Error al obtener los programas:'+data.message, 'error');
@@ -121,7 +120,6 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
       this.message =  info.identificacion+"-"+info.nombres+" "+info.apellidos;
 
       this.idEdit = info.idEgresado;
-      this.getInfoEgresadoById(this.idEdit);
     }
     else{
       this.cellSelect = {
@@ -164,17 +162,17 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   //Metodos del  wizard
   onStep1Next(){
 
-    console.log(this.egresado);
+
   }
 
   onStep2Next(){
 
-    console.log(this.egresado);
+
   }
 
   //METODOS PARA EL FORMULARIO PASO A PASO
   onComplete(){
-    console.log(this.egresado);
+
     this.saveForm();
 
   }
@@ -266,9 +264,8 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
 /*Metodo para editar un egresado en el cual priimero traemos la info y despues abrimos el modal bindeando la info*/
   editEgresado(){
-
-
       if(this.idEdit != ''){
+        this.getInfoEgresadoById(this.idEdit);
         this.modalRef = this.modalService.open(this.modalForm, { size: 'lg', backdrop: 'static' });
 
       }
@@ -277,7 +274,6 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
         this.modalRef.close();
         this.openNotification(this.message, 'error');
       }
-
   }
 
   onChangeIdPrograma(){
@@ -341,22 +337,6 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
             }
             this.listProgramasEgresado.push(newProgram);
           }
-
-          /*this.egresado.idInformacionAcademica = infoAcademica.idInformacionAcademica;
-          this.egresado.idPrograma = infoAcademica.idPrograma;
-          this.egresado.libro = infoAcademica.libro;
-          this.egresado.folio = infoAcademica.folio;
-          this.egresado.acta = infoAcademica.acta;
-          this.egresado.numeroDiploma = infoAcademica.numeroDiploma;
-          this.egresado.semestreGrado = infoAcademica.semestreGrado;
-          this.egresado.formaGrado = infoAcademica.formaGrado;
-          this.egresado.tipoOpcionGrado = infoAcademica.tipoOpcionGrado;
-          this.egresado.notaOpcionGrado = infoAcademica.notaOpcionGrado;
-          this.egresado.semestreFinalizoMaterias = infoAcademica.semestreFinalizoMaterias;*/
-
-          console.log('Prueba------', this.egresado);
-          console.log('Prueba------2', this.listProgramasEgresado);
-
         }
         else{
           this.openNotification('Error del servidor al guardar la informacion basica: '+data.message, 'error');
@@ -412,52 +392,16 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
        }
     };
-    /*this.dtOptionsPrograms = {
-      ajax: this.url+'getEgresados',
-      columns: [{
-        title: 'ID',
-        data: 'idEgresado',
-        visible: false
-      }, {
-        title: 'No. Identificacion',
-        data: 'identificacion'
-      }, {
-        title: 'Nombres',
-        data: 'nombres'
-      }, {
-        title: 'Apellidos',
-        data: 'apellidos'
-      }, {
-        title: 'Correo Electronico',
-        data: 'correoElectronico'
-      }],
-      rowCallback:(row: Node, data: any[] | Object, index: number) => {
-         const self = this;
-         $('td', row).unbind('click');
-         $('td', row).bind('click', () => {
-           self.someClickHandler(data);
-         });
-         return row;
-      },
-      select:{
-            style: 'single'
-      },
-      "language": {
-           "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-       }
-    };*/
+
   }
 
   setProgramData(){
     this.dtTriggerPrograms.next();
   }
 
-
-
-
   open(content, action:string, windowClass:string) {
-
-          this.setProgramData();
+    debugger
+    this.setProgramData();
     //REFERENCIA DEL Modal
     var windowClassModal = (windowClass != undefined) ? windowClass : 'lg';
     this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', windowClass: windowClassModal });
@@ -468,9 +412,11 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
       this.cleanForm();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+
+    if(action == 'new'){
+      this.cleanForm();
+    }
   }
-
-
 
 
 private getDismissReason(reason: any): string {

@@ -14,6 +14,7 @@ import { ProgramasService } from './_services/programasService';
 import { EventosService } from './_services/eventosService';
 import { CategoriasEventosService } from './_services/categoriasEventosService';
 import { TipoEventosService } from './_services/tipoEventosService';
+<<<<<<< HEAD
 import { TiposReconocimientosService } from './_services/tiposReconocimientosService';
 
 import { DataTablesModule } from 'angular-datatables';
@@ -68,6 +69,60 @@ export function createTranslateLoader(http: HttpClient) {
       CategoriasEventosService,
       TipoEventosService,
       TiposReconocimientosService],
+=======
+
+import { DataTablesModule } from 'angular-datatables';
+
+//Libreria para formulario tipo wizard
+import { FormWizardModule } from 'angular-wizard-form';
+
+import {
+    ReactiveFormsModule,
+    FormsModule
+} from '@angular/forms';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AuthGuard } from './shared';
+
+// AoT requires an exported function for factories
+export function createTranslateLoader(http: HttpClient) {
+    // for development
+    // return new TranslateHttpLoader(http, '/start-angular/SB-Admin-BS4-Angular-5/master/dist/assets/i18n/', '.json');
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
+@NgModule({
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        DataTablesModule,
+        FormsModule,
+        HttpModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormWizardModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient]
+            }
+        }),
+        AppRoutingModule,
+
+    ],
+    declarations: [AppComponent],
+    providers: [AuthGuard,
+      AuthenticationService,
+      FacultadesService,
+      EgresadosService,
+      ProgramasService,
+      EventosService,
+      CategoriasEventosService,
+      TipoEventosService],
+>>>>>>> branch 'master' of https://github.com/camiGiraldo/sgeWeb.git
     bootstrap: [AppComponent]
 })
 export class AppModule {}
