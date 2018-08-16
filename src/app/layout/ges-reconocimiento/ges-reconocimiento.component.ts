@@ -1,72 +1,62 @@
 import { AfterViewInit, Component, NgZone, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { routerTransition } from '../../router.animations';
-import { ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs/Subject';
 import {
-    ReactiveFormsModule,
-    FormsModule
+    Validators,
+    FormBuilder
 } from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { ProgramasService } from '../../_services/programasService';
+import { TiposReconocimientosService } from '../../_services/tiposReconocimientosService';
 import * as $ from 'jquery';
 import { environment } from '../../../environments/environment';
 
-
-interface Facultad {
-  idFacultad:string;
-  nombre:string;
-  abreviatura:string;
-
-
-};
-
-
 @Component({
-  selector : 'app-programas',
-  templateUrl: './programas.component.html',
+  selector : 'app-facultades',
+  templateUrl: './ges-reconocimiento.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls:['./programas.component.scss'],
+  styleUrls:['./ges-reconocimiento.component.scss'],
   animations: [routerTransition()]
 })
 
+export class GesReconocimientoComponent implements OnInit, AfterViewInit{
+
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+  @ViewChild('mdlNotification') public modalNotification:NgbModal;
 
 
-export class ProgramasComponent implements OnInit, AfterViewInit{
-
-  @ViewChild(DataTableDirective)
-  dtElement: DataTableDirective;
-
-  @ViewChild('mdlNotification')
-  public modalNotification:NgbModal;
-
+  //vaariables para la tabla
+  dtOptions: any;
   dtTrigger: Subject<any> = new Subject();
+  cellSelect:any;
+  //------------------------
+
   modalRef:any;
   public url:string;
 
+
   message = '';
   messageValidation = '';
-  idEdit:string='';
-  namePro:string;
-  descripPro:string;
-
-  facultadId:string;
-  facultadName:string;
-  cellSelect:any;
-  dtOptions: any = {};
   closeResult: string;
-  listFacultad:Facultad[];
-  txtFacultad:string;
 
-  constructor(private zone: NgZone, private modalService: NgbModal, private facService: ProgramasService, private route: ActivatedRoute){
-    this.route.params.subscribe(res => console.log(res));
-    this.facultadId =
+  //MAPEO DE LOS ATRIBUTOS DEL FORMULARIO A CREAR
+  idEdit:string ='';
+  name:string = '';
+  activo:string = '';
+
+  constructor(private zone: NgZone, private modalService: NgbModal, private tipoRecService: TiposReconocimientosService){
+
+
     this.idEdit = '';
     this.url = environment.urlServices;
     this.cellSelect = {
       id : ''
     }
     this.message = 'No se ha seleccionado una fila';
+
+
    }
 
    ngAfterViewInit(): void {
@@ -75,21 +65,13 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
   }
 
   someClickHandler(info: any): void {
-    console.log(info);
-    console.log(this.cellSelect);
 
-    this.cellSelect = {
-      id : info.id
-    }
-    this.message =  info.name;
-    this.idEdit = info.idPrograma;
-    /*if(this.cellSelect.id !== info.id){
+    if(this.cellSelect.idTipoReconocimiento !== info.idTipoReconocimiento){
       this.cellSelect = {
-        id : info.id
+        id : info.idTipoReconocimiento
       }
-      this.message =  info.name;
-      this.idEdit = info.idPrograma;
-
+      this.message =  info.nombre;
+      this.idEdit = info.idTipoReconocimiento;
     }
     else{
       this.cellSelect = {
@@ -97,29 +79,28 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
       }
       this.message = 'no se ha seleccionado una fila';
       this.idEdit = '';
-    }*/
+    }
 
 
-  }
-
-  someClickHandlerProg(info: any): void {
-    console.log(info);
   }
 
 
 
   ngOnInit():void{
-    this.dtOptions = {
-      //ajax: this.url+'getProgramasByFacultad?idFacultad='+this.idEdit,
-      ajax: this.url+'getProgramas',
 
+
+    this.dtOptions = {
+      ajax: this.url+'getTiposReconocimiento',
       columns: [{
         title: 'ID',
-        data: 'idPrograma',
+        data: 'idTipoReconocimiento',
         visible: false
       }, {
         title: 'Nombre',
         data: 'nombre'
+      }, {
+        title: 'Activo/Inactivo',
+        data: 'activo'
       }],
       rowCallback:(row: Node, data: any[] | Object, index: number) => {
          const self = this;
@@ -127,7 +108,6 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
          $('td', row).bind('click', () => {
            self.someClickHandler(data);
          });
-         console.log(row);
          return row;
       },
       select:{
@@ -137,36 +117,34 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
        }
     };
-
-    this.getFacultades();
   }
 
-//ARREGLAR PARA PROGRAMAS !!!!!!!!!!!!!!!!!!
   open(content, action:string) {
-  console.log("sfsfds");
+      this.modalRef = this.modalService.open(content);
       if(action == 'edit'){
-        console.log("valor edit"+this.idEdit);
 
-        if(this.idEdit != '' && this.idEdit != null){
-          console.log("ingreso")
-          let callBack = this.facService.getProgramaById(this.idEdit);
+        if(this.idEdit != ''){
+          let callBack = this.tipoRecService.getTipoReconocimientoById(this.idEdit);
           callBack.subscribe(res => {
             let data = res.json();
-            console.log(data);
+
             if(data.status && data.status === 'OK'){
-              var programa = data.data;
-              this.idEdit = programa.idPrograma;
-              this.namePro = programa.nombre;
-              this.descripPro = programa.abreviatura;
-              this.txtFacultad=programa.idFacultad;
+              var tipoReco = data.data;
+              this.idEdit = tipoReco.idTipoReconocimiento;
+              this.name = tipoReco.nombre;
+              this.activo = tipoReco.activo
+
             }
           });
-        } else{
-          this.message ="POR FAVOR SELECCIONAR UNA FILA PARA EDITAR";
+        }
+        else{
+          this.message ="Por favor seleccionar una fila para editar";
+          this.modalRef.close();
+          this.openNotification(this.message, 'error');
         }
       }
 
-      this.modalRef = this.modalService.open(content);
+
       this.modalRef.result.then((result) => {
         this.cleanForm();
         this.closeResult = `Closed with: ${result}`;
@@ -177,42 +155,40 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
   }
 
-  saveFomr(){
-    debugger;
-    if( (this.namePro == '' || this.namePro == undefined ) || (this.descripPro == '' || this.descripPro== undefined) || (this.txtFacultad =='' || this.txtFacultad == undefined)){
-        this.openNotification("Todos los campos son obligatorios","error");
+  saveForm(){
+
+    if( this.name == '' || this.activo == ''){
+
+      this.openNotification("Todos los campos son obligatorios","error");
     }else{
 
       let data = {
-        id : (this.idEdit==null|| this.idEdit=='' ?'':this.idEdit) ,
-        nombre: this.namePro ,
-        descripcion: this.descripPro,
-        idFacultad:this.txtFacultad,
+        idTipoReconocimiento : this.idEdit,
+        nombre: this.name,
+        activo: this.activo,
       };
-      let callBack = this.facService.savePrograma(data); //editar para programas !!!!!!!!
+      let callBack = this.tipoRecService.saveTipoReconocimiento(data);
       callBack.subscribe(res => {
           let data = res.json();
 
           let status = data.status;
 
           if(status == 'OK'){
-            this.messageValidation = 'Registro exitoso';
-            this.alertMessage(this.messageValidation);
+
             this.modalRef.close();
+            this.openNotification("","succes");
+            this.message = 'No se ha seleccionado una fila';
+            this.rerenderTable()
           }
           else{
             this.messageValidation = 'Ocurrio un error al guardar el registro';
-            this.alertMessage(this.messageValidation);
+
           }
       })
       this.rerenderTable();
-
     }
   }
-//muestra mensajes de alertas
-  alertMessage(mensaje:string){
-    this.openNotification(mensaje,"info");
-  }
+
 
   private getDismissReason(reason: any): string {
       if (reason === ModalDismissReasons.ESC) {
@@ -226,12 +202,11 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
           return  `with: ${reason}`;
       }
   }
-
-
   cleanForm(){
     //this.idEdit = "";
-    this.namePro = "";
-    this.descripPro = "";
+    this.name = "";
+    this.activo ="";
+
   }
 
 
@@ -246,29 +221,16 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
     });
   }
 
-  getFacultades(){
-    let callBack = this.facService.getFacultades(); //editar para programas !!!!!!!!
-    callBack.subscribe(res => {
-        let data = res.json();
 
-        let status = data.status;
-
-        if(status == 'OK'){
-          this.listFacultad = data.data as  Facultad[];
-        }
-        else{
-        //  this.openNotification('Error al obtener los programas:'+data.message, 'error');
-
-        }
-
-
-    });
-  }
+  //SECCION DE  NOTIFICACIONES
+  //AUTOR: CAMILO GIRALDO 2018
+  //variables para los mensajes de notificacion
   titleNotification:string;
   messageNotification:string;
   iconNotification:string;
   colorAlert:string;
-
+  //-------------------------------------------
+  //METODO PARA ABRIR EL MODAL DE LA NOTIFICACION
   openNotification(messageComplement:string, type:string){
 
 

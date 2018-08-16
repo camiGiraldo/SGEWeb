@@ -29,12 +29,28 @@
   font-size: 14px;
   margin-right: 5px;
   cursor: pointer;
-}
-
-.flt-button-action {
   background-position: center;
   transition: background 0.8s;
 }
+
+/*Tabla de reporte*/
+#tbl-prog-egre{
+  border: 1px solid #bbd1ec;
+    thead th {
+      color: #5f5f73;
+      border-bottom:1px solid #7cb3e4;
+      padding: 0;
+      text-align: center;
+      font-size: 15px;
+    }
+    tbody{
+      font-size: 13px;
+    }
+    thead tr{
+      background: #bbd1ec;
+    }
+}
+
 .flt-button-action:hover {
   background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
 }
@@ -44,6 +60,7 @@
   transition: background 0s;
 }
 
+/*ESTILOS PARA LOS MENSAJES DE ALERTA*/
 .succes-msg .modal-content{
   background-color: #e0ffe0;
   color: #000;
@@ -86,21 +103,4 @@
 
 .icon-message i{
   font-size: 50px;
-}
-
-#tbl-programa{
-  border: 1px solid #bbd1ec;
-    thead th {
-      color: #5f5f73;
-      border-bottom:1px solid #7cb3e4;
-      padding: 0;
-      text-align: center;
-      font-size: 15px;
-    }
-    tbody{
-      font-size: 13px;
-    }
-    thead tr{
-      background: #bbd1ec;
-    }
 }
