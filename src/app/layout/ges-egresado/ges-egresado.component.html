@@ -11,7 +11,7 @@
     <div *ngIf = "!idEdit" class="flt-button-action" title="Editar">
       <i class="fa fa-edit"></i>
     </div>
-    <div class="flt-button-action" title="Crear Egresado" (click)="open(content,'new')">
+    <div class="flt-button-action" title="Crear Egresado" (click)="cleanForm();open(content,'new')">
       <i class="fa fa-plus"></i>
     </div>
   </div>
