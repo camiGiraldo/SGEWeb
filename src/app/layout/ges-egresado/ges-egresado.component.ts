@@ -254,12 +254,30 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
     });
   }
 
-  onClickDeleteProgram(event){
-    var target = event.target;
-    var parent = target.parentNode;
+  onClickDeleteProgram(program){
     if(confirm('Est\u00E1 seguro que desea eliminar el programa del egresado?')){
-      parent.parentNode.removeChild(parent);
-      this.cleanInfoProgram();
+      let callBack = this.egreService.deleteAcademicInformation({idInformacionAcademica: this.egresado.InformacionAcademica[program.idPrograma].idInformacionAcademica});
+      callBack.subscribe(res => {
+
+          let data = res.json();
+          let status = data.status;
+          if(status == 'OK'){
+            this.openNotification("","succes-delete");
+            for(var i = 0, len = this.listProgramasEgresado.length; i < len; i++){
+              if(parseInt(this.listProgramasEgresado[i].idPrograma) === parseInt(program.idPrograma)){
+                this.listProgramasEgresado.splice(i,1);
+              }
+            }
+            this.cleanInfoProgram();
+          }
+          else{
+            this.openNotification('Error del servidor al eliminar la informaci\u00F3n acad\u00E9mica: '+data.message, 'error');
+          }
+      },
+      error=>{
+
+        this.openNotification('Error del servidor: '+error, 'error');
+      });
     }
   }
 
@@ -323,6 +341,19 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
           this.egresado.telefonoMovilAlterno = infoBasica.telefonoMovilAlterno;
           this.egresado.correoElectronico = infoBasica.correoElectronico;
           this.egresado.correoElectronicoAlterno = infoBasica.correoElectronicoAlterno;
+
+          this.egresado.idInformacionControl = infoControl.idInformacionControl;
+          this.egresado.fechaEntregaCarnet = infoControl.fechaEntregaCarnet;
+          this.egresado.encuestaM0En = infoControl.encuestaM0En;
+          this.egresado.encuestaM1En = infoControl.encuestaM1En;
+          this.egresado.encuestaM5En = infoControl.encuestaM5En;
+          this.egresado.gradoAcademusoft = infoControl.gradoAcademusoft;
+          this.egresado.recibeInformacion = infoControl.recibeInformacion;
+          this.egresado.tipoInformacion = infoControl.tipoInformacion;
+          this.egresado.observacionCorreo = infoControl.observacionCorreo;
+          this.egresado.observacionesGenerales = infoControl.observacionesGenerales;
+
+
           this.egresado.InformacionAcademica = {};
 
           this.listProgramasEgresado = [];
@@ -516,7 +547,7 @@ openNotification(messageComplement:string, type:string){
 
   switch (type){
     case 'succes':
-      titleNot = "Confirmación";
+      titleNot = "Confirmaci\u00F3n";
       firstMessage ="Registro exitoso.";
       classIcon = "fa fa-check-square-o";
       colorIcon = "green";
@@ -535,6 +566,13 @@ openNotification(messageComplement:string, type:string){
       classIcon ="fa fa-times";
       colorIcon="red";
       classBox = "error-msg";
+    break;
+    case 'succes-delete':
+      titleNot = "Confirmaci\u00F3n";
+      firstMessage ="Eliminaci\u00F3n exitosa.";
+      classIcon = "fa fa-check-square-o";
+      colorIcon = "green";
+      classBox = "succes-msg";
     break;
   }
 

@@ -35,6 +35,23 @@ export class EgresadosService{
                    {headers : headers});
 
   }
+
+  deleteAcademicInformation(data:any){
+
+    let headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    let myParams = new URLSearchParams();
+    myParams.set('idInformacionAcademica', data.idInformacionAcademica);
+
+    let options = new RequestOptions({ headers: headers, params: myParams});
+
+    return this.http.post(this.url+'deleteInformacionAcademica',
+                   myParams.toString(),
+                   {headers : headers});
+
+  }
  //metodo que se comunica para con el back el cual guarda o edita una facultad
   saveInfoBasic(data:any){
 
@@ -99,16 +116,17 @@ export class EgresadosService{
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
-    debugger
-
     let myParams = new URLSearchParams();
     myParams.set('idInformacionControl', data.idInformacionControl);
     myParams.set('idEgresado', data.idEgresado);
     let dateEntregaCarnet = new Date(data.fechaEntregaCarnet);
+    let dateEncuestaM0En = new Date(data.encuestaM0En.replace(/-/g, '/'));
+    let dateEncuestaM1En = new Date(data.encuestaM1En.replace(/-/g, '/'));
+    let dateEncuestaM5En = new Date(data.encuestaM5En.replace(/-/g, '/'));
     myParams.set('fechaEntregaCarnet', ""+dateEntregaCarnet.getTime());
-    myParams.set('encuestaM0En', data.encuestaM0En);
-    myParams.set('encuestaM1En', data.encuestaM1En);
-    myParams.set('encuestaM5En', data.encuestaM5En);
+    myParams.set('encuestaM0En', dateEncuestaM0En.getTime());
+    myParams.set('encuestaM1En', dateEncuestaM1En.getTime());
+    myParams.set('encuestaM5En', dateEncuestaM5En.getTime());
     myParams.set('gradoAcademusoft', data.gradoAcademusoft);
     myParams.set('recibeInformacion', data.recibeInformacion);
     myParams.set('tipoInformacion', data.tipoInformacion);
