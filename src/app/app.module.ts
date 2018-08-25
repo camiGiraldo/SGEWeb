@@ -15,6 +15,7 @@ import { EventosService } from './_services/eventosService';
 import { CategoriasEventosService } from './_services/categoriasEventosService';
 import { TipoEventosService } from './_services/tipoEventosService';
 import { TiposReconocimientosService } from './_services/tiposReconocimientosService';
+import { ReconocimientosService } from './_services/reconocimientosService'
 
 import { DataTablesModule } from 'angular-datatables';
 
@@ -67,7 +68,8 @@ export function createTranslateLoader(http: HttpClient) {
       EventosService,
       CategoriasEventosService,
       TipoEventosService,
-      TiposReconocimientosService],
+      TiposReconocimientosService,
+      ReconocimientosService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

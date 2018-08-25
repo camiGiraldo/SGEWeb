@@ -4,14 +4,30 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs/Subject';
 import {
     Validators,
-    FormBuilder
+    FormBuilder,
+    ReactiveFormsModule,
+    FormControl
 } from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TiposReconocimientosService } from '../../_services/tiposReconocimientosService';
+import { ReconocimientosService } from '../../_services/reconocimientosService';
+import { Reconocimiento } from './reconocimiento';
+import { ReconocimeintoEgresado } from './reconocimiento';
 import * as $ from 'jquery';
 import { environment } from '../../../environments/environment';
+
+interface TipoReconocimiento {
+    idTipoReconocimiento:string;
+    nombre:string;
+}
+
+interface Egresado{
+  idEgresado:string,
+  nombres:string,
+  apellidos:string
+}
 
 @Component({
   selector : 'app-facultades',
@@ -24,6 +40,7 @@ import { environment } from '../../../environments/environment';
 export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+  @ViewChild('mdlEgresados') public mdlEgresadoReconocimiento:NgbModal;
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
 
 
@@ -36,26 +53,39 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   modalRef:any;
   public url:string;
 
+  //----------------
+  //varables para realizar el Buscar
+  tipoDocToFind:string ="";
+  numeroDocToFind:string ="";
+
 
   message = '';
   messageValidation = '';
   closeResult: string;
 
   //MAPEO DE LOS ATRIBUTOS DEL FORMULARIO A CREAR
+  tipoReconocimientoInterface : TipoReconocimiento;
+  reconocimiento: Reconocimiento;
+  reconoEgresadoModel: ReconocimeintoEgresado;
+  listTipoRecono: TipoReconocimiento[];
+  listEgresado: Egresado[] = [];
+
+
   idEdit:string ='';
-  name:string = '';
-  activo:string = '';
-
-  constructor(private zone: NgZone, private modalService: NgbModal, private tipoRecService: TiposReconocimientosService){
 
 
+  constructor(private zone: NgZone, private modalService: NgbModal,
+    private tipoRecService: TiposReconocimientosService, private reconoService: ReconocimientosService){
+
+    this.reconocimiento = new Reconocimiento();
+    this.reconoEgresadoModel = new ReconocimeintoEgresado();
     this.idEdit = '';
     this.url = environment.urlServices;
     this.cellSelect = {
       id : ''
     }
     this.message = 'No se ha seleccionado una fila';
-
+    this.getTiposReconocimiento();
 
    }
 
@@ -70,7 +100,7 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
       this.cellSelect = {
         id : info.idTipoReconocimiento
       }
-      this.message =  info.nombre;
+      this.message =  info.descripcion;
       this.idEdit = info.idTipoReconocimiento;
     }
     else{
@@ -84,23 +114,47 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
   }
 
+  getTiposReconocimiento(){
+    let callBack = this.tipoRecService.getTiposReconocimiento();
+    callBack.subscribe(res => {
+
+        let data = res.json();
+        let status = data.status;
+
+        if(status == 'OK'){
+
+          this.listTipoRecono = data.data as TipoReconocimiento[];
+
+        }
+        else{
+          this.openNotification('Error al obtener los tipos de reconocimientos:'+data.message, 'error');
+
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+
+  }
 
 
   ngOnInit():void{
-
-
     this.dtOptions = {
-      ajax: this.url+'getTiposReconocimiento',
+      ajax: this.url+'getReconocimientos',
       columns: [{
         title: 'ID',
-        data: 'idTipoReconocimiento',
+        data: 'idReconocimiento',
         visible: false
+      },{
+        title: 'Lugar realizacion',
+        data: 'lugarRealizacion'
       }, {
-        title: 'Nombre',
-        data: 'nombre'
-      }, {
-        title: 'Activo/Inactivo',
-        data: 'activo'
+        title: 'Descripcion',
+        data: 'descripcion'
+      },{
+        title: 'Fecha de vinculacion',
+        data: 'fechaVinculacion'
       }],
       rowCallback:(row: Node, data: any[] | Object, index: number) => {
          const self = this;
@@ -119,32 +173,15 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
     };
   }
 
-  open(content, action:string) {
-      this.modalRef = this.modalService.open(content);
+  open(content, action:string, size:string) {
+
       if(action == 'edit'){
 
-        if(this.idEdit != ''){
-          let callBack = this.tipoRecService.getTipoReconocimientoById(this.idEdit);
-          callBack.subscribe(res => {
-            let data = res.json();
-
-            if(data.status && data.status === 'OK'){
-              var tipoReco = data.data;
-              this.idEdit = tipoReco.idTipoReconocimiento;
-              this.name = tipoReco.nombre;
-              this.activo = tipoReco.activo
-
-            }
-          });
-        }
-        else{
-          this.message ="Por favor seleccionar una fila para editar";
-          this.modalRef.close();
-          this.openNotification(this.message, 'error');
-        }
       }
+      else{
 
-
+      }
+      this.modalRef = this.modalService.open(content);
       this.modalRef.result.then((result) => {
         this.cleanForm();
         this.closeResult = `Closed with: ${result}`;
@@ -155,40 +192,45 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
   }
 
+  openModalReconoEgresado(){
+    this.modalRef = this.modalService.open(this.mdlEgresadoReconocimiento,{windowClass: 'bigModal'});
+  }
+
   saveForm(){
 
-    if( this.name == '' || this.activo == ''){
+  }
 
-      this.openNotification("Todos los campos son obligatorios","error");
+  getEgresadoByDocument(){
+
+    if(this.tipoDocToFind == '0' || this.numeroDocToFind == ''){
+      this.openNotification('Error de validacion: se debe seleccionar un tipo y un numero de documento', 'error');
     }else{
 
-      let data = {
-        idTipoReconocimiento : this.idEdit,
-        nombre: this.name,
-        activo: this.activo,
-      };
-      let callBack = this.tipoRecService.saveTipoReconocimiento(data);
+      let callBack = this.reconoService.getEgresadoByDocument(this.tipoDocToFind,this.numeroDocToFind);
       callBack.subscribe(res => {
+        debugger
           let data = res.json();
-
           let status = data.status;
 
           if(status == 'OK'){
+            let newEgresado = data.data[0];
+            this.reconoEgresadoModel.idEgresado = newEgresado.idEgresado;
+            this.reconoEgresadoModel.nombreEgresado = newEgresado.nombres;
+            this.reconoEgresadoModel.apellidosEgresado = newEgresado.apellidos;
 
-            this.modalRef.close();
-            this.openNotification("","succes");
-            this.message = 'No se ha seleccionado una fila';
-            this.rerenderTable()
           }
           else{
-            this.messageValidation = 'Ocurrio un error al guardar el registro';
+            this.openNotification('Error al obtener el egresado, consultar con el administrador:'+data.message, 'error');
 
           }
-      })
-      this.rerenderTable();
-    }
-  }
+      },
+      error=>{
 
+        this.openNotification('Error del servidor: '+error, 'error');
+      });
+    }
+
+  }
 
   private getDismissReason(reason: any): string {
       if (reason === ModalDismissReasons.ESC) {
@@ -204,8 +246,6 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   }
   cleanForm(){
     //this.idEdit = "";
-    this.name = "";
-    this.activo ="";
 
   }
 

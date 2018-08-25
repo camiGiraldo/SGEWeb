@@ -10,3 +10,9 @@
 .no-padding{
   padding: 0 !important;
 }
+
+.bigModal{
+  .modal-dialog{
+    max-width: 98%;
+  }
+}

@@ -19,6 +19,13 @@ export class TiposReconocimientosService {
         this.url = environment.urlServices;
     }
 
+    getTiposReconocimiento(){
+      let headers = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+      });
+      return this.http.get(this.url+'getTiposReconocimiento');
+    }
+
     getTipoReconocimientoById(id:string){
 
       let headers = new Headers({

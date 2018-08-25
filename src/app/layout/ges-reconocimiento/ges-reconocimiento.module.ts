@@ -5,6 +5,7 @@ import { DataTablesModule } from 'angular-datatables';
 
 import { GesReconocimientoRoutingModule } from './ges-reconocimiento.routing.module';
 import { GesReconocimientoComponent} from './ges-reconocimiento.component';
+import { ReconocimientosService } from '../../_services/reconocimientosService';
 import { TiposReconocimientosService } from '../../_services/tiposReconocimientosService';
 import { PageHeaderModule } from './../../shared';
 import {

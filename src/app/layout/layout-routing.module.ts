@@ -25,6 +25,7 @@ const routes: Routes = [
             { path: 'categoria-eventos', loadChildren: './categoria-eventos/categoria-eventos.module#CategoriaEventosModule' },
             { path: 'tipo-eventos', loadChildren: './tipo-eventos/tipo-eventos.module#TipoEventoModule' },
             { path: 'tipos-reconocimientos', loadChildren: './tipos-reconocimientos/tipos-reconocimientos.module#TiposReconocimientosModule' },
+            { path: 'ges-reconocimiento', loadChildren: './ges-reconocimiento/ges-reconocimiento.module#GesReconocimientoModule' },
         ]
     }
 ];

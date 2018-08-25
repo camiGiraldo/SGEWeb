@@ -83,12 +83,12 @@
             <li class="nested" [class.expand]="showMenu === 'reconocimientos'">
                 <ul class="submenu">
                     <li>
-                      <a routerLink="/tipos-reconocimientos"  class="list-group-item">
+                      <a routerLink="/tipos-reconocimientos" [routerLinkActive]="['router-link-active']" class="list-group-item">
                           <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Tipos' | translate }}
                       </a>
                     </li>
                     <li>
-                      <a routerLink="/ges-aportes"  class="list-group-item">
+                      <a routerLink="/ges-reconocimiento" [routerLinkActive]="['router-link-active']" class="list-group-item">
                           <i class="fa fa-fw fa-address-card"></i>&nbsp;{{ 'Gestionar reconocimientos' | translate }}
                       </a>
                     </li>

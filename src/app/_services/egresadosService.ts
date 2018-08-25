@@ -124,9 +124,9 @@ export class EgresadosService{
     let dateEncuestaM1En = new Date(data.encuestaM1En.replace(/-/g, '/'));
     let dateEncuestaM5En = new Date(data.encuestaM5En.replace(/-/g, '/'));
     myParams.set('fechaEntregaCarnet', ""+dateEntregaCarnet.getTime());
-    myParams.set('encuestaM0En', dateEncuestaM0En.getTime());
-    myParams.set('encuestaM1En', dateEncuestaM1En.getTime());
-    myParams.set('encuestaM5En', dateEncuestaM5En.getTime());
+    myParams.set('encuestaM0En', ""+dateEncuestaM0En.getTime());
+    myParams.set('encuestaM1En', ""+dateEncuestaM1En.getTime());
+    myParams.set('encuestaM5En', ""+dateEncuestaM5En.getTime());
     myParams.set('gradoAcademusoft', data.gradoAcademusoft);
     myParams.set('recibeInformacion', data.recibeInformacion);
     myParams.set('tipoInformacion', data.tipoInformacion);

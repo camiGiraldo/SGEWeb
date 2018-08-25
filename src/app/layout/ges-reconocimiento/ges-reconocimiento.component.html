@@ -1,8 +1,10 @@
 <div [@routerTransition]>
-  <app-page-header [heading]="'Tipos de Reconocimientos'" [icon]="'fa-building'"></app-page-header>
+  <app-page-header [heading]="'Gestion de Reconocimientos'" [icon]="'fa-building'"></app-page-header>
   <div class="cont-actions">
     <div class="fac-selec">Tipo seleccionado: <strong>{{ message }}</strong></div>
-
+    <div class="flt-button-action" title="Relacionar un egresado" (click)="openModalReconoEgresado()">
+      <i class="fa fa-book"></i>
+    </div>
     <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
       <i class="fa fa-edit"></i>
     </div>
@@ -12,6 +14,7 @@
     <div class="flt-button-action" title="Crear Programas" (click)="open(content,'new')">
       <i class="fa fa-plus"></i>
     </div>
+
   </div>
 
   <br />
@@ -21,32 +24,168 @@
 <!--FORMULARIO MODAL PARA CREAR Y EDITAR FACULTADES-->
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Tipo de reconocimiento</h4>
+      <h4 class="modal-title">Reconocimiento</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
       </button>
   </div>
   <div class="modal-body">
+  <div class="row">
+    <div class="col-12 no-margin">
 
-      <form>
+      <form #formGesReconomento = 'ngForm'>
+        <div class="form-row">
+          <input type="hidden" id="idReconocimiento" name="idReconocimiento" #idReconocimiento="ngModel"
+               [(ngModel)]="reconocimiento.idReconocimiento">
+          <div class="form-group col-md-6 col-lg-12 col-sm-12 col-xs-12">
+            <label for="sel1">Tipo de Reconocimiento:</label>
+            <select class="form-control form-control-sm" id="idTipoReconocimiento" #idTipoReconocimiento="ngModel" name="idTipoReconocimiento"
+            [(ngModel)]="reconocimiento.idTipoReconocimiento">
+              <option value="">Seleccionar</option>
+              <option *ngFor="let tiposReco of listTipoRecono"
+                 [value]="tiposReco.idTipoReconocimiento">
+                 {{tiposReco.nombre}}
+             </option>
+            </select>
+          </div>
+          <input type="hidden" value=""  id="adjunto" #adjunto="ngModel" name="adjunto" placeholder=""
+          [(ngModel)]="reconocimiento.adjunto">
+          <div class="form-group col-md-6 col-lg-12 col-sm-12 col-xs-12">
+           <label for="">Descripcion:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="descripcion" #descripcion="ngModel" name="descripcion"
+           [(ngModel)]="reconocimiento.descripcion">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Lugar de realizacion:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="lugarRealizacion" #lugarRealizacion="ngModel" name="lugarRealizacion"
+           [(ngModel)]="reconocimiento.lugarRealizacion">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Fecha de vinculacion:</label>
+           <input type="date" name="" class="form-control form-control-sm" id="fechaVinculacion" #fechaVinculacion="ngModel" name="fechaVinculacion"
+           [(ngModel)]="reconocimiento.fechaVinculacion">
+          </div>
+          <div class="form-group col-md-12 col-lg-12 col-sm-12 col-xs-12">
+           <label for="">Beneficiarios:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="beneficiario" #beneficiario="ngModel" name="beneficiario"
+           [(ngModel)]="reconocimiento.beneficiario">
+          </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Nombre del tipo:</label>
-          <input type="text"  class="form-control"  id="txtname" [(ngModel)]="name" name="name"  placeholder="Reconocimeinto anual de..." >
+          <div class="form-group col-md-6 col-lg-12 col-sm-12 col-xs-12">
+           <label for="">Soporte:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="soporte" #soporte="ngModel" name="soporte"
+           [(ngModel)]="reconocimiento.soporte">
+          </div>
         </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Activo:</label>
-          <input type="text" class="form-control" id="txtActivo"  [(ngModel)]="activo" name="activo" placeholder="0 = inactivo, 1 = activo" required>
-        </div>
-        <div class="form-group">
-          <input type="hidden" id="txtIdTipoReco" [(ngModel)]="idEdit" name="idEdit">
-        </div>
-      </form>
+     </form>
+    </div>
+  </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
     <button type="button" class="btn btn-primary" (click)="saveForm()">Guardar</button>
 
+  </div>
+</ng-template>
+<!--MODAL PARA LISTAR LOS EGRESADOS CONDECORADOS CON EL RECONOCIMEINTO-->
+<ng-template #mdlEgresados let-c="close" let-d="dismiss">
+  <div class="modal-header">
+      <h4 class="modal-title">Egresados reconocidos</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <div class="modal-body">
+   <div class="row">
+    <div class="col-xs-12 col-sm-12 col-lg-6 col-md-6">
+
+      <div class="row" [ngStyle]="{'padding': '0 20px','background':'#e1eaff','border-radius':'20px'}">
+        <span class="col-12 sub-title-modal">Agrear egresado</span>
+        <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
+          <select class="form-control form-control-sm" [(ngModel)]="tipoDocToFind">
+            <option value="0" selected="selected">Seleccionar</option>
+            <option value="CC">Cedula de ciudadania</option>
+            <option value="TC">Tarjeta de identidad</option>
+            <option value="CE">Cedula extrangera</option>
+            <option value="PS">Pasaporte</option>
+          </select>
+        </div>
+        <div class="form-group col-md-5 col-lg-5 col-sm-12 col-xs-12">
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="numeroDocToFind" placeholder="Numero de documento ...">
+        </div>
+        <div class="form-group col-md-3 col-lg-3 col-sm-12 col-xs-12">
+          <button type="button" name="button" class="btn btn-primary" (click)="getEgresadoByDocument()">Agregar</button>
+        </div>
+        <span class="col-12 sub-title-modal">Informacion del reconocimiento al egresado</span>
+        <div class="form-group col-12">
+          <input type="hidden" class="form-control" id="idEgresadoReconocimiento" name="idEgresadoReconocimiento"
+          [(ngModel)]="reconoEgresadoModel.idEgresadoReconocimiento" #idEgresadoReconocimiento="ngModel" placeholder="">
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-2 col-lg-2">
+          <label for="">Codigo</label>
+          <input type="text" name="" class="form-control form-control-sm" disabled #idEgresado='ngModel' name="idEgresado"
+          [(ngModel)]="reconoEgresadoModel.idEgresado">
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-5 col-lg-5">
+          <label for="">Nombres egresado</label>
+          <input type="text" name="" class="form-control form-control-sm" disabled #nombreEgresado='ngModel' name="nombreEgresado"
+          [(ngModel)]="reconoEgresadoModel.nombreEgresado">
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-5 col-lg-5">
+          <label for="">Apellidos egresado</label>
+          <input type="text" name="" class="form-control form-control-sm" disabled #apellidosEgresado='ngModel' name="apellidosEgresado"
+          [(ngModel)]="reconoEgresadoModel.apellidosEgresado">
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-4">
+          <label for="">Distinguido</label>
+          <select type="text" name="" class="form-control form-control-sm" #distinguido='ngModel' name="distinguido"
+          [(ngModel)]="reconoEgresadoModel.distinguido">
+            <option value="1">Si</option>
+            <option value="0"> No</option>
+          </select>
+
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-4">
+          <label for="">Vinculado laboralmente</label>
+          <select class="form-control form-control-sm" #vinculadoLaboralmente='ngModel' name="vinculadoLaboralmente"
+          [(ngModel)]="reconoEgresadoModel.vinculadoLaboralmente">
+            <option value="1">Si</option>
+            <option value="0"> No</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-4">
+          <label for="">Logro publicado</label>
+          <select class="form-control form-control-sm" #logroPublicado='ngModel' name="logroPublicado"
+          [(ngModel)]="reconoEgresadoModel.logroPublicado">
+            <option value="1">Si</option>
+            <option value="0"> No</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-6 col-lg-6">
+          <label for="">Url externa</label>
+          <input type="text" name="" class="form-control form-control-sm" #urlExterna='ngModel' name="urlExterna"
+          [(ngModel)]="reconoEgresadoModel.urlExterna">
+        </div>
+        <div class="form-group col-sm-12 col-xs-12 col-md-6 col-lg-6">
+          <label for="">Soporte</label>
+          <input type="number" name="" class="form-control form-control-sm" #soporte='ngModel' name="soporte"
+          [(ngModel)]="reconoEgresadoModel.soporte">
+        </div>
+
+      </div>
+    </div>
+    <!--Listado de egresados-->
+    <div class="col-xs-12 col-sm-12 col-lg-6 col-md-6">
+      <div class="row" [ngStyle]="{'padding': '0 20px'}">
+        <span class="col-12 sub-title-modal">Lisado de egresados</span>
+      </div>
+
+    </div>
+   </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
+    <button type="button" class="btn btn-primary">Guardar</button>
   </div>
 </ng-template>
 
