@@ -1,13 +1,12 @@
 export  class Reconocimiento {
 
-  idReconocimiento:string;
+  idReconocimiento:string = "";
   idTipoReconocimiento:string;
   adjunto:string;
   fechaVinculacion:string
   lugarRealizacion:string;
   beneficiario:string ="";
   descripcion:string;
-  soporte:string;
   fechaCreacion:string ="";
 
 }

@@ -5,10 +5,10 @@
     <div class="flt-button-action" title="Relacionar un egresado" (click)="openModalReconoEgresado()">
       <i class="fa fa-book"></i>
     </div>
-    <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
+    <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="getReconocimientoById(content)">
       <i class="fa fa-edit"></i>
     </div>
-    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
+    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="getReconocimientoById(content)">
       <i class="fa fa-edit"></i>
     </div>
     <div class="flt-button-action" title="Crear Programas" (click)="open(content,'new')">
@@ -70,11 +70,10 @@
            <input type="text" name="" class="form-control form-control-sm" id="beneficiario" #beneficiario="ngModel" name="beneficiario"
            [(ngModel)]="reconocimiento.beneficiario">
           </div>
-
           <div class="form-group col-md-6 col-lg-12 col-sm-12 col-xs-12">
            <label for="">Soporte:</label>
-           <input type="text" name="" class="form-control form-control-sm" id="soporte" #soporte="ngModel" name="soporte"
-           [(ngModel)]="reconocimiento.soporte">
+           <input type="file" name="" class="form-control form-control-sm" id="fileUpload" #fileUpload="ngModel" name="fileUpload"
+           [(ngModel)]="fileUpload">
           </div>
         </div>
      </form>

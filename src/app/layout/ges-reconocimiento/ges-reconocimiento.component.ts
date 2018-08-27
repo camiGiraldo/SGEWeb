@@ -69,6 +69,8 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   reconoEgresadoModel: ReconocimeintoEgresado;
   listTipoRecono: TipoReconocimiento[];
   listEgresado: Egresado[] = [];
+  //archivoa cargar
+  fileUpload:string|any;
 
 
   idEdit:string ='';
@@ -95,13 +97,13 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   }
 
   someClickHandler(info: any): void {
-
-    if(this.cellSelect.idTipoReconocimiento !== info.idTipoReconocimiento){
+debugger
+    if(this.cellSelect.id !== info.idReconocimiento){
       this.cellSelect = {
-        id : info.idTipoReconocimiento
+        id : info.idReconocimiento
       }
       this.message =  info.descripcion;
-      this.idEdit = info.idTipoReconocimiento;
+      this.idEdit = info.idReconocimiento;
     }
     else{
       this.cellSelect = {
@@ -173,23 +175,18 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
     };
   }
 
-  open(content, action:string, size:string) {
+  open(content, size:string) {
 
-      if(action == 'edit'){
 
-      }
-      else{
-
-      }
-      this.modalRef = this.modalService.open(content);
-      this.modalRef.result.then((result) => {
-        this.cleanForm();
-        this.closeResult = `Closed with: ${result}`;
-      }, (reason) => {
-        this.cleanForm();
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      });
-
+          this.reconocimiento = new Reconocimiento();
+          this.modalRef = this.modalService.open(content);
+          this.modalRef.result.then((result) => {
+            this.cleanForm();
+            this.closeResult = `Closed with: ${result}`;
+          }, (reason) => {
+            this.cleanForm();
+            this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          });
   }
 
   openModalReconoEgresado(){
@@ -197,6 +194,64 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   }
 
   saveForm(){
+    debugger
+    let callBack = this.reconoService.saveReconocimeinto(this.reconocimiento);
+    callBack.subscribe(res => {
+
+        let data = res.json();
+        let status = data.status;
+
+        if(status == 'OK'){
+          this.reconocimiento.idReconocimiento = data.data;
+          this.openNotification('Registro exitoso','succes');
+        }
+        else{
+          this.openNotification('Error del servidor al guardar la informacion basica:'+data.message, 'error');
+
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+  }
+
+  getReconocimientoById(content){
+    if(this.idEdit == '' || this.idEdit == null || this.idEdit == undefined){
+      this.openNotification('Se debe seleccionar un elemento de la tabla', 'error');
+    }
+    else{
+        debugger
+        let callBack = this.reconoService.getReconocimientoById(this.idEdit);
+        callBack.subscribe(res => {
+
+            let data = res.json();
+            let status = data.status;
+
+            if(status == 'OK'){
+              this.reconocimiento = data.data as Reconocimiento;
+              this.modalRef = this.modalService.open(content);
+            }
+            else{
+              this.openNotification('Error del servidor al guardar la informacion basica:'+data.message, 'error');
+
+            }
+        },
+        error=>{
+
+          this.openNotification('Error del servidor: '+error, 'error');
+        });
+
+      /*  this.modalRef.result.then((result) => {
+          this.cleanForm();
+          this.closeResult = `Closed with: ${result}`;
+        }, (reason) => {
+          this.cleanForm();
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        });*/
+
+    }
+
 
   }
 
@@ -245,7 +300,7 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
       }
   }
   cleanForm(){
-    //this.idEdit = "";
+    this.idEdit = "";
 
   }
 

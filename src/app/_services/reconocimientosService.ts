@@ -52,4 +52,32 @@ export class ReconocimientosService {
   }
 
 
+  saveReconocimeinto(data:any){
+    let headers = new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    let myParams = new URLSearchParams();
+    myParams.set('idReconocimiento', data.idReconocimiento);
+    myParams.set('idTipoReconocimiento', data.idTipoReconocimiento);
+    myParams.set('adjunto', data.adjunto);
+    let dateVinculacion =  new Date(data.fechaVinculacion.replace(/-/g, '/'));
+    myParams.set('fechaVinculacion', ""+dateVinculacion.getTime());
+    myParams.set('lugarRealizacion', data.lugarRealizacion);
+    myParams.set('beneficiario', data.beneficiario);
+    myParams.set('descripcion', data.descripcion);
+    myParams.set('soporte', data.soporte);
+
+    let options = new RequestOptions({ headers: headers, params: myParams});
+
+    return this.http.post(this.url+'saveReconocimiento',
+                   myParams.toString(),
+                   {headers : headers});
+  }
+
+  fileUpload(file){
+    
+  }
+
+
 }
