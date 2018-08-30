@@ -11,15 +11,15 @@ import {
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { TiposReconocimientosService } from '../../_services/tiposReconocimientosService';
-import { ReconocimientosService } from '../../_services/reconocimientosService';
-import { Reconocimiento } from './reconocimiento';
-import { ReconocimeintoEgresado } from './reconocimiento';
+import { TiposAportesService } from '../../_services/tiposAportesService';
+import { AporteService } from '../../_services/aporteService';
+import { Aporte } from './aportes';
+import { AporteEgresado } from './aportes';
 import * as $ from 'jquery';
 import { environment } from '../../../environments/environment';
 
-interface TipoReconocimiento {
-    idTipoReconocimiento:string;
+interface TipoAporte {
+    idTipoAporte:string;
     nombre:string;
 }
 
@@ -31,16 +31,16 @@ interface Egresado{
 
 @Component({
   selector : 'app-facultades',
-  templateUrl: './ges-reconocimiento.component.html',
+  templateUrl: './ges-aportes.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls:['./ges-reconocimiento.component.scss'],
+  styleUrls:['./ges-aportes.component.scss'],
   animations: [routerTransition()]
 })
 
-export class GesReconocimientoComponent implements OnInit, AfterViewInit{
+export class GesAporteComponent implements OnInit, AfterViewInit{
 
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
-  @ViewChild('mdlEgresados') public mdlEgresadoReconocimiento:NgbModal;
+  @ViewChild('mdlEgresados') public mdlEgresadoAporte:NgbModal;
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
 
 
@@ -64,11 +64,11 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   closeResult: string;
 
   //MAPEO DE LOS ATRIBUTOS DEL FORMULARIO A CREAR
-  tipoReconocimientoInterface : TipoReconocimiento;
-  reconocimiento: Reconocimiento;
-  reconoEgresadoModel: ReconocimeintoEgresado;
-  lisEgresadosReconocidos: ReconocimeintoEgresado[];
-  listTipoRecono: TipoReconocimiento[];
+  tipoAporteInterface : TipoAporte;
+  aporte: Aporte;
+  aporteEgresadoModel: AporteEgresado;
+  lisEgresadosAportes: AporteEgresado[];
+  listTipoAporte: TipoAporte[];
   listEgresado: Egresado[] = [];
   //archivoa cargar
   fileUpload:string|any;
@@ -78,10 +78,10 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
 
   constructor(private zone: NgZone, private modalService: NgbModal,
-    private tipoRecService: TiposReconocimientosService, private reconoService: ReconocimientosService){
+    private tipoAporteService: TiposAportesService, private aporteSrvice: AporteService){
 
-    this.reconocimiento = new Reconocimiento();
-    this.reconoEgresadoModel = new ReconocimeintoEgresado();
+    this.aporte = new Aporte();
+    this.aporteEgresadoModel = new AporteEgresado();
     this.idEdit = '';
     this.url = environment.urlServices;
     this.cellSelect = {
@@ -98,12 +98,13 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   }
 
   someClickHandler(info: any): void {
-    if(this.cellSelect.id !== info.idReconocimiento){
+
+    if(this.cellSelect.id !== info.idAporteInvestigacion){
       this.cellSelect = {
-        id : info.idReconocimiento
+        id : info.idAporteInvestigacion
       }
-      this.message =  info.descripcion;
-      this.idEdit = info.idReconocimiento;
+      this.message =  info.nombreProyecto;
+      this.idEdit = info.idAporteInvestigacion;
     }
     else{
       this.cellSelect = {
@@ -117,7 +118,7 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   }
 
   getTiposReconocimiento(){
-    let callBack = this.tipoRecService.getTiposReconocimiento();
+    let callBack = this.tipoAporteService.getTiposAportes();
     callBack.subscribe(res => {
 
         let data = res.json();
@@ -125,11 +126,11 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
         if(status == 'OK'){
 
-          this.listTipoRecono = data.data as TipoReconocimiento[];
+          this.listTipoAporte = data.data as TipoAporte[];
 
         }
         else{
-          this.openNotification('Error al obtener los tipos de reconocimientos:'+data.message, 'error');
+          this.openNotification('Error al obtener los tipos de aportes:'+data.message, 'error');
 
         }
     },
@@ -143,20 +144,23 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
   ngOnInit():void{
     this.dtOptions = {
-      ajax: this.url+'getReconocimientos',
+      ajax: this.url+'getAportes',
       columns: [{
         title: 'ID',
-        data: 'idReconocimiento',
+        data: 'idAporteInvestigacion',
         visible: false
       },{
-        title: 'Lugar realizacion',
-        data: 'lugarRealizacion'
+        title: 'Nombre Proyecto',
+        data: 'nombreProyecto'
       }, {
         title: 'Descripcion',
-        data: 'descripcion'
+        data: 'descripcionProyecto'
       },{
-        title: 'Fecha de vinculacion',
-        data: 'fechaVinculacion'
+        title: 'Persona a Cargo',
+        data: 'personaACargo'
+      },{
+        title: 'Grupo Beneficiarios',
+        data: 'grupoBeneficiario'
       }],
       rowCallback:(row: Node, data: any[] | Object, index: number) => {
          const self = this;
@@ -178,7 +182,7 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   open(content, size:string) {
 
 
-          this.reconocimiento = new Reconocimiento();
+          this.aporte = new Aporte();
           this.modalRef = this.modalService.open(content);
           this.modalRef.result.then((result) => {
             this.closeResult = `Closed with: ${result}`;
@@ -193,25 +197,25 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
     }
     else{
       this.getEgresadosRegistrados();
-      this.modalRef = this.modalService.open(this.mdlEgresadoReconocimiento,{windowClass: 'bigModal'});
+      this.modalRef = this.modalService.open(this.mdlEgresadoAporte,{windowClass: 'bigModal'});
 
     }
 
   }
-//metodo que lista los egresados registrados al reconocimeinto seleccionado
+//metodo que lista los egresados registrados al aporte seleccionado
   getEgresadosRegistrados(){
-    let callBack = this.reconoService.getEgresadosRegistrados(this.idEdit);
+    let callBack = this.aporteSrvice.getEgresadosAportes(this.idEdit);
     callBack.subscribe(res => {
         let data = res.json();
         let status = data.status;
 
         if(status == 'OK'){
-          this.lisEgresadosReconocidos = [];
-          this.lisEgresadosReconocidos = data.data as ReconocimeintoEgresado[];
+          this.lisEgresadosAportes = [];
+          this.lisEgresadosAportes = data.data as AporteEgresado[];
 
         }
         else{
-          this.openNotification('Error al obtener los egresados registrados al reconocimiento:'+data.message, 'error');
+          this.openNotification('Error al obtener los egresados registrados al aporte:'+data.message, 'error');
 
         }
     },
@@ -221,22 +225,22 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
     });
   }
 
-  //al dar click en el egresado reconocido Listado
+  //al dar click en el egresado aporte Listado
   //traemos su informacion para mostrarla en el formulario de la izquierda
-  getInfoEgresadoReconocimiento(idEgresadoRecono:string, nombres:string, apellidos:string){
+  getInfoEgresadoReconocimiento(idEgresadoAporte:string, nombres:string, apellidos:string){
 
-    let callBack = this.reconoService.getEgresadoReconocimientoById(idEgresadoRecono);
+    let callBack = this.aporteSrvice.getEgresadoAporteById(idEgresadoAporte);
     callBack.subscribe(res => {
         let data = res.json();
         let status = data.status;
         if(status == 'OK'){
 
-          this.reconoEgresadoModel = data.data as ReconocimeintoEgresado;
-          this.reconoEgresadoModel.nombreEgresado = nombres;
-          this.reconoEgresadoModel.apellidosEgresado= apellidos;
+          this.aporteEgresadoModel = data.data as AporteEgresado;
+          this.aporteEgresadoModel.nombreEgresado = nombres;
+          this.aporteEgresadoModel.apellidosEgresado= apellidos;
         }
         else{
-          this.openNotification('Error al obtener los egresados registrados al reconocimiento:'+data.message, 'error');
+          this.openNotification('Error al obtener los egresados registrados al aporte:'+data.message, 'error');
         }
     },
     error=>{
@@ -247,20 +251,19 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
 
   }
-  //metodo que registra los egresados al reconocimiento
+  //metodo que registra los egresados al aporte
   registrarEgresadoAlEvento(){
-    this.reconoEgresadoModel.idReconocimiento = this.idEdit;
-    let callBack = this.reconoService.registrarEgresadoAlEvento(this.reconoEgresadoModel);
+    this.aporteEgresadoModel.idAporteInvestigacion = this.idEdit;
+    let callBack = this.aporteSrvice.registrarEgresadoAlAporte(this.aporteEgresadoModel);
     callBack.subscribe(res => {
         let data = res.json();
         let status = data.status;
         if(status == 'OK'){
-
-          debugger
           this.getEgresadosRegistrados();
+          this.openNotification('', 'succes');
         }
         else{
-          this.openNotification('Error al obtener los egresados registrados al reconocimiento:'+data.message, 'error');
+          this.openNotification('Error al obtener los egresados registrados al aporte:'+data.message, 'error');
         }
     },
     error=>{
@@ -270,9 +273,9 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
   }
   //metodo que elimina
-  eliminarEgresadoDelEvento(idEgresadoRecono:string){
-  debugger
-    let callBack = this.reconoService.deleteEgresadoReconocimiento(idEgresadoRecono);
+  eliminarEgresadoDelEvento(idEgresadoAporte:string){
+
+    let callBack = this.aporteSrvice.deleteEgresadoAporte(idEgresadoAporte);
     callBack.subscribe(res => {
         let data = res.json();
         let status = data.status;
@@ -284,7 +287,7 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
         }
         else{
-          this.openNotification('Error al obtener los egresados registrados al reconocimiento:'+data.message, 'error');
+          this.openNotification('Error al obtener los egresados registrados al aporte:'+data.message, 'error');
         }
     },
     error=>{
@@ -294,23 +297,25 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
   }
 
   cleanEgreRecoForm(){
-    this.reconoEgresadoModel = new ReconocimeintoEgresado();
+    this.aporteEgresadoModel = new AporteEgresado();
     this.tipoDocToFind = "";
     this.numeroDocToFind ="";
   }
 
   saveForm(){
 
-
-    let callBack = this.reconoService.saveReconocimeinto(this.reconocimiento);
+    let callBack = this.aporteSrvice.saveAporte(this.aporte);
     callBack.subscribe(res => {
 
         let data = res.json();
         let status = data.status;
 
         if(status == 'OK'){
-          this.reconocimiento.idReconocimiento = data.data;
+          this.aporte.idAporteInvestigacion = data.data;
           this.openNotification('Registro exitoso','succes');
+          this.rerenderTable();
+          this.modalRef.close()
+
         }
         else{
           this.openNotification('Error del servidor al guardar la informacion basica:'+data.message, 'error');
@@ -330,14 +335,14 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
     }
     else{
 
-        let callBack = this.reconoService.getReconocimientoById(this.idEdit);
+        let callBack = this.aporteSrvice.getAporteById(this.idEdit);
         callBack.subscribe(res => {
 
             let data = res.json();
             let status = data.status;
 
             if(status == 'OK'){
-              this.reconocimiento = data.data as Reconocimiento;
+              this.aporte = data.data as Aporte;
               this.modalRef = this.modalService.open(content);
             }
             else{
@@ -368,7 +373,7 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
       this.openNotification('Error de validacion: se debe seleccionar un tipo y un numero de documento', 'error');
     }else{
 
-      let callBack = this.reconoService.getEgresadoByDocument(this.tipoDocToFind,this.numeroDocToFind);
+      let callBack = this.aporteSrvice.getEgresadoByDocument(this.tipoDocToFind,this.numeroDocToFind);
       callBack.subscribe(res => {
 
           let data = res.json();
@@ -378,9 +383,9 @@ export class GesReconocimientoComponent implements OnInit, AfterViewInit{
 
             if(data.data.length > 0){
               let newEgresado = data.data[0];
-              this.reconoEgresadoModel.idEgresado = newEgresado.idEgresado;
-              this.reconoEgresadoModel.nombreEgresado = newEgresado.nombres;
-              this.reconoEgresadoModel.apellidosEgresado = newEgresado.apellidos;
+              this.aporteEgresadoModel.idEgresado = newEgresado.idEgresado;
+              this.aporteEgresadoModel.nombreEgresado = newEgresado.nombres;
+              this.aporteEgresadoModel.apellidosEgresado = newEgresado.apellidos;
             }
             else{
               this.openNotification('No se encontro un egresado con el tipo y numero de documento','info');

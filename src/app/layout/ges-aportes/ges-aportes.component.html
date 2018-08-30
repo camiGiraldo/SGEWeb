@@ -1,7 +1,7 @@
 <div [@routerTransition]>
-  <app-page-header [heading]="'Gestion de Reconocimientos'" [icon]="'fa-building'"></app-page-header>
+  <app-page-header [heading]="'Gestion de Aportes'" [icon]="'fa-building'"></app-page-header>
   <div class="cont-actions">
-    <div class="fac-selec">Tipo seleccionado: <strong>{{ message }}</strong></div>
+    <div class="fac-selec">Aporte seleccionado: <strong>{{ message }}</strong></div>
     <div class="flt-button-action" title="Relacionar un egresado" (click)="openModalReconoEgresado()">
       <i class="fa fa-book"></i>
     </div>
@@ -21,7 +21,7 @@
 <!--FORMULARIO MODAL PARA CREAR Y EDITAR FACULTADES-->
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Reconocimiento</h4>
+      <h4 class="modal-title">Gestionar Aporte</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
       </button>
@@ -30,44 +30,69 @@
   <div class="row">
     <div class="col-12 no-margin">
 
-      <form #formGesReconomento = 'ngForm'>
+      <form #formGesAporte = 'ngForm'>
         <div class="form-row">
-          <input type="hidden" id="idReconocimiento" name="idReconocimiento" #idReconocimiento="ngModel"
-               [(ngModel)]="reconocimiento.idReconocimiento">
-          <div class="form-group col-md-6 col-lg-12 col-sm-12 col-xs-12">
-            <label for="sel1">Tipo de Reconocimiento:</label>
-            <select class="form-control form-control-sm" id="idTipoReconocimiento" #idTipoReconocimiento="ngModel" name="idTipoReconocimiento"
-            [(ngModel)]="reconocimiento.idTipoReconocimiento">
+          <input type="hidden" id="idAporteInvestigacion" name="idAporteInvestigacion" #idAporteInvestigacion="ngModel"
+           [(ngModel)]="aporte.idAporteInvestigacion">
+           <input type="hidden" value=""  id="adjunto" #adjunto="ngModel" name="adjunto" placeholder=""
+           [(ngModel)]="aporte.adjunto">
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+            <label for="sel1">Tipo de Aportes:</label>
+            <select class="form-control form-control-sm" id="idTipoAporte" #idTipoAporte="ngModel" name="idTipoAporte"
+            [(ngModel)]="aporte.idTipoAporte">
               <option value="">Seleccionar</option>
-              <option *ngFor="let tiposReco of listTipoRecono"
-                 [value]="tiposReco.idTipoReconocimiento">
-                 {{tiposReco.nombre}}
+              <option *ngFor="let tiposApor of listTipoAporte"
+                 [value]="tiposApor.idTipoAporte">
+                 {{tiposApor.nombre}}
              </option>
             </select>
           </div>
-          <input type="hidden" value=""  id="adjunto" #adjunto="ngModel" name="adjunto" placeholder=""
-          [(ngModel)]="reconocimiento.adjunto">
-          <div class="form-group col-md-6 col-lg-12 col-sm-12 col-xs-12">
-           <label for="">Descripcion:</label>
-           <input type="text" name="" class="form-control form-control-sm" id="descripcion" #descripcion="ngModel" name="descripcion"
-           [(ngModel)]="reconocimiento.descripcion">
-          </div>
-          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
-           <label for="">Lugar de realizacion:</label>
-           <input type="text" name="" class="form-control form-control-sm" id="lugarRealizacion" #lugarRealizacion="ngModel" name="lugarRealizacion"
-           [(ngModel)]="reconocimiento.lugarRealizacion">
-          </div>
-          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
-           <label for="">Fecha de vinculacion:</label>
-           <input type="date" name="" class="form-control form-control-sm" id="fechaVinculacion" #fechaVinculacion="ngModel" name="fechaVinculacion"
-           [(ngModel)]="reconocimiento.fechaVinculacion">
-          </div>
-          <div class="form-group col-md-12 col-lg-12 col-sm-12 col-xs-12">
-           <label for="">Beneficiarios:</label>
-           <input type="text" name="" class="form-control form-control-sm" id="beneficiario" #beneficiario="ngModel" name="beneficiario"
-           [(ngModel)]="reconocimiento.beneficiario">
-          </div>
 
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Nombre aporte:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="nombreProyecto" #nombreProyecto="ngModel" name="nombreProyecto"
+           [(ngModel)]="aporte.nombreProyecto">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Descripcion:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="descripcionProyecto" #descripcionProyecto="ngModel" name="descripcionProyecto"
+           [(ngModel)]="aporte.descripcionProyecto">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Beneficiarios:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="grupoBeneficiario" #grupoBeneficiario="ngModel" name="grupoBeneficiario"
+           [(ngModel)]="aporte.grupoBeneficiario">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Sub Beneficiarios:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="subGrupoBeneficiario" #subGrupoBeneficiario="ngModel" name="subGrupoBeneficiario"
+           [(ngModel)]="aporte.subGrupoBeneficiario">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Persona a cargo:</label>
+           <input type="text" name="" class="form-control form-control-sm" id="personaACargo" #personaACargo="ngModel" name="personaACargo"
+           [(ngModel)]="aporte.personaACargo">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Correo electronico:</label>
+           <input type="email" name="" class="form-control form-control-sm" id="correoElectronico" #correoElectronico="ngModel" name="correoElectronico"
+           [(ngModel)]="aporte.correoElectronico">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Telefono:</label>
+           <input type="number" name="" class="form-control form-control-sm" id="telefono" #telefono="ngModel" name="telefono"
+           [(ngModel)]="aporte.telefono">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Fecha de realizacion:</label>
+           <input type="date" name="" class="form-control form-control-sm" id="fechaRealizacion" #fechaRealizacion="ngModel" name="fechaRealizacion"
+           [(ngModel)]="aporte.fechaRealizacion">
+          </div>
+          <div class="form-group col-md-6 col-lg-6 col-sm-12 col-xs-12">
+           <label for="">Fecha de finalizacion:</label>
+           <input type="date" name="" class="form-control form-control-sm" id="fechaFinalizacion" #fechaFinalizacion="ngModel" name="fechaFinalizacion"
+           [(ngModel)]="aporte.fechaFinalizacion">
+          </div>
         </div>
      </form>
     </div>
@@ -82,7 +107,7 @@
 <!--MODAL PARA LISTAR LOS EGRESADOS CONDECORADOS CON EL RECONOCIMEINTO-->
 <ng-template #mdlEgresados let-c="close" let-d="dismiss">
   <div class="modal-header">
-      <h4 class="modal-title">Egresados reconocidos</h4>
+      <h4 class="modal-title">Egresados aportadores</h4>
       <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
       </button>
@@ -107,60 +132,40 @@
         <div class="form-group col-md-3 col-lg-3 col-sm-12 col-xs-12">
           <button type="button" name="button" class="btn btn-primary" (click)="getEgresadoByDocument()">Buscar</button>
         </div>
-        <span class="col-12 sub-title-modal">Informacion del reconocimiento al egresado</span>
+        <span class="col-12 sub-title-modal">Informacion del aporte al egresado</span>
         <div class="form-group col-12">
-          <input type="hidden" class="form-control" id="idEgresadoReconocimiento" name="idEgresadoReconocimiento"
-          [(ngModel)]="reconoEgresadoModel.idEgresadoReconocimiento" #idEgresadoReconocimiento="ngModel" placeholder="">
+          <input type="hidden" class="form-control" id="idEgresadoAporte" name="idEgresadoAporte"
+          [(ngModel)]="aporteEgresadoModel.idEgresadoAporte" #idEgresadoAporte="ngModel" placeholder="">
         </div>
         <div class="form-group col-sm-12 col-xs-12 col-md-2 col-lg-2">
           <label for="">Codigo</label>
           <input type="text" name="" class="form-control form-control-sm" disabled #idEgresado='ngModel' name="idEgresado"
-          [(ngModel)]="reconoEgresadoModel.idEgresado">
+          [(ngModel)]="aporteEgresadoModel.idEgresado">
         </div>
         <div class="form-group col-sm-12 col-xs-12 col-md-5 col-lg-5">
           <label for="">Nombres egresado</label>
           <input type="text" name="" class="form-control form-control-sm" disabled #nombreEgresado='ngModel' name="nombreEgresado"
-          [(ngModel)]="reconoEgresadoModel.nombreEgresado">
+          [(ngModel)]="aporteEgresadoModel.nombreEgresado">
         </div>
         <div class="form-group col-sm-12 col-xs-12 col-md-5 col-lg-5">
           <label for="">Apellidos egresado</label>
           <input type="text" name="" class="form-control form-control-sm" disabled #apellidosEgresado='ngModel' name="apellidosEgresado"
-          [(ngModel)]="reconoEgresadoModel.apellidosEgresado">
+          [(ngModel)]="aporteEgresadoModel.apellidosEgresado">
         </div>
-        <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-4">
-          <label for="">Distinguido</label>
-          <select type="text" name="" class="form-control form-control-sm" #distinguido='ngModel' name="distinguido"
-          [(ngModel)]="reconoEgresadoModel.distinguido">
-            <option value="1">Si</option>
-            <option value="0"> No</option>
-          </select>
-
-        </div>
-        <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-4">
-          <label for="">Vinculado laboralmente</label>
-          <select class="form-control form-control-sm" #vinculadoLaboralmente='ngModel' name="vinculadoLaboralmente"
-          [(ngModel)]="reconoEgresadoModel.vinculadoLaboralmente">
-            <option value="1">Si</option>
-            <option value="0"> No</option>
-          </select>
-        </div>
-        <div class="form-group col-sm-12 col-xs-12 col-md-4 col-lg-4">
-          <label for="">Logro publicado</label>
-          <select class="form-control form-control-sm" #logroPublicado='ngModel' name="logroPublicado"
-          [(ngModel)]="reconoEgresadoModel.logroPublicado">
-            <option value="1">Si</option>
-            <option value="0"> No</option>
-          </select>
+        <div class="form-group col-sm-12 col-xs-12 col-md-5 col-lg-5">
+          <label for="">Participacion</label>
+          <input type="text" name="" class="form-control form-control-sm"  #participacion='ngModel' name="participacion"
+          [(ngModel)]="aporteEgresadoModel.participacion">
         </div>
         <div class="form-group col-sm-12 col-xs-12 col-md-6 col-lg-6">
           <label for="">Url externa</label>
           <input type="text" name="" class="form-control form-control-sm" #urlExterna='ngModel' name="urlExterna"
-          [(ngModel)]="reconoEgresadoModel.urlExterna">
+          [(ngModel)]="aporteEgresadoModel.urlExterna">
         </div>
         <div class="form-group col-sm-12 col-xs-12 col-md-6 col-lg-6">
           <label for="">Soporte</label>
           <input type="number" name="" class="form-control form-control-sm" #soporte='ngModel' name="soporte"
-          [(ngModel)]="reconoEgresadoModel.soporte">
+          [(ngModel)]="aporteEgresadoModel.soporte">
         </div>
         <div class="col-12 text-center">
           <button type="button" class="btn btn-primary" (click)="registrarEgresadoAlEvento()">Registrar</button>
@@ -174,12 +179,12 @@
       <div class="row" [ngStyle]="{'padding': '0 20px'}">
         <span class="col-12 sub-title-modal">Lisado de egresados</span>
         <ul class="listEgresados col-12">
-          <li *ngFor="let item of lisEgresadosReconocidos"
-          (click)="getInfoEgresadoReconocimiento(item.idEgresadoReconocimiento, item.egresado.nombres, item.egresado.apellidos)">
+          <li *ngFor="let item of lisEgresadosAportes"
+          (click)="getInfoEgresadoReconocimiento(item.idEgresadoAporte, item.egresado.nombres, item.egresado.apellidos)">
 
               <label for="" class="col-12">
                 <strong>No. documento:</strong> {{item.egresado.identificacion}}
-                <i style="font-size:24px; float: right;" class="fa" (click)="eliminarEgresadoDelEvento(item.idEgresadoReconocimiento);$event.stopPropagation();">&#xf00d;</i>
+                <i style="font-size:24px; float: right;" class="fa" (click)="eliminarEgresadoDelEvento(item.idEgresadoAporte);$event.stopPropagation();">&#xf00d;</i>
               </label>
               <label for="" class="col-12">
                 <strong>Egresado:</strong> {{item.egresado.nombres}} {{item.egresado.apellidos}}

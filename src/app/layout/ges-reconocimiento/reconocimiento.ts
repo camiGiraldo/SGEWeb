@@ -13,9 +13,10 @@ export  class Reconocimiento {
 
 export class ReconocimeintoEgresado{
 
-  idEgresadoReconocimiento: string;
+  idEgresadoReconocimiento: string = "";
 	idReconocimiento: string;
-	idEgresado: string;
+  idEgresado:string;
+	egresado: any;
   nombreEgresado:string;
   apellidosEgresado:string;
 	distinguido: string;

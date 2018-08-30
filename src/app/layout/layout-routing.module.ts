@@ -26,6 +26,8 @@ const routes: Routes = [
             { path: 'tipo-eventos', loadChildren: './tipo-eventos/tipo-eventos.module#TipoEventoModule' },
             { path: 'tipos-reconocimientos', loadChildren: './tipos-reconocimientos/tipos-reconocimientos.module#TiposReconocimientosModule' },
             { path: 'ges-reconocimiento', loadChildren: './ges-reconocimiento/ges-reconocimiento.module#GesReconocimientoModule' },
+            { path: 'tipos-aportes', loadChildren: './tipos-aportes/tipos-aportes.module#TiposAportesModule' },
+            { path: 'ges-aportes', loadChildren: './ges-aportes/ges-aportes.module#GesAportesModule' },
         ]
     }
 ];

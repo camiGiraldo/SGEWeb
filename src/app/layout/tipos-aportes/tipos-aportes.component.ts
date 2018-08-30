@@ -9,19 +9,19 @@ import {
 import {BrowserModule} from '@angular/platform-browser';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { TiposReconocimientosService } from '../../_services/tiposReconocimientosService';
+import { TiposAportesService } from '../../_services/tiposAportesService';
 import * as $ from 'jquery';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector : 'app-facultades',
-  templateUrl: './tipos-reconocimientos.component.html',
+  templateUrl: './tipos-aportes.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls:['./tipos-reconocimientos.component.scss'],
+  styleUrls:['./tipos-aportes.component.scss'],
   animations: [routerTransition()]
 })
 
-export class TiposReconocimientosComponent implements OnInit, AfterViewInit{
+export class TiposAportesComponent implements OnInit, AfterViewInit{
 
   @ViewChild(DataTableDirective) dtElement: DataTableDirective;
   @ViewChild('mdlNotification') public modalNotification:NgbModal;
@@ -46,7 +46,7 @@ export class TiposReconocimientosComponent implements OnInit, AfterViewInit{
   name:string = '';
   activo:string = '';
 
-  constructor(private zone: NgZone, private modalService: NgbModal, private tipoRecService: TiposReconocimientosService){
+  constructor(private zone: NgZone, private modalService: NgbModal, private tipoRecService: TiposAportesService){
 
 
     this.idEdit = '';
@@ -66,12 +66,12 @@ export class TiposReconocimientosComponent implements OnInit, AfterViewInit{
 
   someClickHandler(info: any): void {
 
-    if(this.cellSelect.idTipoReconocimiento !== info.idTipoReconocimiento){
+    if(this.cellSelect.id !== info.idTipoAporte){
       this.cellSelect = {
-        id : info.idTipoReconocimiento
+        id : info.idTipoAporte
       }
       this.message =  info.nombre;
-      this.idEdit = info.idTipoReconocimiento;
+      this.idEdit = info.idTipoAporte;
     }
     else{
       this.cellSelect = {
@@ -90,10 +90,10 @@ export class TiposReconocimientosComponent implements OnInit, AfterViewInit{
 
 
     this.dtOptions = {
-      ajax: this.url+'getTiposReconocimiento',
+      ajax: this.url+'getTiposAporte',
       columns: [{
         title: 'ID',
-        data: 'idTipoReconocimiento',
+        data: 'idTipoAporte',
         visible: false
       }, {
         title: 'Nombre',
@@ -125,13 +125,13 @@ export class TiposReconocimientosComponent implements OnInit, AfterViewInit{
       if(action == 'edit'){
 
         if(this.idEdit != ''){
-          let callBack = this.tipoRecService.getTipoReconocimientoById(this.idEdit);
+          let callBack = this.tipoRecService.getTipoAportesById(this.idEdit);
           callBack.subscribe(res => {
             let data = res.json();
 
             if(data.status && data.status === 'OK'){
               var tipoReco = data.data;
-              this.idEdit = tipoReco.idTipoReconocimiento;
+              this.idEdit = tipoReco.idTipoAporte;
               this.name = tipoReco.nombre;
               this.activo = tipoReco.activo
 
@@ -164,11 +164,11 @@ export class TiposReconocimientosComponent implements OnInit, AfterViewInit{
     }else{
 
       let data = {
-        idTipoReconocimiento : this.idEdit,
+        idTipoAporte : this.idEdit,
         nombre: this.name,
         activo: this.activo,
       };
-      let callBack = this.tipoRecService.saveTipoReconocimiento(data);
+      let callBack = this.tipoRecService.saveTipoAportes(data);
       callBack.subscribe(res => {
           let data = res.json();
 

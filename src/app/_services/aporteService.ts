@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map'
 import * as CryptoJS from 'crypto-js';
 
 @Injectable()
-export class ReconocimientosService {
+export class AporteService {
 
   public url:string;
 
@@ -19,18 +19,18 @@ export class ReconocimientosService {
       this.url = environment.urlServices;
   }
 
-  getReconocimientoById(id:string){
+  getAporteById(id:string){
 
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('idReconocimiento', id);
+    myParams.set('idAporteInvestigacion', id);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 
-    return this.http.post(this.url+'getReconocimientoById',
+    return this.http.post(this.url+'getAporteById',
                    myParams.toString(),
                    {headers : headers});
   }
@@ -52,55 +52,60 @@ export class ReconocimientosService {
   }
 
 
-  saveReconocimeinto(data:any){
+  saveAporte(data:any){
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('idReconocimiento', data.idReconocimiento);
-    myParams.set('idTipoReconocimiento', data.idTipoReconocimiento);
+    myParams.set('idAporteInvestigacion', data.idAporteInvestigacion);
+    myParams.set('idTipoAporte', data.idTipoAporte);
+    let fechaInicio =  new Date(data.fechaRealizacion.replace(/-/g, '/'));
+    let fechaFin = new Date(data.fechaFinalizacion.replace(/-/g, '/'));
+    myParams.set('fechaRealizacion', ""+fechaInicio.getTime());
+    myParams.set('fechaFinalizacion', ""+fechaFin.getTime());
+    myParams.set('grupoBeneficiario', data.grupoBeneficiario);
+    myParams.set('subGrupoBeneficiario', data.subGrupoBeneficiario);
+    myParams.set('nombreProyecto', data.nombreProyecto);
+    myParams.set('descripcionProyecto', data.descripcionProyecto);
+    myParams.set('personaACargo', data.personaACargo);
+    myParams.set('correoElectronico', data.correoElectronico);
+    myParams.set('telefono', data.telefono);
     myParams.set('adjunto', data.adjunto);
-    let dateVinculacion =  new Date(data.fechaVinculacion.replace(/-/g, '/'));
-    myParams.set('fechaVinculacion', ""+dateVinculacion.getTime());
-    myParams.set('lugarRealizacion', data.lugarRealizacion);
-    myParams.set('beneficiario', data.beneficiario);
-    myParams.set('descripcion', data.descripcion);
-    myParams.set('soporte', data.soporte);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 
-    return this.http.post(this.url+'saveReconocimiento',
+    return this.http.post(this.url+'saveAporte',
                    myParams.toString(),
                    {headers : headers});
   }
-
-  getEgresadosRegistrados(id:string){
+  //Lista los egresados del aporte
+  getEgresadosAportes(id:string){
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('idReconocimiento', id);
+    myParams.set('idAporteInvestigacion', id);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 
-    return this.http.post(this.url+'getEgresadoReconocimientosByIdReconocimiento',
+    return this.http.post(this.url+'getEgresadoAporteByIdAporte',
                    myParams.toString(),
                    {headers : headers});
   }
-
-  getEgresadoReconocimientoById(idReconoEgresado){
+  //obtiene la informacion de un egresado regitrado a un aporte
+  getEgresadoAporteById(idEgresadoAporte){
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('idEgresadoReconocimiento', idReconoEgresado);
+    myParams.set('idEgresadoAporte', idEgresadoAporte);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 
-    return this.http.post(this.url+'getEgresadoReconocimientoById',
+    return this.http.post(this.url+'getEgresadoAporteById',
                    myParams.toString(),
                    {headers : headers});
   }
@@ -109,41 +114,39 @@ export class ReconocimientosService {
 
   }
 
-  registrarEgresadoAlEvento(data:any){
+  registrarEgresadoAlAporte(data:any){
 
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('idEgresadoReconocimiento', data.idEgresadoReconocimiento);
-    myParams.set('idReconocimiento', data.idReconocimiento);
+    myParams.set('idEgresadoAporte', data.idEgresadoAporte);
+    myParams.set('idAporteInvestigacion', data.idAporteInvestigacion);
     myParams.set('idEgresado', data.idEgresado);
-    myParams.set('distinguido', data.distinguido);
-    myParams.set('vinculadoLaboralmente', data.vinculadoLaboralmente);
-    myParams.set('logroPublicado', data.logroPublicado);
+    myParams.set('participacion', data.participacion);
     myParams.set('urlExterna', data.urlExterna);
     myParams.set('soporte', data.soporte);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 
-    return this.http.post(this.url+'saveEgresadoReconocimiento',
+    return this.http.post(this.url+'saveEgresadoAporte',
                    myParams.toString(),
                    {headers : headers});
   }
 
 
-  deleteEgresadoReconocimiento(idEgresadoReconocimiento){
+  deleteEgresadoAporte(idEgresadoAporte){
     let headers = new Headers({
         'Content-Type': 'application/x-www-form-urlencoded'
     });
 
     let myParams = new URLSearchParams();
-    myParams.set('idEgresadoReconocimiento', idEgresadoReconocimiento);
+    myParams.set('idEgresadoAporte', idEgresadoAporte);
 
     let options = new RequestOptions({ headers: headers, params: myParams});
 
-    return this.http.post(this.url+'deleteEgresadoReconocimiento',
+    return this.http.post(this.url+'deleteEgresadoAporte',
                    myParams.toString(),
                    {headers : headers});
   }
