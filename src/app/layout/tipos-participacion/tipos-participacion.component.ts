@@ -1,72 +1,62 @@
 import { AfterViewInit, Component, NgZone, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { routerTransition } from '../../router.animations';
-import { ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs/Subject';
 import {
-    ReactiveFormsModule,
-    FormsModule
+    Validators,
+    FormBuilder
 } from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { ProgramasService } from '../../_services/programasService';
+import { TiposParticipacionService } from '../../_services/tiposParticipacionService';
 import * as $ from 'jquery';
 import { environment } from '../../../environments/environment';
 
-
-interface Facultad {
-  idFacultad:string;
-  nombre:string;
-  abreviatura:string;
-
-
-};
-
-
 @Component({
-  selector : 'app-programas',
-  templateUrl: './programas.component.html',
+  selector : 'app-facultades',
+  templateUrl: './tipos-participacion.component.html',
   encapsulation: ViewEncapsulation.None,
-  styleUrls:['./programas.component.scss'],
+  styleUrls:['./tipos-participacion.component.scss'],
   animations: [routerTransition()]
 })
 
+export class TiposParticipacionComponent implements OnInit, AfterViewInit{
+
+  @ViewChild(DataTableDirective) dtElement: DataTableDirective;
+  @ViewChild('mdlNotification') public modalNotification:NgbModal;
 
 
-export class ProgramasComponent implements OnInit, AfterViewInit{
-
-  @ViewChild(DataTableDirective)
-  dtElement: DataTableDirective;
-
-  @ViewChild('mdlNotification')
-  public modalNotification:NgbModal;
-
+  //vaariables para la tabla
+  dtOptions: any;
   dtTrigger: Subject<any> = new Subject();
+  cellSelect:any;
+  //------------------------
+
   modalRef:any;
   public url:string;
 
+
   message = '';
   messageValidation = '';
-  idEdit:string='';
-  namePro:string;
-  descripPro:string;
-
-  facultadId:string;
-  facultadName:string;
-  cellSelect:any;
-  dtOptions: any = {};
   closeResult: string;
-  listFacultad:Facultad[];
-  txtFacultad:string;
 
-  constructor(private zone: NgZone, private modalService: NgbModal, private facService: ProgramasService, private route: ActivatedRoute){
-    this.route.params.subscribe(res => console.log(res));
-    this.facultadId =
+  //MAPEO DE LOS ATRIBUTOS DEL FORMULARIO A CREAR
+  idEdit:string ='';
+  name:string = '';
+  activo:string = '';
+
+  constructor(private zone: NgZone, private modalService: NgbModal, private tiposPartiService: TiposParticipacionService){
+
+
     this.idEdit = '';
     this.url = environment.urlServices;
     this.cellSelect = {
       id : ''
     }
     this.message = 'No se ha seleccionado una fila';
+
+
    }
 
    ngAfterViewInit(): void {
@@ -75,15 +65,13 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
   }
 
   someClickHandler(info: any): void {
-    debugger
 
-    if(this.cellSelect.id !== info.idPrograma){
+    if(this.cellSelect.id !== info.idFormaParticipacion){
       this.cellSelect = {
-        id : info.idPrograma
+        id : info.idFormaParticipacion
       }
       this.message =  info.nombre;
-      this.idEdit = info.idPrograma;
-
+      this.idEdit = info.idFormaParticipacion;
     }
     else{
       this.cellSelect = {
@@ -96,24 +84,22 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
   }
 
-  someClickHandlerProg(info: any): void {
-    console.log(info);
-  }
-
-
-
   ngOnInit():void{
-    this.dtOptions = {
-      //ajax: this.url+'getProgramasByFacultad?idFacultad='+this.idEdit,
-      ajax: this.url+'getProgramas',
 
+
+    this.dtOptions = {
+      ajax: this.url+'getFormasParticipacion',
       columns: [{
         title: 'ID',
-        data: 'idPrograma',
+        data: 'idFormaParticipacion',
         visible: false
       }, {
         title: 'Nombre',
         data: 'nombre'
+      }, {
+        title: 'Activo/Inactivo',
+        data: 'activo',
+        visible: false
       }],
       rowCallback:(row: Node, data: any[] | Object, index: number) => {
          const self = this;
@@ -121,7 +107,6 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
          $('td', row).bind('click', () => {
            self.someClickHandler(data);
          });
-         console.log(row);
          return row;
       },
       select:{
@@ -131,34 +116,34 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
            "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
        }
     };
-
-    this.getFacultades();
   }
 
-//ARREGLAR PARA PROGRAMAS !!!!!!!!!!!!!!!!!!
   open(content, action:string) {
-
+      this.modalRef = this.modalService.open(content);
       if(action == 'edit'){
 
-
-        if(this.idEdit != '' && this.idEdit != null){
-          let callBack = this.facService.getProgramaById(this.idEdit);
+        if(this.idEdit != ''){
+          let callBack = this.tiposPartiService.getTipoParticipacionById(this.idEdit);
           callBack.subscribe(res => {
             let data = res.json();
+
             if(data.status && data.status === 'OK'){
-              var programa = data.data;
-              this.idEdit = programa.idPrograma;
-              this.namePro = programa.nombre;
-              this.descripPro = programa.abreviatura;
-              this.txtFacultad=programa.idFacultad;
+              var tipoReco = data.data;
+              this.idEdit = tipoReco.idFormaParticipacion;
+              this.name = tipoReco.nombre;
+              this.activo = tipoReco.activo
+
             }
           });
-        } else{
-          this.message ="POR FAVOR SELECCIONAR UNA FILA PARA EDITAR";
+        }
+        else{
+          this.message ="Por favor seleccionar una fila para editar";
+          this.modalRef.close();
+          this.openNotification(this.message, 'error');
         }
       }
 
-      this.modalRef = this.modalService.open(content);
+
       this.modalRef.result.then((result) => {
         this.cleanForm();
         this.closeResult = `Closed with: ${result}`;
@@ -169,66 +154,58 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
 
   }
 
-  saveFomr(){
+  saveForm(){
 
-    if( (this.namePro == '' || this.namePro == undefined ) || (this.descripPro == '' || this.descripPro== undefined) || (this.txtFacultad =='' || this.txtFacultad == undefined)){
-        this.openNotification("Todos los campos son obligatorios","error");
+    if( this.name == '' || this.activo == ''){
+
+      this.openNotification("Todos los campos son obligatorios","error");
     }else{
 
       let data = {
-        id : (this.idEdit==null|| this.idEdit=='' ?'':this.idEdit) ,
-        nombre: this.namePro ,
-        descripcion: this.descripPro,
-        idFacultad:this.txtFacultad,
-        abreviatura:"DEFAUL",
+        idFormaParticipacion : this.idEdit,
+        nombre: this.name,
+        activo: this.activo,
       };
-      let callBack = this.facService.savePrograma(data); //editar para programas !!!!!!!!
+      let callBack = this.tiposPartiService.saveTipoParticipacion(data);
       callBack.subscribe(res => {
           let data = res.json();
 
           let status = data.status;
 
           if(status == 'OK'){
-            this.messageValidation = 'Registro exitoso';
-            this.openNotification("","succes");
+
             this.modalRef.close();
-            this.cleanForm();
-            this.rerenderTable();
+            this.openNotification("","succes");
+            this.message = 'No se ha seleccionado una fila';
+            this.rerenderTable()
           }
           else{
             this.messageValidation = 'Ocurrio un error al guardar el registro';
-            this.alertMessage(this.messageValidation);
+
           }
       })
       this.rerenderTable();
-
     }
   }
-//muestra mensajes de alertas
-  alertMessage(mensaje:string){
-    this.openNotification(mensaje,"info");
-  }
+
 
   private getDismissReason(reason: any): string {
       if (reason === ModalDismissReasons.ESC) {
-
+          this.cleanForm();
           return 'by pressing ESC';
       } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-
+          this.cleanForm();
           return 'by clicking on a backdrop';
       } else {
-
+          this.cleanForm();
           return  `with: ${reason}`;
       }
   }
-
-
   cleanForm(){
-    this.cellSelect.id = "";
-    this.namePro='';
-    this.descripPro='';
-    this.facultadId='';
-    this.message="No se ha seleccionado una fila";
+    //this.idEdit = "";
+    this.name = "";
+    this.activo ="";
+
   }
 
 
@@ -243,29 +220,16 @@ export class ProgramasComponent implements OnInit, AfterViewInit{
     });
   }
 
-  getFacultades(){
-    let callBack = this.facService.getFacultades(); //editar para programas !!!!!!!!
-    callBack.subscribe(res => {
-        let data = res.json();
 
-        let status = data.status;
-
-        if(status == 'OK'){
-          this.listFacultad = data.data as  Facultad[];
-        }
-        else{
-        //  this.openNotification('Error al obtener los programas:'+data.message, 'error');
-
-        }
-
-
-    });
-  }
+  //SECCION DE  NOTIFICACIONES
+  //AUTOR: CAMILO GIRALDO 2018
+  //variables para los mensajes de notificacion
   titleNotification:string;
   messageNotification:string;
   iconNotification:string;
   colorAlert:string;
-
+  //-------------------------------------------
+  //METODO PARA ABRIR EL MODAL DE LA NOTIFICACION
   openNotification(messageComplement:string, type:string){
 
 

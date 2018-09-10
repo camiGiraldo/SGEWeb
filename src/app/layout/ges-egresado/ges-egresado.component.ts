@@ -50,6 +50,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   modalRef:any;
   public url:string;
 
+  acctionCrud = "";
 
 
   message = '';
@@ -120,7 +121,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
       this.message =  info.identificacion+"-"+info.nombres+" "+info.apellidos;
 
       this.idEdit = info.idEgresado;
-      this.getInfoEgresadoById(this.idEdit);
+
     }
     else{
       this.cellSelect = {
@@ -182,6 +183,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
   //METO DE INGNICION PARA EMPREZAR A GUARDAR LA INFO DEL EGRESADO
   saveForm(){
+
       let callBack = this.egreService.saveInfoBasic(this.egresado);
       callBack.subscribe(res => {
 
@@ -235,6 +237,8 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
   }
 
   saveFormControl(data:any){
+
+
     let callBack = this.egreService.saveInfoControl(this.egresado);
     callBack.subscribe(res => {
 
@@ -286,6 +290,7 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
 
       if(this.idEdit != ''){
+        this.getInfoEgresadoById(this.idEdit);
         this.modalRef = this.modalService.open(this.modalForm, { size: 'lg', backdrop: 'static' });
 
       }
@@ -384,8 +389,6 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
           this.egresado.notaOpcionGrado = infoAcademica.notaOpcionGrado;
           this.egresado.semestreFinalizoMaterias = infoAcademica.semestreFinalizoMaterias;*/
 
-          console.log('Prueba------', this.egresado);
-          console.log('Prueba------2', this.listProgramasEgresado);
 
         }
         else{
@@ -487,15 +490,22 @@ export class GesEgresadoComponent implements OnInit, AfterViewInit{
 
   open(content, action:string, windowClass:string) {
 
-          this.setProgramData();
+    this.setProgramData();
+    debugger
+    this.acctionCrud = action;
+    if(action==='new'){
+      this.egresado = new Egresados();
+    }
+    else{
+      this.getInfoEgresadoById(this.idEdit);
+    }
+
     //REFERENCIA DEL Modal
     var windowClassModal = (windowClass != undefined) ? windowClass : 'lg';
     this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', windowClass: windowClassModal });
     this.modalRef.result.then((result) => {
-      this.cleanForm();
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
-      this.cleanForm();
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
@@ -554,7 +564,7 @@ openNotification(messageComplement:string, type:string){
       classBox = "succes-msg";
     break;
     case 'info':
-      titleNot = "Información";
+      titleNot = "InformaciÃ³n";
       firstMessage ="";
       classIcon ="fa fa-exclamation-triangle";
       colorIcon = "#b0b01a";

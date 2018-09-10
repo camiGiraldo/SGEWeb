@@ -1,3 +1,16 @@
+label{
+  font-size: 14px;
+}
+
+.sub-title-modal{
+  background: #007bff;
+  border-radius: 9px;
+  font-size: 16px;
+  text-align: center;
+  color: #FFF;
+  margin-bottom: 5px;
+}
+
 /*LISTADO DE EGRESADOS BENEFICIARIOS*/
 .list-egre-benef li{
   color: #464a4e;
@@ -16,21 +29,7 @@
   padding: 0 7px;
   padding-top: 7px;
 }
-.fltbtnplus{
-  width: 25px;
-    /* float: right; */
-    height: 25px;
-    border-radius: 50%;
-    -webkit-box-shadow: 2px 2px 10px #09afa4;
-    box-shadow: 2px 2px 10px #09afa4;
-    background-color: #0fb8ad;
-    color: #FFF;
-    text-align: center;
-    line-height: 2;
-    font-size: 14px;
-    margin-right: 5px;
-    cursor: pointer;
-}
+
 .fac-selec{
 
   white-space: nowrap;
@@ -52,12 +51,28 @@
   font-size: 14px;
   margin-right: 5px;
   cursor: pointer;
-}
-
-.flt-button-action {
   background-position: center;
   transition: background 0.8s;
 }
+
+/*Tabla de reporte*/
+#tbl-prog-egre{
+  border: 1px solid #bbd1ec;
+    thead th {
+      color: #5f5f73;
+      border-bottom:1px solid #7cb3e4;
+      padding: 0;
+      text-align: center;
+      font-size: 15px;
+    }
+    tbody{
+      font-size: 13px;
+    }
+    thead tr{
+      background: #bbd1ec;
+    }
+}
+
 .flt-button-action:hover {
   background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
 }
@@ -67,6 +82,7 @@
   transition: background 0s;
 }
 
+/*ESTILOS PARA LOS MENSAJES DE ALERTA*/
 .succes-msg .modal-content{
   background-color: #e0ffe0;
   color: #000;
@@ -111,57 +127,25 @@
   font-size: 50px;
 }
 
-
-#tbl-eventos{
-  border: 1px solid #bbd1ec;
-    thead th {
-      color: #5f5f73;
-      border-bottom:1px solid #7cb3e4;
-      padding: 0;
-      text-align: center;
-      font-size: 15px;
-    }
-    tbody{
-      font-size: 13px;
-    }
-    thead tr{
-      background: #bbd1ec;
-    }
-}
-
-.sub-title-modal{
-  background: #007bff;
-  border-radius: 9px;
-  font-size: 16px;
-  text-align: center;
-  color: #FFF;
-  margin-bottom: 5px;
-}
-
 .listEgresados{
   list-style: none;
-  padding: 0 15px;
+  padding: 0;
 
   li{
     padding: 0 5px;
-    background: rgb(239, 245, 170);
+    background: #d6d3d3;
     border-radius: 5px;
     cursor: pointer !important;
     margin-bottom: 5px;
-    border: 1px solid #fff;
-    box-shadow: 1px 1px 1px yellow;
-
-    label{
-      cursor: pointer !important;
-      padding: 0;
-      margin: 0;
-      font-size: 14px;
-    }
 
   }
   li:hover{
     background: #c0c3f7;
     cursor: pointer !important;
   }
-
+  label{
+    cursor: pointer !important;
+    padding: 0;
+    margin: 0;
+  }
 }

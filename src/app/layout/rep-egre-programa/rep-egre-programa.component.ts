@@ -127,6 +127,9 @@ export class ReporteEgreProgComponent implements AfterViewInit, OnDestroy, OnIni
           title: 'Corre electronico',
           data: 'correoElectronico'
         }],
+        "language": {
+             "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
+         },
         // Declare the use of the extension in the dom parameter
         dom: 'Bfrtip',
         // Configure the buttons

@@ -43,6 +43,7 @@ export class ProgramasService{
       myParams.set('nombre', data.nombre);
       myParams.set('abreviatura', data.descripcion);
       myParams.set('idFacultad', data.idFacultad);
+      myParams.set('abreviatura', data.abreviatura);
 
 
       let options = new RequestOptions({ headers: headers, params: myParams});

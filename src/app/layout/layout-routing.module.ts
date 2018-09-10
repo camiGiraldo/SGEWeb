@@ -28,6 +28,8 @@ const routes: Routes = [
             { path: 'ges-reconocimiento', loadChildren: './ges-reconocimiento/ges-reconocimiento.module#GesReconocimientoModule' },
             { path: 'tipos-aportes', loadChildren: './tipos-aportes/tipos-aportes.module#TiposAportesModule' },
             { path: 'ges-aportes', loadChildren: './ges-aportes/ges-aportes.module#GesAportesModule' },
+            { path: 'tipos-participacion', loadChildren: './tipos-participacion/tipos-participacion.module#TiposParticipacionModule' },
+            { path: 'ges-participacion', loadChildren: './ges-participacion/ges-participacion.module#GesParticipacionModule' },
         ]
     }
 ];

@@ -106,6 +106,21 @@ headers.append('Accept', 'application/json');
       return this.http.get(this.url+'getEgresados');
 
     }
+
+    getListEgresadosDelEvento(idEvento){
+      let headers = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+      });
+
+      let myParams = new URLSearchParams();
+      myParams.set('idEvento', idEvento);
+
+      let options = new RequestOptions({ headers: headers, params: myParams});
+
+      return this.http.post(this.url+'getAsistenciasByIdEvento',
+                     myParams.toString(),
+                     {headers : headers});
+    }
     getEgresadosbyEvent(id:string){
 
       let headers = new Headers({
@@ -113,22 +128,22 @@ headers.append('Accept', 'application/json');
       });
 
       let myParams = new URLSearchParams();
-      myParams.set('idEvento', id);
+      myParams.set('idAsistenciaEvento', id);
 
       let options = new RequestOptions({ headers: headers, params: myParams});
 
-      return this.http.post(this.url+'getAsistenciasByIdEvento',
+      return this.http.post(this.url+'getAsistenciaEventoById',
                      myParams.toString(),
                      {headers : headers});
 
     }
 
     saveAsistioEvento(data:any){
-    
+
       let headers = new Headers({
           'Content-Type': 'application/x-www-form-urlencoded'
       });
-
+      debugger
       let myParams = new URLSearchParams();
       myParams.set('idAsistenciaEvento',data.idAsistenciaEvento);
       myParams.set('idEgresado',data.idEgresado);
@@ -138,7 +153,7 @@ headers.append('Accept', 'application/json');
       myParams.set('aprobo',data.aprobo);
 
       let options = new RequestOptions({ headers: headers, params: myParams});
-  console.log('save asistio');
+      console.log('save asistio');
       return this.http.post(this.url+'saveAsistenciaEvento',
                      myParams.toString(),
                      {headers : headers});
@@ -146,5 +161,35 @@ headers.append('Accept', 'application/json');
 
     }
 
+    getEgresadoByDocument(tipoDoc:string, numeroDoc:string){
+      let headers = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+      });
+
+      let myParams = new URLSearchParams();
+      myParams.set('tipoIdentificacion', tipoDoc);
+      myParams.set('identificacion', numeroDoc);
+
+      let options = new RequestOptions({ headers: headers, params: myParams});
+
+      return this.http.post(this.url+'getEgresadoByDocumento',
+                     myParams.toString(),
+                     {headers : headers});
+    }
+
+    deleteEgresadoEvento(idEgresadoEvento){
+      let headers = new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+      });
+
+      let myParams = new URLSearchParams();
+      myParams.set('idEgresadoEvento', idEgresadoEvento);
+
+      let options = new RequestOptions({ headers: headers, params: myParams});
+
+      return this.http.post(this.url+'deleteEgresadoEvento',
+                     myParams.toString(),
+                     {headers : headers});
+    }
 
 }

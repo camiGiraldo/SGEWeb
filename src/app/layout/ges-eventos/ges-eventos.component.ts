@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { EventosService } from '../../_services/eventosService';
+import { EventoEgresado } from './evento';
 import * as $ from 'jquery';
 import { environment } from '../../../environments/environment';
 /*import {Observable} from 'rxjs/Observable';*/
@@ -101,9 +102,19 @@ export class GesEventosComponent implements OnInit {
   cbotipoduracion:string;
   urlExterna:string;
 
+  //
+  listAsistenciaEvento: EventoEgresado[];
+  asistenciaEventoModel:EventoEgresado;
+
+  //----------------
+  //varables para realizar el Buscar
+  tipoDocToFind:string ="";
+  numeroDocToFind:string ="";
+
   constructor(private zone: NgZone, private modalService: NgbModal, private facService: EventosService, private route: ActivatedRoute){
     this.route.params.subscribe(res => console.log(res));
-    this.facultadId =
+    this.facultadId ="";
+    this.asistenciaEventoModel = new EventoEgresado();
     this.idEdit = '';
     this.url = environment.urlServices;
     this.duracionEstimada='';
@@ -153,20 +164,14 @@ this.egresadosSave={
   }
 
   someClickHandler(info: any): void {
-    console.log(info);
-    console.log(this.cellSelect);
 
-    this.cellSelect = {
-      id : info.id
-    }
-    this.message =  info.name;
-    this.idEdit = info.idEvento;
-    /*if(this.cellSelect.id !== info.id){
+debugger
+    if(this.cellSelect.id !== info.idEvento){
       this.cellSelect = {
-        id : info.id
+        id : info.idEvento
       }
-      this.message =  info.name;
-      this.idEdit = info.idPrograma;
+      this.message =  info.nombre;
+      this.idEdit = info.idEvento;
 
     }
     else{
@@ -175,7 +180,7 @@ this.egresadosSave={
       }
       this.message = 'no se ha seleccionado una fila';
       this.idEdit = '';
-    }*/
+    }
 
 
   }
@@ -227,28 +232,90 @@ this.egresadosSave={
   }
 
 addEgresados(content){
+  if(this.idEdit == '' || this.idEdit == null || this.idEdit == undefined){
+    this.openNotification('Se debe seleccionar un elemento de la tabla', 'error');
+  }
+  else{
+    this.getEgresadosRegistrados();
+    this.modalRef = this.modalService.open(content,{windowClass: 'bigModal'});
 
-  if(this.idEdit == ''){
-      this.openNotification('Debe seleccionar un evento','error');
-  }else{
-
-    console.log("valor edit"+this.idEdit);
-    this.getEgresados();
-    this.modalRef = this.modalService.open(content);
-    this.modalRef.result.then((result) => {
-      this.cleanForm();
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.cleanForm();
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-    }
+  }
 }
+//metodo que lista los egresados registrados al aporte seleccionado
+  getEgresadosRegistrados(){
+    let callBack = this.facService.getListEgresadosDelEvento(this.idEdit);
+    callBack.subscribe(res => {
+        let data = res.json();
+        let status = data.status;
+
+        if(status == 'OK'){
+          this.listAsistenciaEvento = [];
+          this.listAsistenciaEvento = data.data as EventoEgresado[];
+
+        }
+        else{
+          this.openNotification('Error al obtener los egresados registrados al aporte:'+data.message, 'error');
+
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+  }
+
+  //metodo que elimina los egresados de un evento
+  eliminarEgresadoDelEvento(idEgresadoEvento:string){
+
+    let callBack = this.facService.deleteEgresadoEvento(idEgresadoEvento);
+    callBack.subscribe(res => {
+        let data = res.json();
+        let status = data.status;
+        if(status == 'OK'){
+
+          this.getEgresadosRegistrados();
+        }
+        else{
+          this.openNotification('Error al obtener los egresados registrados al aporte:'+data.message, 'error');
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+  }
+
+  //metodo que registra los egresados al aporte
+  registrarEgresadoAlEvento(){
+    this.asistenciaEventoModel.idEvento = this.idEdit;
+    let callBack = this.facService.saveAsistioEvento(this.asistenciaEventoModel);
+    callBack.subscribe(res => {
+        let data = res.json();
+        let status = data.status;
+        if(status == 'OK'){
+          this.getEgresadosRegistrados();
+          this.openNotification('', 'succes');
+        }
+        else{
+          this.openNotification('Error al obtener los egresados registrados al aporte:'+data.message, 'error');
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
+
+  }
+
+  cleanEgreRecoForm(){
+    this.asistenciaEventoModel = new EventoEgresado();
+    this.tipoDocToFind = "";
+    this.numeroDocToFind ="";
+  }
+
   open(content, action:string) {
   console.log("sfsfds");
       if(action == 'edit'){
-        console.log("valor edit"+this.idEdit);
-
         if(this.idEdit != '' && this.idEdit != null){
           console.log("ingreso")
           let callBack = this.facService.getEventobyId(this.idEdit);
@@ -265,22 +332,22 @@ addEgresados(content){
 
               if(this.evento.duracionEstimada.indexOf('dias') > -1){
                   console.log(this.evento.duracionEstimada.replace('dias',''));
-                this.duracionEstimada=this.evento.duracionEstimada.replace('dias','');
+                this.duracionEstimada=this.evento.duracionEstimada.replace('dias','').trim();
                 this.cbotipoduracion='dias';
               }
               if(this.evento.duracionEstimada.indexOf('horas')  > -1){
-                this.duracionEstimada=this.evento.duracionEstimada.replace('horas','');
+                this.duracionEstimada=this.evento.duracionEstimada.replace('horas','').trim();
                 this.cbotipoduracion='horas';
               }
 
               if(this.evento.duracionEstimada.indexOf('años')  > -1){
-                this.duracionEstimada=this.evento.duracionEstimada.replace('años','');
+                this.duracionEstimada=this.evento.duracionEstimada.replace('años','').trim();
                 this.cbotipoduracion='años';
               }
 
               if(this.evento.duracionEstimada.indexOf('minutos')  > -1){
                 console.log(this.evento.duracionEstimada.replace('minutos',''));
-                this.duracionEstimada=this.evento.duracionEstimada.replace('minutos','');
+                this.duracionEstimada=this.evento.duracionEstimada.replace('minutos','').trim();
                 this.cbotipoduracion='minutos';
               }
             }
@@ -289,13 +356,17 @@ addEgresados(content){
           this.message ="POR FAVOR SELECCIONAR UNA FILA PARA EDITAR";
         }
       }
+      else{
+        this.evento= {} as EventoObj;
+        this.evento.idEvento ="";
+      }
 
-      this.modalRef = this.modalService.open(content);
+      this.modalRef = this.modalService.open(content,{windowClass:'bigModal'});
       this.modalRef.result.then((result) => {
-        this.cleanForm();
+
         this.closeResult = `Closed with: ${result}`;
       }, (reason) => {
-        this.cleanForm();
+
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       });
 
@@ -378,13 +449,10 @@ addEgresados(content){
 
   private getDismissReason(reason: any): string {
       if (reason === ModalDismissReasons.ESC) {
-          this.cleanForm();
           return 'by pressing ESC';
       } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-          this.cleanForm();
           return 'by clicking on a backdrop';
       } else {
-          this.cleanForm();
           return  `with: ${reason}`;
       }
   }
@@ -392,6 +460,7 @@ addEgresados(content){
 
   cleanForm(){
     //this.idEdit = "";
+
     this.namePro = "";
     this.descripPro = "";
   }
@@ -472,6 +541,45 @@ getEgresadosEnEvento(obj,lst){
 
 
     });
+  }
+
+  //buscamos el egresado por el tipo y numero de documento
+  getEgresadoByDocument(){
+    if(this.tipoDocToFind == '' || this.numeroDocToFind == ''){
+      this.openNotification('Error de validacion: se debe seleccionar un tipo y un numero de documento', 'error');
+    }else{
+
+      let callBack = this.facService.getEgresadoByDocument(this.tipoDocToFind,this.numeroDocToFind);
+      callBack.subscribe(res => {
+
+          let data = res.json();
+          let status = data.status;
+
+          if(status == 'OK'){
+
+            if(data.data.length > 0){
+              let newEgresado = data.data[0];
+              this.asistenciaEventoModel.idEgresado = newEgresado.idEgresado;
+              this.asistenciaEventoModel.nombreEgresado = newEgresado.nombres;
+              this.asistenciaEventoModel.apellidosEgresado = newEgresado.apellidos;
+            }
+            else{
+              this.openNotification('No se encontro un egresado con el tipo y numero de documento','info');
+            }
+
+
+          }
+          else{
+            this.openNotification('Error al obtener el egresado, consultar con el administrador:'+data.message, 'error');
+
+          }
+      },
+      error=>{
+
+        this.openNotification('Error del servidor: '+error, 'error');
+      });
+    }
+
   }
   getTiposEvento(){
     let callBack = this.facService.getTipoEventos(); //editar para programas !!!!!!!!
@@ -587,6 +695,30 @@ this.egresadosSave.aprobo='1';
 
 
 
+  }
+
+  //al dar click en el egresado aporte Listado
+  //traemos su informacion para mostrarla en el formulario de la izquierda
+  getInfoEgresadoReconocimiento(idEgresadoEvento:string, nombres:string, apellidos:string){
+
+    let callBack = this.facService.getEgresadosbyEvent(idEgresadoEvento);
+    callBack.subscribe(res => {
+        let data = res.json();
+        let status = data.status;
+        if(status == 'OK'){
+          debugger
+          this.asistenciaEventoModel = data.data as EventoEgresado;
+          this.asistenciaEventoModel.nombreEgresado = nombres;
+          this.asistenciaEventoModel.apellidosEgresado= apellidos;
+        }
+        else{
+          this.openNotification('Error al obtener los egresados registrados al evento:'+data.message, 'error');
+        }
+    },
+    error=>{
+
+      this.openNotification('Error del servidor: '+error, 'error');
+    });
   }
 
 }

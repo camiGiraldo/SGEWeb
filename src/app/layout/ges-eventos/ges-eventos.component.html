@@ -2,19 +2,15 @@
   <app-page-header [heading]="'Gestion de Eventos'" [icon]="'fa-building'"></app-page-header>
   <div class="cont-actions">
     <div class="fac-selec">Evento seleccionado: <strong>{{ message }}</strong></div>
-    <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
-      <i class="fa fa-edit"></i>
-    </div>
-    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
-      <i class="fa fa-edit"></i>
-    </div>
-
-    <div class="flt-button-action" title="Crear Eventos" (click)="open(content,'new')">
-      <i class="fa fa-plus"></i>
-    </div>
 
     <div class="flt-button-action" title="Añadir Egresados" (click)="addEgresados(addEgre)">
       <i class="fa fa-user-plus"></i>
+    </div>
+    <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="open(content,'edit')">
+      <i class="fa fa-edit"></i>
+    </div>
+    <div class="flt-button-action" title="Crear Eventos" (click)="open(content,'new')">
+      <i class="fa fa-plus"></i>
     </div>
   </div>
 
@@ -31,39 +27,109 @@
           <span aria-hidden="true">&times;</span>
       </button>
   </div>
-    <div class="modal-body">
-      <ul>
-        <li *ngFor="let eg of listEgresados">
-
-           <div *ngIf ="eg.inscrito=='0' && eg.asistio=='0' && eg.aprobo=='0' ">
-             {{eg.nombres + ' '+eg.apellidos}}
-           <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'inscrito',eg.idAsistenciaEvento)">  <i class="fa fa-plus"></i></button>
+  <div class="modal-body">
+    <div class="row">
+     <div class="col-xs-12 col-sm-12 col-lg-6 col-md-6">
+       <div class="row" [ngStyle]="{'padding': '0 20px','background':'#e1eaff','border-radius':'20px'}">
+         <span class="col-12 sub-title-modal">Agrear egresado</span>
+         <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
+           <select class="form-control form-control-sm" [(ngModel)]="tipoDocToFind">
+             <option value="" selected>Tipo de documento</option>
+             <option value="CC">Cedula de ciudadania</option>
+             <option value="TI">Tarjeta de identidad</option>
+             <option value="CE">Cedula extrangera</option>
+             <option value="PS">Pasaporte</option>
+           </select>
+         </div>
+         <div class="form-group col-md-5 col-lg-5 col-sm-12 col-xs-12">
+           <input type="number" class="form-control form-control-sm" [(ngModel)]="numeroDocToFind" placeholder="Numero de documento ...">
+         </div>
+         <div class="form-group col-md-3 col-lg-3 col-sm-12 col-xs-12">
+           <button type="button" name="button" class="btn btn-primary" (click)="getEgresadoByDocument()">Buscar</button>
+         </div>
+         <span class="col-12 sub-title-modal">Informacion del evento egresado</span>
+         <div class="form-group col-12">
+           <input type="hidden" class="form-control" id="idAsistenciaEvento" name="idAsistenciaEvento"
+           [(ngModel)]="asistenciaEventoModel.idAsistenciaEvento" #idAsistenciaEvento="ngModel" placeholder="">
+         </div>
+         <div class="form-group col-sm-12 col-xs-12 col-md-2 col-lg-2">
+           <label for="">Codigo</label>
+           <input type="text" name="" class="form-control form-control-sm" disabled #idEgresado='ngModel' name="idEgresado"
+           [(ngModel)]="asistenciaEventoModel.idEgresado">
+         </div>
+         <div class="form-group col-sm-12 col-xs-12 col-md-5 col-lg-5">
+           <label for="">Nombres egresado</label>
+           <input type="text" name="" class="form-control form-control-sm" disabled #nombreEgresado='ngModel' name="nombreEgresado"
+           [(ngModel)]="asistenciaEventoModel.nombreEgresado">
+         </div>
+         <div class="form-group col-sm-12 col-xs-12 col-md-5 col-lg-5">
+           <label for="">Apellidos egresado</label>
+           <input type="text" name="" class="form-control form-control-sm" disabled #apellidosEgresado='ngModel' name="apellidosEgresado"
+           [(ngModel)]="asistenciaEventoModel.apellidosEgresado">
+         </div>
+         <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
+           <label for="">Inscrito</label>
+           <select class="form-control form-control-sm"  #inscrito='ngModel' name="inscrito"
+           [(ngModel)]="asistenciaEventoModel.inscrito">
+             <option value="" selected>Seleccionar</option>
+             <option value="1">Si</option>
+             <option value="0">No</option>
+           </select>
+         </div>
+         <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
+           <label for="">Asistio</label>
+           <select class="form-control form-control-sm"  #asistio='ngModel' name="asistio"
+           [(ngModel)]="asistenciaEventoModel.asistio">
+             <option value="" selected>Seleccionar</option>
+             <option value="1">Si</option>
+             <option value="0">No</option>
+           </select>
+         </div>
+         <div class="form-group col-md-4 col-lg-4 col-sm-12 col-xs-12">
+           <label for="">Aprobo</label>
+           <select class="form-control form-control-sm"  #aprobo='ngModel' name="aprobo"
+           [(ngModel)]="asistenciaEventoModel.aprobo">
+             <option value="" selected>Seleccionar</option>
+             <option value="1">Si</option>
+             <option value="0">No</option>
+           </select>
          </div>
 
-         <div *ngIf ="eg.inscrito=='1' && eg.asistio=='0' && eg.aprobo=='0'">
-           {{eg.nombres + ' '+eg.apellidos}}
-         <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'asistio',eg.idAsistenciaEvento)">  <i class="fa fa-check"></i></button>
+         <div class="col-12 text-center">
+           <button type="button" class="btn btn-primary" (click)="registrarEgresadoAlEvento()">Registrar</button>
+           <button type="button" class="btn btn-secondary" (click)="cleanEgreRecoForm()" >Limpiar</button>
+         </div>
+
+       </div>
+     </div>
+     <!--Listado de egresados-->
+     <div class="col-xs-12 col-sm-12 col-lg-6 col-md-6">
+       <div class="row" [ngStyle]="{'padding': '0 20px'}">
+         <span class="col-12 sub-title-modal">Lisado de egresados</span>
+         <ul class="listEgresados row">
+           <li *ngFor="let item of listAsistenciaEvento"
+           (click)="getInfoEgresadoReconocimiento(item.idAsistenciaEvento, item.egresado.nombres, item.egresado.apellidos)"
+           class="col-xs-12 col-sm-12 col-lg-6 col-md-6">
+
+               <label for="" class="col-12">
+                 <strong>No. documento:</strong> {{item.egresado.identificacion}}
+                 <i style="font-size:24px; float: right;" class="fa" (click)="eliminarEgresadoDelEvento(item.idAsistenciaEvento);$event.stopPropagation();">&#xf00d;</i>
+               </label>
+               <label for="" class="col-12">
+                 <strong>Egresado:</strong> {{item.egresado.nombres}} {{item.egresado.apellidos}}
+               </label>
+
+           </li>
+         </ul>
        </div>
 
-       <div *ngIf ="eg.asistio=='1' && eg.aprobo=='0'">
-         {{eg.nombres + ' '+eg.apellidos}}
-       <button type="button" class="fltbtnplus" (click)="agregarEgresados(eg.idEgresado,'aprobo',eg.idAsistenciaEvento)">  <i class="fa fa-thumbs-up"></i></button>
      </div>
-
-
-     <div *ngIf ="eg.aprobo=='1'">
-       {{eg.nombres + ' '+eg.apellidos}}
-     <button type="button" class="fltbtnplus"  disabled>  <i class="fa fa-user"></i></button>
-   </div>
-         </li>
-      </ul>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
-
-
-    </div>
-    </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>
+  </div>
+  </ng-template>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
       <h4 class="modal-title">Eventos</h4>
@@ -72,125 +138,134 @@
       </button>
   </div>
   <div class="modal-body">
+    <div class="row">
+      <div class="col-12">
+        <form #formEvento='ngForm' class="" method="post">
+          <div class="form-row">
+            <div class="form-group">
+              <input type="hidden" class="form-control" id="txtIdEvento" [(ngModel)]="idEdit" name="idEdit" #ctrl="ngModel">
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Nombre Evento:</label>
+              <input type="text" class="form-control form-control-sm" id="txtPrograma" [(ngModel)]="evento.nombre" name="namePro" #ctrl="ngModel" placeholder="Evento ....">
+            </div>
 
-      <form class="" method="post">
-        <div class="form-group">
-          <input type="hidden" class="form-control" id="txtIdEvento" [(ngModel)]="idEdit" name="idEdit" #ctrl="ngModel">
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Nombre Evento:</label>
-          <input type="text" class="form-control" id="txtPrograma" [(ngModel)]="evento.nombre" name="namePro" #ctrl="ngModel" placeholder="Evento ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="idFacultad">Tipo Evento:</label>
+              <select  class="form-control form-control-sm" id="txtTipoEvento" [(ngModel)]="evento.idTipoEvento" name="txtFacultad" #ctrl="ngModel">
+                <option value="">Seleccionar</option>
+                <option *ngFor="let tev of listTipoEventos"
+                   [value]="tev.idTipoEvento">
+                   {{tev.nombre}}
+               </option>
+              </select>
 
-        <div class="form-group">
-          <label for="idFacultad">Tipo Evento:</label>
-          <select  class="form-control" id="txtTipoEvento" [(ngModel)]="evento.idTipoEvento" name="txtFacultad" #ctrl="ngModel">
-            <option value="">Seleccionar
-            </option>
-            <option *ngFor="let tev of listTipoEventos"
-               [value]="tev.idTipoEvento">
-               {{tev.nombre}}
-           </option>
-          </select>
+            </div>
 
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Fecha de Inicio:</label>
+              <input type="date" class="form-control form-control-sm" id="txtDescripcion" [(ngModel)]="evento.fechaInicio" name="fechaInicio" #ctrl="ngModel" placeholder="Fecha de Inicio">
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Fecha Fin:</label>
+              <input type="date" class="form-control form-control-sm" id="txtDescripcion" [(ngModel)]="evento.fechaFin" name="fechaFin" #ctrl="ngModel" placeholder="Fecha de Inicio">
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Lugar:</label>
+              <input type="text" class="form-control form-control-sm" id="txtPrograma" [(ngModel)]="evento.lugar" name="lugar" #ctrl="ngModel" placeholder="Lugar ....">
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Hora Inicio:</label>
+              <input type="time" class="form-control form-control-sm" id="txtPrograma" [(ngModel)]="evento.horaInicio" name="hora" #ctrl="ngModel" placeholder="Hora Inicio ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Fecha de Inicio:</label>
-          <input type="date" class="form-control" id="txtDescripcion" [(ngModel)]="evento.fechaInicio" name="fechaInicio" #ctrl="ngModel" placeholder="Fecha de Inicio">
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Fecha Fin:</label>
-          <input type="date" class="form-control" id="txtDescripcion" [(ngModel)]="evento.fechaFin" name="fechaFin" #ctrl="ngModel" placeholder="Fecha de Inicio">
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Lugar:</label>
-          <input type="text" class="form-control" id="txtPrograma" [(ngModel)]="evento.lugar" name="lugar" #ctrl="ngModel" placeholder="Lugar ....">
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Hora Inicio:</label>
-          <input type="time" class="form-control" id="txtPrograma" [(ngModel)]="evento.horaInicio" name="hora" #ctrl="ngModel" placeholder="Hora Inicio ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Duración Estimada:</label>
+              <div class="row" style="padding: 0px 15px;">
+                <input type="number" class="form-control form-control-sm col-4" id="txtPrograma" [(ngModel)]="duracionEstimada" name="duracion" #ctrl="ngModel" placeholder="Duración ....">
+                <select class="form-control form-control-sm col-8" id="cbotipoduracion" [(ngModel)]="cbotipoduracion" name="cbotipoduracion" #ctrl="ngModel">
+                  <option value="">Seleccionar</option>
+                  <option value="dias">Dias</option>
+                  <option value="horas">Horas</option>
+                  <option value="años">Años</option>
+                  <option value="minutos">Minutos</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Costo Egresado:</label>
+              <input type="number" class="form-control form-control-sm" id="costoEgresado" [(ngModel)]="evento.costoEgresado" name="costoEgresado" #ctrl="ngModel" placeholder="Costo Egresado ....">
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Costo Uniajc:</label>
+              <input type="number" class="form-control form-control-sm" id="costoUniajc" [(ngModel)]="evento.costoUniajc" name="costoUniajc" #ctrl="ngModel" placeholder="Costo Uniajc ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Duración Estimada:</label>
-          <input type="number" class="form-control" id="txtPrograma" [(ngModel)]="duracionEstimada" name="duracion" #ctrl="ngModel" placeholder="Duración ....">
-          <select class="form-control" id="cbotipoduracion" [(ngModel)]="cbotipoduracion" name="cbotipoduracion" #ctrl="ngModel">
-            <option value="dias">Dias</option>
-            <option value="horas">Horas</option>
-            <option value="años">Años</option>
-            <option value="minutos">Minutos</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Costo Egresado:</label>
-          <input type="number" class="form-control" id="costoEgresado" [(ngModel)]="evento.costoEgresado" name="costoEgresado" #ctrl="ngModel" placeholder="Costo Egresado ....">
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Costo Uniajc:</label>
-          <input type="number" class="form-control" id="costoUniajc" [(ngModel)]="evento.costoUniajc" name="costoUniajc" #ctrl="ngModel" placeholder="Costo Uniajc ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Certificable:</label>
+              <select class="form-control form-control-sm" id="cbocertificable" [(ngModel)]="evento.certificable" name="cbocertificable" #ctrl="ngModel">
+                <option value="">Seleccionar</option>
+                <option value="1">Si</option>
+                <option value="0">No</option>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Certificable:</label>
-          <select class="form-control" id="cbocertificable" [(ngModel)]="evento.certificable" name="cbocertificable" #ctrl="ngModel">
-            <option value="1">Si</option>
-            <option value="0">No</option>
+              </select>
+            </div>
 
-          </select>
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Dependencia Organiza:</label>
+              <input type="text" class="form-control form-control-sm" id="dependenciaOrganiza" [(ngModel)]="evento.dependenciaOrganiza" name="dependenciaOrganiza" #ctrl="ngModel" placeholder="Dependencia Organiza ....">
+            </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Dependencia Beneficiaria:</label>
+              <input type="text" class="form-control form-control-sm" id="dependenciaBeneficiaria" [(ngModel)]="evento.dependenciaBeneficiaria" name="dependenciaBeneficiaria" #ctrl="ngModel" placeholder="Dependencia Beneficiaria ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Dependencia Organiza:</label>
-          <input type="text" class="form-control" id="dependenciaOrganiza" [(ngModel)]="evento.dependenciaOrganiza" name="dependenciaOrganiza" #ctrl="ngModel" placeholder="Dependencia Organiza ....">
-        </div>
-        <div class="form-group">
-          <label for="exampleInputEmail1">Dependencia Beneficiaria:</label>
-          <input type="text" class="form-control" id="dependenciaBeneficiaria" [(ngModel)]="evento.dependenciaBeneficiaria" name="dependenciaBeneficiaria" #ctrl="ngModel" placeholder="Dependencia Beneficiaria ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Comunidad Beneficiaria:</label>
+              <input type="text" class="form-control form-control-sm" id="comunidadBeneficiaria" [(ngModel)]="evento.comunidadBeneficiaria" name="comunidadBeneficiaria" #ctrl="ngModel" placeholder="Comunidad Beneficiada  ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Comunidad Beneficiaria:</label>
-          <input type="text" class="form-control" id="comunidadBeneficiaria" [(ngModel)]="evento.comunidadBeneficiaria" name="comunidadBeneficiaria" #ctrl="ngModel" placeholder="Comunidad Beneficiada  ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Personas a Cargo:</label>
+              <input type="text" class="form-control form-control-sm" id="personasCargo" [(ngModel)]="evento.personaACargo" name="personasCargo" #ctrl="ngModel" placeholder="Personas a Cargo ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Personas a Cargo:</label>
-          <input type="number" class="form-control" id="personasCargo" [(ngModel)]="evento.personaACargo" name="personasCargo" #ctrl="ngModel" placeholder="Personas a Cargo ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Correo Electronico:</label>
+              <input type="email" class="form-control form-control-sm" id="email" [(ngModel)]="evento.correoElectronico" name="email" #ctrl="ngModel" placeholder="Correo Electronico ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Correo Electronico:</label>
-          <input type="email" class="form-control" id="email" [(ngModel)]="evento.correoElectronico" name="email" #ctrl="ngModel" placeholder="Correo Electronico ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Telefono:</label>
+              <input type="number" class="form-control form-control-sm" id="telefono" [(ngModel)]="evento.telefono" name="telefono" #ctrl="ngModel" placeholder="Telefono ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Telefono:</label>
-          <input type="number" class="form-control" id="telefono" [(ngModel)]="evento.telefono" name="telefono" #ctrl="ngModel" placeholder="Telefono ....">
-        </div>
-
-        <div class="form-group">
-          <label for="exampleInputEmail1">Cupos Egresados:</label>
-          <input type="number" class="form-control" id="cupos" [(ngModel)]="evento.cuposEgresados" name="cupos" #ctrl="ngModel" placeholder="Cupos Egresado ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Cupos Egresados:</label>
+              <input type="number" class="form-control form-control-sm" id="cupos" [(ngModel)]="evento.cuposEgresados" name="cupos" #ctrl="ngModel" placeholder="Cupos Egresado ....">
+            </div>
 
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Url Incripcion:</label>
-          <input type="text" class="form-control" id="urlInsc" [(ngModel)]="evento.urlInscripcion" name="urlInsc" #ctrl="ngModel" placeholder="http:// ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Url Incripcion:</label>
+              <input type="text" class="form-control form-control-sm" id="urlInsc" [(ngModel)]="evento.urlInscripcion" name="urlInsc" #ctrl="ngModel" placeholder="http:// ....">
+            </div>
 
-        <div class="form-group">
-          <label for="exampleInputEmail1">Url Externa:</label>
-          <input type="text" class="form-control" id="urlExterna" [(ngModel)]="urlExterna" name="urlExterna" #ctrl="ngModel" placeholder="http:// ....">
-        </div>
+            <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+              <label for="exampleInputEmail1">Url Externa:</label>
+              <input type="text" class="form-control form-control-sm" id="urlExterna" [(ngModel)]="urlExterna" name="urlExterna" #ctrl="ngModel" placeholder="http:// ....">
+            </div>
 
-        <!--<div class="form-group">
-          <label for="exampleInputEmail1">Archivo:</label>
-          <input type="file" class="form-control" id="archivo"  [(ngModel)]="archivo" (change)="handleFileInput($event.target.files)" #ctrl="ngModel" >
-        </div>-->
+            <!--<div class="form-group">
+              <label for="exampleInputEmail1">Archivo:</label>
+              <input type="file" class="form-control form-control-sm" id="archivo"  [(ngModel)]="archivo" (change)="handleFileInput($event.target.files)" #ctrl="ngModel" >
+            </div>-->
+          </div>
+        </form>
+      </div>
 
-      </form>
+    </div>
+
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="c('Close click')">Cancelar</button>

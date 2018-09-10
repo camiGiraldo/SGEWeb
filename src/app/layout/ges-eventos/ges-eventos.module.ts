@@ -6,12 +6,18 @@ import { GesEventosRoutingModule } from './ges-eventos.routing.module';
 import { GesEventosComponent } from './ges-eventos.component';
 import {
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+
 } from '@angular/forms';
 
 import { PageHeaderModule } from './../../shared';
 @NgModule({
-    imports: [CommonModule, GesEventosRoutingModule,PageHeaderModule,NgbModule.forRoot(), DataTablesModule, FormsModule, ReactiveFormsModule],
+    imports: [CommonModule,
+      GesEventosRoutingModule,
+      PageHeaderModule,
+      NgbModule.forRoot(),
+      DataTablesModule,
+      FormsModule, ReactiveFormsModule],
     declarations: [GesEventosComponent]
 })
 export class GesEventosModule {}

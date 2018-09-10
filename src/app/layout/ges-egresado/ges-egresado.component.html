@@ -2,16 +2,13 @@
   <app-page-header [heading]="'Gestion de Egresados'" [icon]="'fa-user'"></app-page-header>
   <div class="cont-actions">
     <div class="fac-selec">Egresado seleccionado: <strong>{{ message }}</strong></div>
-    <div *ngIf = "idEdit" class="flt-button-action" title="Ver programas" (click)="open(contentprograms,'new', 'modal-xl')">
+    <div *ngIf = "idEdit" class="flt-button-action" title="Ver programas" (click)="open(contentprograms,'prog', 'modal-xl')">
       <i class="fa fa-book"></i>
     </div>
     <div *ngIf = "idEdit" class="flt-button-action" title="Editar" (click)="editEgresado()">
       <i class="fa fa-edit"></i>
     </div>
-    <div *ngIf = "!idEdit" class="flt-button-action" title="Editar">
-      <i class="fa fa-edit"></i>
-    </div>
-    <div class="flt-button-action" title="Crear Egresado" (click)="cleanForm();open(content,'new')">
+    <div class="flt-button-action" title="Crear Egresado" (click)="open(content,'new')">
       <i class="fa fa-plus"></i>
     </div>
   </div>
@@ -137,10 +134,10 @@
                 <label for="sel1">Tipo de identificacion:</label>
                 <select class="form-control form-control-sm" id="tipoId" #tipoId="ngModel" name="tipoId" [(ngModel)]="egresado.tipoIdentificacion">
                   <option value="">Seleccionar</option>
-                  <option value="1">Cedula de ciudadania</option>
-                  <option value="2">Tarjeta de identidad</option>
-                  <option value="3">Pasaportes</option>
-                  <option value="4">Cedula extrangera</option>
+                  <option value="CC">Cedula de ciudadania</option>
+                  <option value="TI">Tarjeta de identidad</option>
+                  <option value="PS">Pasaportes</option>
+                  <option value="CE">Cedula extrangera</option>
                 </select>
              </div>
              <div class="form-group col-md-4">
@@ -255,7 +252,6 @@
              <input type="text" class="form-control" id="observacionesGenerales" name="observacionesGenerales"
                  #observacionesGenerales="ngModel" [(ngModel)]="egresado.observacionesGenerales">
           </div>
-
         </div>
       </form>
      </wizard-step>
